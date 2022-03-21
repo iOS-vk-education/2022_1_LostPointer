@@ -5,7 +5,7 @@ class MainController: UIViewController {
         super.viewDidLoad()
         setupViews()
         setupConstraints()
-        view.backgroundColor = .white
+        view.backgroundColor = .black
     }
     
     private func setupConstraints() {
