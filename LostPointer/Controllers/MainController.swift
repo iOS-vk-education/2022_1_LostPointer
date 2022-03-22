@@ -7,11 +7,11 @@ class MainController: UIViewController {
         setupConstraints()
         view.backgroundColor = .black
     }
-    
+
     private func setupConstraints() {
     }
-    
+
     private func setupViews() {
-        
+
     }
 }
