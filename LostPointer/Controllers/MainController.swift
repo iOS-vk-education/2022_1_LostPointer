@@ -4,21 +4,24 @@ class MainController: UIViewController {
     
     private lazy var loginInput: UITextField = {
         let input = UITextField()
-        input.text = "TEST1"
+        input.placeholder = "Login"
+        input.backgroundColor = .white
         return input
     }()
     
     private lazy var passwordInput: UITextField = {
         let input = UITextField()
-        
-        input.text = "TEST2"
+        input.placeholder = "Password"
+        input.backgroundColor = .white
         return input
     }()
     
     private lazy var signinButton: UIButton = {
-        let button = UIButton()
-        button.titleLabel?.text = "Login"
-        button.backgroundColor = .white
+        let button = UIButton(type: UIButton.ButtonType.roundedRect)
+        button.titleLabel?.text = "Present"
+        button.titleLabel?.textColor = .white
+        button.backgroundColor = .blue
+        button.layer.cornerRadius = 10
         button.addTarget(self, action: #selector(signinTap), for: .touchUpInside)
         return button
     }()
@@ -31,43 +34,36 @@ class MainController: UIViewController {
         view.addSubview(passwordInput)
         view.addSubview(signinButton)
     }
-    
-//    private func getTracks() {
-//        Request.fetch(url: "/home/tracks", method: RequestMethods.GET, successHandler: {(data: Data) -> Void in
-//            let decoder = JSONDecoder()
-//            if let tracks = try? decoder.decode([TrackModel].self, from: data) {
-//                print(tracks)
-//            } else {
-//                print("Fetch error")
-//            }
-//        }, errorHandler: nil)
-//    }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        let inputSize = loginInput.sizeThatFits(view.bounds.size)
+        var inputSize = loginInput.sizeThatFits(view.bounds.size)
+        inputSize.width *= 2
         let signinButtonSize = signinButton.sizeThatFits(view.bounds.size)
         
         loginInput.frame = CGRect(
-            origin: CGPoint(
-                x: view.bounds.midX + (view.bounds.width - inputSize.width) / 2,
-                y: view.bounds.midY - inputSize.height / 2
-            ),
-            size: inputSize
+        
+                x: view.bounds.minX + 20,
+                y: view.bounds.midY - inputSize.height / 2,
+                width: view.bounds.width - 40,
+                height: 30
+        
         )
         passwordInput.frame = CGRect(
-            origin: CGPoint(
-                x: view.bounds.midX + (view.bounds.width - inputSize.width) / 2,
-                y: view.bounds.midY - inputSize.height / 2 + 20
-            ),
-            size: CGSize(width: 800, height: 22)
+            
+                x: view.bounds.minX + 20,
+                y: loginInput.frame.maxY + 20,
+                width: view.bounds.width - 40,
+                height: 30
+        
         )
         
         signinButton.frame = CGRect(
-            origin: CGPoint(x: view.bounds.minX + (view.bounds.width - inputSize.width) / 2,
-                            y: view.bounds.midY - inputSize.height / 2 + 60),
-            size: CGSize(width: 800, height: 22)
+            x: view.bounds.minX + 20,
+            y: passwordInput.frame.maxY + 34,
+            width: view.bounds.width - 40,
+            height: 30
         )
     }
     
