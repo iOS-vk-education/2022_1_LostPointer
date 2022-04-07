@@ -1,6 +1,6 @@
 import UIKit
 
-struct ArtistModel {
+struct ArtistModel: Codable {
+    let id: Int
     let name: String
-    let photo: String
 }
