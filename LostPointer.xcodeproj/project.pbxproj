@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		520C8EDD2807504100A2BFA5 /* TabController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 520C8EDC2807504100A2BFA5 /* TabController.swift */; };
+		520C8EDF280752A000A2BFA5 /* HomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 520C8EDE280752A000A2BFA5 /* HomeController.swift */; };
+		520C8EE1280752AA00A2BFA5 /* ProfileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 520C8EE0280752AA00A2BFA5 /* ProfileController.swift */; };
+		520C8EE32807564500A2BFA5 /* FavoritesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 520C8EE22807564500A2BFA5 /* FavoritesController.swift */; };
 		5B1ADBF327E63AD10081EFDB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B1ADBF227E63AD10081EFDB /* AppDelegate.swift */; };
 		5B1ADBF527E63AD10081EFDB /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B1ADBF427E63AD10081EFDB /* SceneDelegate.swift */; };
 		5B1ADBFC27E63AD20081EFDB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5B1ADBFB27E63AD20081EFDB /* Assets.xcassets */; };
@@ -20,6 +24,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		520C8EDC2807504100A2BFA5 /* TabController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabController.swift; sourceTree = "<group>"; };
+		520C8EDE280752A000A2BFA5 /* HomeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeController.swift; sourceTree = "<group>"; };
+		520C8EE0280752AA00A2BFA5 /* ProfileController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileController.swift; sourceTree = "<group>"; };
+		520C8EE22807564500A2BFA5 /* FavoritesController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesController.swift; sourceTree = "<group>"; };
 		5B1ADBEF27E63AD10081EFDB /* LostPointer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LostPointer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B1ADBF227E63AD10081EFDB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5B1ADBF427E63AD10081EFDB /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -91,6 +99,10 @@
 			isa = PBXGroup;
 			children = (
 				5B1ADC0E27E63BD30081EFDB /* MainController.swift */,
+				520C8EDC2807504100A2BFA5 /* TabController.swift */,
+				520C8EDE280752A000A2BFA5 /* HomeController.swift */,
+				520C8EE0280752AA00A2BFA5 /* ProfileController.swift */,
+				520C8EE22807564500A2BFA5 /* FavoritesController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -230,10 +242,14 @@
 				5B2E371427F9F91600530356 /* Request.swift in Sources */,
 				5B1ADC1527E63D2D0081EFDB /* UserModel.swift in Sources */,
 				5B1ADBF327E63AD10081EFDB /* AppDelegate.swift in Sources */,
+				520C8EDF280752A000A2BFA5 /* HomeController.swift in Sources */,
 				5B1ADC1127E63CDB0081EFDB /* TrackModel.swift in Sources */,
+				520C8EDD2807504100A2BFA5 /* TabController.swift in Sources */,
+				520C8EE1280752AA00A2BFA5 /* ProfileController.swift in Sources */,
 				5B1ADC1727E63E040081EFDB /* AlbumModel.swift in Sources */,
 				5B1ADC1327E63D140081EFDB /* ArtistModel.swift in Sources */,
 				5B1ADBF527E63AD10081EFDB /* SceneDelegate.swift in Sources */,
+				520C8EE32807564500A2BFA5 /* FavoritesController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

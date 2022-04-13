@@ -12,16 +12,28 @@ struct CommonResponse: Decodable {
 
 public final class Request {
     private static var baseUrl = "https://lostpointer.site/api/v1"
-    public static func fetch(url: String, method: RequestMethods, data: Data?, successHandler: ((Data) -> Void)?, errorHandler: ((Error) -> Void)?) {
+    public static func fetch(url: String, method: RequestMethods, data: Data? = nil, successHandler: ((Data) -> Void)?, errorHandler: ((Error) -> Void)?) {
         let url = URL(string: baseUrl + url)!
 
         var request = URLRequest(url: url)
         if data != nil {
             request.httpBody = data
         }
+        
+        let cookies = HTTPCookieStorage.shared.cookies(for: url)
+        
+        request.allHTTPHeaderFields = HTTPCookie.requestHeaderFields(with: cookies!)
+        
+        print("Headers: >>>")
+        print(request.allHTTPHeaderFields)
+        print("Headers: <<<")
+        
+        print("Headers after: >>>")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("application/json", forHTTPHeaderField: "Accept")
-        request.httpMethod = method.rawValue        
+        request.httpMethod = method.rawValue
+        print(request.allHTTPHeaderFields)
+        print("Headers after: <<<")
         
         let failure = { (error: Error) in
             DispatchQueue.main.async {
@@ -48,6 +60,7 @@ public final class Request {
                 failure(NSError(domain: "APIRequest", code: -2, userInfo: nil))
                 return
             }
+            print(String(decoding: data, as: UTF8.self))
             var code = 0
             do {
                 let responseObject = try JSONDecoder().decode(CommonResponse.self, from: data)
@@ -61,7 +74,9 @@ public final class Request {
                 print("Request error: ", data)
                 return
             }
-            print(response.statusCode)
+                      
+            HTTPCookieStorage.shared.cookies(
+                for: response.url ?? URL(string: "https://lostpointer.site")!)
             success(data)
 
         }

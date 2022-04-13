@@ -46,6 +46,7 @@ class MainController: UIViewController {
         view.addSubview(loginInput)
         view.addSubview(passwordInput)
         view.addSubview(signinButton)
+        
     }
 
     override func viewDidLayoutSubviews() {
@@ -81,11 +82,17 @@ class MainController: UIViewController {
     
     @objc func signinTap() {
         let user = UserModel(email: loginInput.text ?? "", password: passwordInput.text ?? "")
-        user.authenticate(onSuccess:  { [self] in
-            showToast(controller: self, message : "Login Successful!", seconds: 2.0)
-        },
-        onError: {[self] in
-            showToast(controller: self, message : "Incorrect credentials!", seconds: 2.0)
-        })
+        user.checkAuth {
+            print("AUTH USER")
+            return self.navigationController?.setViewControllers([TabController()], animated: true)
+        } onError: {
+            print("NOT AUTH USER")
+            user.authenticate {
+                self.showToast(controller: self, message : "Login Successful!", seconds: 2.0)
+            } onError: {
+                self.showToast(controller: self, message : "Incorrect credentials!", seconds: 2.0)
+            }
+            return nil
+        }
     }
 }
