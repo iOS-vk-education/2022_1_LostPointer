@@ -5,6 +5,10 @@ public enum RequestMethods: String {
     case POST
 }
 
+struct CommonResponse: Decodable {
+    let status: Int32
+}
+
 
 public final class Request {
     private static var baseUrl = "https://lostpointer.site/api/v1"
@@ -15,11 +19,9 @@ public final class Request {
         if data != nil {
             request.httpBody = data
         }
-        request.httpMethod = method.rawValue
-        print(String(decoding: (request.httpBody)!, as: UTF8.self))
-        print(url)
-        
-        print(request.httpMethod)
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
+        request.httpMethod = method.rawValue        
         
         let failure = { (error: Error) in
             DispatchQueue.main.async {
@@ -39,23 +41,29 @@ public final class Request {
                 return
             }
             guard let response = response as? HTTPURLResponse else {
-                failure(NSError(domain: "", code: -1, userInfo: nil))
+                failure(NSError(domain: "APIRequest", code: -1, userInfo: nil))
                 return
             }
             guard let data = data else {
-                failure(NSError(domain: "", code: -2, userInfo: nil))
+                failure(NSError(domain: "APIRequest", code: -2, userInfo: nil))
                 return
             }
-            if response.statusCode != 200 {
-                failure(NSError(domain: "", code: -3, userInfo: nil))
+            var code = 0
+            do {
+                let responseObject = try JSONDecoder().decode(CommonResponse.self, from: data)
+                code = Int(responseObject.status)
+            } catch {
+                failure(NSError(domain: "APIRequest", code: -4, userInfo: nil))
+            }
+
+            if response.statusCode != 200 || code != 200 {
+                failure(NSError(domain: "APIRequest", code: -5, userInfo: nil))
                 print("Request error: ", data)
                 return
             }
             print(response.statusCode)
-//            print(response.allHeaderFields)
             success(data)
-            request.setValue("application/json; charset=UTF-8", forHTTPHeaderField: "Content-Type")
-            request.setValue("application/json; charset=UTF-8", forHTTPHeaderField: "Accept")
+
         }
         task.resume()
     }

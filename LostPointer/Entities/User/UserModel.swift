@@ -12,10 +12,14 @@ struct UserModel: Codable {
         self.password = password
     }
     
-    public func authenticate() {
+    public func authenticate(onSuccess: @escaping ()->Void?, onError: @escaping () -> Void?) {
         let data = try? JSONEncoder().encode(UserModel(email: email, password: password))
         Request.fetch(url: "/user/signin", method: RequestMethods.POST, data: data, successHandler: {(data: Data) -> Void in
             print(String(decoding: data, as: UTF8.self))
-        }, errorHandler: nil)
+            onSuccess()
+        }, errorHandler: {(err: Error) -> Void in
+            print(err)
+            onError()
+        })
     }
 }

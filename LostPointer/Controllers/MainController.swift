@@ -2,6 +2,19 @@ import UIKit
 
 class MainController: UIViewController {
     
+    func showToast(controller: UIViewController, message : String, seconds: Double) {
+        let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
+        
+        alert.view.alpha = 0.6
+        alert.view.layer.cornerRadius = 15
+
+        controller.present(alert, animated: true)
+
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + seconds) {
+            alert.dismiss(animated: true)
+        }
+    }
+    
     private lazy var loginInput: UITextField = {
         let input = UITextField()
         input.placeholder = "Login"
@@ -13,14 +26,14 @@ class MainController: UIViewController {
         let input = UITextField()
         input.placeholder = "Password"
         input.backgroundColor = .white
+        input.isSecureTextEntry = true
         return input
     }()
     
     private lazy var signinButton: UIButton = {
         let button = UIButton(type: UIButton.ButtonType.roundedRect)
-        button.titleLabel?.text = "Present"
-        button.titleLabel?.textColor = .white
-        button.backgroundColor = .blue
+        button.setTitle("TEST", for: .normal)
+        button.backgroundColor = .red
         button.layer.cornerRadius = 10
         button.addTarget(self, action: #selector(signinTap), for: .touchUpInside)
         return button
@@ -40,12 +53,11 @@ class MainController: UIViewController {
 
         var inputSize = loginInput.sizeThatFits(view.bounds.size)
         inputSize.width *= 2
-        let signinButtonSize = signinButton.sizeThatFits(view.bounds.size)
+        signinButton.sizeThatFits(view.bounds.size)
         
         loginInput.frame = CGRect(
-        
                 x: view.bounds.minX + 20,
-                y: view.bounds.midY - inputSize.height / 2,
+                y: view.bounds.minY + view.bounds.midY / 2,
                 width: view.bounds.width - 40,
                 height: 30
         
@@ -69,6 +81,11 @@ class MainController: UIViewController {
     
     @objc func signinTap() {
         let user = UserModel(email: loginInput.text ?? "", password: passwordInput.text ?? "")
-        user.authenticate()
+        user.authenticate(onSuccess:  { [self] in
+            showToast(controller: self, message : "Login Successful!", seconds: 2.0)
+        },
+        onError: {[self] in
+            showToast(controller: self, message : "Incorrect credentials!", seconds: 2.0)
+        })
     }
 }
