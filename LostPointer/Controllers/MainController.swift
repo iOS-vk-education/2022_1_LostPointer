@@ -5,8 +5,9 @@ class MainController: UIViewController {
     func showToast(controller: UIViewController, message : String, seconds: Double) {
         let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
         
-        alert.view.alpha = 0.6
+        alert.view.alpha = 0.2
         alert.view.layer.cornerRadius = 15
+        alert.view.backgroundColor = .red
 
         controller.present(alert, animated: true)
 
@@ -32,8 +33,9 @@ class MainController: UIViewController {
     
     private lazy var signinButton: UIButton = {
         let button = UIButton(type: UIButton.ButtonType.roundedRect)
-        button.setTitle("TEST", for: .normal)
-        button.backgroundColor = .red
+        button.setTitle("Sign In", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.backgroundColor = UIColor(named: "accentColor")
         button.layer.cornerRadius = 10
         button.addTarget(self, action: #selector(signinTap), for: .touchUpInside)
         return button
@@ -83,14 +85,12 @@ class MainController: UIViewController {
     @objc func signinTap() {
         let user = UserModel(email: loginInput.text ?? "", password: passwordInput.text ?? "")
         user.checkAuth {
-            print("AUTH USER")
             return self.navigationController?.setViewControllers([TabController()], animated: true)
         } onError: {
-            print("NOT AUTH USER")
             user.authenticate {
-                self.showToast(controller: self, message : "Login Successful!", seconds: 2.0)
+                self.showToast(controller: self, message : "Login Successful!", seconds: 1.0)
             } onError: {
-                self.showToast(controller: self, message : "Incorrect credentials!", seconds: 2.0)
+                self.showToast(controller: self, message : "Incorrect credentials!", seconds: 1.0)
             }
             return nil
         }

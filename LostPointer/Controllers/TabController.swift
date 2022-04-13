@@ -4,8 +4,8 @@ class TabController: UITabBarController, UITabBarControllerDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
-        
+        view.backgroundColor = .black
+        view.tintColor = UIColor(named: "accentColor")
         delegate = self
     }
     
