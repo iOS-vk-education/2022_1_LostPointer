@@ -229,9 +229,18 @@ class ProfileController: UIViewController {
     }
 
     @objc func saveProfile() {
-//        if newPasswordInput !=
-//        UserModel.validateProfileData();
-//        UserModel.updateProfile();
+        if newPasswordInput.text != confirmPasswordInput.text {
+            showAlert(title: "Error", message: "Passwords do not match")
+        }
+        let user = UserModel(email: emailInput.text, password: oldPasswordInput.text,
+                             nickname: nicknameInput.text,
+                             oldPassword: oldPasswordInput.text)
+
+        user.updateProfileData(onSuccess: {() -> Void in
+            print("Success")
+        }, onError: {(err: String) -> Void in
+            showAlert(title: "Error", message: err)
+        })
     }
 
     @objc func logout() {

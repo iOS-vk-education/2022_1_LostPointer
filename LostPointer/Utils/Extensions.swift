@@ -21,6 +21,14 @@ extension UIImageView {
     }
 }
 
+extension UIViewController {
+    func showAlert(title: String, message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alert, animated: true, completion: nil)
+    }
+}
+
 extension UIView {
     func setBackgroundImage(img: UIImage) {
         UIGraphicsBeginImageContext(self.frame.size)
@@ -31,7 +39,7 @@ extension UIView {
     }
 }
 
-//swiftlint:disable all
+// swiftlint:disable all
 let __firstpart = "[A-Z0-9a-z]([A-Z0-9a-z._%+-]{0,30}[A-Z0-9a-z])?"
 let __serverpart = "([A-Z0-9a-z]([A-Z0-9a-z-]{0,30}[A-Z0-9a-z])?\\.){1,5}"
 let __emailRegex = __firstpart + "@" + __serverpart + "[A-Za-z]{2,8}"
@@ -48,4 +56,4 @@ extension UITextField {
         return self.text?.isEmail() ?? false
     }
 }
-//swiftlint:enable all
+// swiftlint:enable all

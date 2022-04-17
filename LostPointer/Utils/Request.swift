@@ -3,6 +3,7 @@ import Foundation
 public enum RequestMethods: String {
     case GET
     case POST
+    case PATCH
 }
 
 struct CommonResponse: Decodable {

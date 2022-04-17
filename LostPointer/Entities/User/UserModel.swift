@@ -1,18 +1,21 @@
 import UIKit
 
 struct UserModel: Codable {
-    let email, password, nickname, bigAvatar: String?
+    let email, password, nickname, bigAvatar, oldPassword: String?
 
     enum CodingKeys: String, CodingKey {
         case email, password, nickname
         case bigAvatar = "big_avatar"
+        case oldPassword = "old_password"
     }
 
-    init(email: String, password: String, nickname: String? = nil, bigAvatar: String? = nil) {
+    init(email: String? = nil, password: String? = nil, nickname: String? = nil,
+         bigAvatar: String? = nil, oldPassword: String? = nil) {
         self.email = email
         self.password = password
         self.nickname = nickname
         self.bigAvatar = bigAvatar
+        self.oldPassword = oldPassword
     }
 
     public static func authenticate(email: String, password: String, onSuccess: @escaping () -> Void?, onError: @escaping () -> Void?) {
@@ -49,9 +52,7 @@ struct UserModel: Codable {
         })
     }
 
-    public static func validateProfileData(nickname: String? = nil, email: String? = nil,
-                                           oldPassword: String? = nil, password: String? = nil,
-                                           onSuccess: () -> Void, onError: (String) -> Void) {
+    public func validateProfileData(onSuccess: () -> Void, onError: (String) -> Void) {
         if nickname != nil {
 
         }
@@ -65,5 +66,13 @@ struct UserModel: Codable {
         if oldPassword != nil && password != nil {
 
         }
+    }
+
+    public func updateProfileData(onSuccess: () -> Void, onError: (String) -> Void) {
+        validateProfileData(onSuccess: {() -> Void in
+            print("Updating")
+        }, onError: {(err: String) -> Void in
+            onError(err)
+        })
     }
 }
