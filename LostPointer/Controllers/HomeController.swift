@@ -6,7 +6,6 @@ class HomeController: UIViewController, UITableViewDataSource, UITableViewDelega
 
     var tracks: [TrackModel] = []
 //    var artists: [ArtistModel] = []
-//    var albums: [AlbumModel] = []
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 1 + self.tracks.count
@@ -15,7 +14,8 @@ class HomeController: UIViewController, UITableViewDataSource, UITableViewDelega
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
         if indexPath.row == 0 {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "AlbumsTableViewCell", for: indexPath)
+            // swiftlint:disable force_cast
+            let cell = tableView.dequeueReusableCell(withIdentifier: "AlbumsTableViewCell", for: indexPath) as! AlbumsTableViewCell
             return cell
         } else {
             // swiftlint:disable force_cast
@@ -57,29 +57,8 @@ class HomeController: UIViewController, UITableViewDataSource, UITableViewDelega
         }, onError: {(err: Error) -> Void in
             print(err)
         })
-
-//        ArtistModel.getHomeArtists(onSuccess: {(loadedArtists: [ArtistModel]) -> Void in
-//            self.artists = loadedArtists
-//        }, onError: {(err: Error) -> Void in
-//            print(err)
-//        });
-//        AlbumModel.getHomeAlbums(onSuccess: {(loadedAlbums: [AlbumModel]) -> Void in
-//            self.albums = loadedAlbums
-//        }, onError: {(err: Error) -> Void in
-//            print(err)
-//        })
     }
 
-}
-
-class AlbumsTableViewCell: UITableViewCell {
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-    }
 }
 
 class TrackTableViewCell: UITableViewCell {
@@ -177,5 +156,101 @@ class TrackTableViewCell: UITableViewCell {
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+    }
+}
+
+class AlbumsTableViewCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataSource {
+    var albumsCollectionView: UICollectionView?
+    
+    var albums: [AlbumModel] = []
+    var loaded: Bool = false
+    
+    override func layoutSubviews() {
+        if loaded {
+            return
+        }
+        super.layoutSubviews()
+        
+        AlbumModel.getHomeAlbums(onSuccess: {(loadedAlbums: [AlbumModel]) -> Void in
+            self.albums = loadedAlbums
+
+            self.backgroundColor = UIColor(named: "backgroundColor")
+
+            let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
+            layout.sectionInset = UIEdgeInsets(top: 20, left: 10, bottom: 20, right: 10)
+            layout.itemSize = CGSize(width: 230, height: 380)
+            layout.scrollDirection = .horizontal
+
+            self.albumsCollectionView = UICollectionView(frame: self.frame, collectionViewLayout: layout)
+            self.albumsCollectionView?.heightAnchor.constraint(equalToConstant: self.frame.height / 2).isActive = true
+            self.albumsCollectionView?.register(AlbumCell.self, forCellWithReuseIdentifier: "AlbumCell")
+            self.albumsCollectionView?.backgroundColor = UIColor.black
+            
+            self.albumsCollectionView?.delegate = self
+            self.albumsCollectionView?.dataSource = self
+
+            self.addSubview(self.albumsCollectionView ?? UICollectionView())
+            self.loaded = true
+        }, onError: {(err: Error) -> Void in
+            print(err)
+        })
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 5
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        // swiftlint:disable force_cast
+        let albumCell = collectionView.dequeueReusableCell(withReuseIdentifier: "AlbumCell", for: indexPath) as! AlbumCell
+        albumCell.album = albums[indexPath.item]
+        return albumCell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+       print("User tapped on item \(indexPath.row)")
+    }
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+}
+
+
+class AlbumCell: UICollectionViewCell {
+
+    var album: AlbumModel? {
+        didSet {
+            guard let albumItem = album else {return}
+            if let artwork = albumItem.artwork {
+                albumImageView.downloaded(from: "https://lostpointer.site/static/artworks/" + (artwork) + "_384px.webp")
+            }
+        }
+    }
+
+    let albumImageView: UIImageView = {
+        let img = UIImageView()
+        img.contentMode = .scaleAspectFit
+        img.translatesAutoresizingMaskIntoConstraints = false
+        return img
+    }()
+
+    override init(frame: CGRect) {
+        super.init(frame: .zero)
+        contentView.addSubview(albumImageView)
+        contentView.clipsToBounds = true
+        contentView.layer.cornerRadius = 12
+
+        albumImageView.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
+        albumImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
+        albumImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(codeer:) has not been implemented")
     }
 }
