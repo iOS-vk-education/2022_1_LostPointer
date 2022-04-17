@@ -9,31 +9,31 @@ class ProfileController: UIViewController {
         return image
     }()
     
-    private lazy var nicknameLabel: UILabel = {
-        
-    }()
-    
-    private lazy var nicknameInput: UITextField = {
-        
-    }()
-    
-    private lazy var emailLabel: UILabel = {
-        
-    }()
-    
-    private lazy var emailInput: UITextField = {
-        
-    }()
-    
-    private lazy var oldPasswordLabel: UITextLabel = {
-        
-    }
-    
-    private lazy var oldPasswordInput: UITextInput = {
-        
-    }
-    
-    private lazy var newPasswordLabel: UILabel
+//    private lazy var nicknameLabel: UILabel = {
+//        
+//    }()
+//    
+//    private lazy var nicknameInput: UITextField = {
+//        
+//    }()
+//    
+//    private lazy var emailLabel: UILabel = {
+//        
+//    }()
+//    
+//    private lazy var emailInput: UITextField = {
+//        
+//    }()
+//    
+//    private lazy var oldPasswordLabel: UITextLabel = {
+//        
+//    }
+//    
+//    private lazy var oldPasswordInput: UITextInput = {
+//        
+//    }
+//    
+//    private lazy var newPasswordLabel: UILabel
     
     override func viewDidLoad() {
         super.viewDidLoad()
