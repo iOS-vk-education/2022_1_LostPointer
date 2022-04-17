@@ -14,8 +14,7 @@ struct UserModel: Codable {
     
     public func authenticate(onSuccess: @escaping ()->Void?, onError: @escaping () -> Void?) {
         let data = try? JSONEncoder().encode(UserModel(email: email, password: password))
-        Request.fetch(url: "/user/signin", method: RequestMethods.POST, data: data, successHandler: {(data: Data) -> Void in
-            print(String(decoding: data, as: UTF8.self))
+        Request.fetch(url: "/user/signin", method: RequestMethods.POST, data: data, successHandler: {(_: Data) -> Void in
             onSuccess()
         }, errorHandler: {(err: Error) -> Void in
             print(err)
@@ -23,7 +22,7 @@ struct UserModel: Codable {
         })
     }
     
-    public func checkAuth(onSuccess: @escaping () -> Void?, onError: @escaping () -> Void?) {
+    public static func checkAuth(onSuccess: @escaping () -> Void?, onError: @escaping () -> Void?) {
         Request.fetch(url: "/auth", method: RequestMethods.GET, successHandler: {(_)->Void in
             onSuccess()
         }, errorHandler: {(_) -> Void in

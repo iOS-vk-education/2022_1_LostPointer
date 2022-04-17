@@ -25,8 +25,6 @@ class TabController: UITabBarController, UITabBarControllerDelegate {
     }
     
     func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) {
-//            print("Should select viewController: \(viewController.title ?? "") ?")
-//            return true;
         self.navigationController?.setViewControllers([viewController], animated: true)
         }
 }
