@@ -1,13 +1,13 @@
 import UIKit
 
 struct TrackModel: Codable {
-    let id: Int
-    let title, genre: String
-    let number: Int
+    let id: Int?
+    let title, genre: String?
+    let number: Int?
     let listenCount: Int?
-    let duration: Int
-    let album: AlbumModel
-    let artist: ArtistModel
+    let duration: Int?
+    let album: AlbumModel?
+    let artist: ArtistModel?
     let file: String
 
     enum CodingKeys: String, CodingKey {
@@ -33,4 +33,5 @@ struct TrackModel: Codable {
         }
         )
     }
+    
 }

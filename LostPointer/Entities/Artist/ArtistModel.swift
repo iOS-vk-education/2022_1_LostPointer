@@ -1,8 +1,8 @@
 import UIKit
 
 struct ArtistModel: Codable {
-    let id: Int
-    let name: String
+    let id: Int?
+    let name: String?
     let avatar: String?
     
     static func getHomeArtists(onSuccess: @escaping ([ArtistModel])->Void, onError: @escaping  (Error)->Void) {
