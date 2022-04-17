@@ -13,61 +13,61 @@ class ProfileController: UIViewController {
         image.clipsToBounds = true
         return image
     }()
-    
+
     private lazy var nicknameLabel: UILabel = {
         let label = UILabel()
         label.text = "Nickname"
         label.textColor = .white
         return label
     }()
-    
+
     private lazy var nicknameInput: UITextField = {
         let input = UITextField()
         input.placeholder = "Nickname"
         return input
     }()
-    
+
     private lazy var emailLabel: UILabel = {
         let label = UILabel()
         label.text = "Email"
         label.textColor = .white
         return label
     }()
-    
+
     private lazy var emailInput: UITextField = {
         let input = UITextField()
         input.placeholder = "Email"
         return input
     }()
-    
+
     private lazy var oldPasswordLabel: UILabel = {
         let label = UILabel()
         label.text = "Old password"
         label.textColor = .white
         return label
     }()
-    
+
     private lazy var oldPasswordInput: UITextField = {
         let input = UITextField()
         input.placeholder = "Old password"
         input.isSecureTextEntry = true
         return input
     }()
-    
+
     private lazy var newPasswordLabel: UILabel = {
         let label = UILabel()
         label.text = "New password"
         label.textColor = .white
         return label
     }()
-    
+
     private lazy var newPasswordInput: UITextField = {
         let input = UITextField()
         input.placeholder = "New password"
         input.isSecureTextEntry = true
         return input
     }()
-    
+
     private lazy var saveButton: UIButton = {
         let button = UIButton()
         button.setTitle("Save", for: .normal)
@@ -77,7 +77,7 @@ class ProfileController: UIViewController {
         button.addTarget(self, action: #selector(saveProfile), for: .touchUpInside)
         return button
     }()
-    
+
     private lazy var logoutButton: UIButton = {
         let button = UIButton()
         button.setTitle("Log out", for: .normal)
@@ -91,7 +91,7 @@ class ProfileController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(named: "backgroundColor")
-        
+
         view.addSubview(avatar)
         view.addSubview(nicknameLabel)
         view.addSubview(nicknameInput)
@@ -109,7 +109,7 @@ class ProfileController: UIViewController {
                 activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
                 activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
                 activityIndicator.startAnimating()
-        
+
         UserModel.getProfileData(onSuccess: {(data: Data) -> Void in
             do {
                 let profile = try JSONDecoder().decode(UserModel.self, from: data)
@@ -117,7 +117,7 @@ class ProfileController: UIViewController {
                 self.nicknameInput.text = profile.nickname
                 self.emailInput.text = profile.email
             } catch {
-                    
+
                         print("UserModel unmarshaling error")
                     }
             self.activityIndicator.stopAnimating()
@@ -125,19 +125,19 @@ class ProfileController: UIViewController {
             self.activityIndicator.startAnimating()
             print(error)
         })
-            
+
     }
-    
+
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        
+
         avatar.frame = CGRect(
             x: view.bounds.midX - 100,
             y: view.bounds.minY + view.bounds.midY / 4,
             width: 200,
             height: 200
         )
-        
+
         nicknameLabel.frame = CGRect(
             x: view.bounds.minX + 10,
             y: avatar.frame.maxY + 30,
@@ -199,11 +199,11 @@ class ProfileController: UIViewController {
             height: 40
         )
     }
-    
+
     @objc func saveProfile() {
 //        UserModel.updateProfile();
     }
-    
+
     @objc func logout() {
         print("Logout")
         let alert = UIAlertController(title: "Log out", message: "Are you sure you want to log out?", preferredStyle: .alert)
@@ -213,7 +213,7 @@ class ProfileController: UIViewController {
                 return (self.navigationController?.setViewControllers([SigninController()], animated: true))!
             }, onError: {(err: Error) -> Void in
                 print(err)
-            });
+            })
         }))
         present(alert, animated: true, completion: nil)
     }

@@ -10,7 +10,7 @@ extension UIImageView {
                 let data = data, error == nil,
                 let image = UIImage(data: data)
                 else { return }
-            DispatchQueue.main.async() { [weak self] in
+            DispatchQueue.main.async { [weak self] in
                 self?.image = image
             }
         }.resume()
@@ -22,7 +22,7 @@ extension UIImageView {
 }
 
 extension UIView {
-    func setBackgroundImage(img: UIImage){
+    func setBackgroundImage(img: UIImage) {
         UIGraphicsBeginImageContext(self.frame.size)
         img.draw(in: self.bounds)
         let patternImage: UIImage = UIGraphicsGetImageFromCurrentImageContext()!

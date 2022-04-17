@@ -9,7 +9,6 @@ struct CommonResponse: Decodable {
     let status: Int32
 }
 
-
 public final class Request {
     private static var baseUrl = "https://lostpointer.site/api/v1"
     public static func fetch(url: String, method: RequestMethods, data: Data? = nil, successHandler: ((Data) -> Void)?, errorHandler: ((Error) -> Void)?) {
@@ -19,22 +18,22 @@ public final class Request {
         if data != nil {
             request.httpBody = data
         }
-        
+
         let cookies = HTTPCookieStorage.shared.cookies(for: url)
-        
+
         request.allHTTPHeaderFields = HTTPCookie.requestHeaderFields(with: cookies!)
-        
+
 //        print("Headers: >>>")
 //        print(request.allHTTPHeaderFields)
 //        print("Headers: <<<")
-        
+
 //        print("Headers after: >>>")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("application/json", forHTTPHeaderField: "Accept")
         request.httpMethod = method.rawValue
 //        print(request.allHTTPHeaderFields)
 //        print("Headers after: <<<")
-        
+
         let failure = { (error: Error) in
             DispatchQueue.main.async {
                 errorHandler?(error)
@@ -75,7 +74,7 @@ public final class Request {
                 print("Request error: ", data)
                 return
             }
-                      
+
             HTTPCookieStorage.shared.cookies(
                 for: response.url ?? URL(string: "https://lostpointer.site")!)
             success(data)
