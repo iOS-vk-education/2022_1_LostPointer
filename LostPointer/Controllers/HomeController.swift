@@ -3,7 +3,6 @@ import UIKit
 class HomeController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     let tableView = UITableView()
     
-    // var activityIndicator = UIActivityIndicatorView(style: .large)
     var tracks: [TrackModel] = []
 //    var artists: [ArtistModel] = []
 //    var albums: [AlbumModel] = []
@@ -57,15 +56,6 @@ class HomeController: UIViewController, UITableViewDataSource, UITableViewDelega
             print(err)
         })
         
-        
-        
-        // Spinner
-//        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
-//        view.addSubview(activityIndicator)
-//        activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-//        activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
-//        activityIndicator.startAnimating()
-        
 //        ArtistModel.getHomeArtists(onSuccess: {(loadedArtists: [ArtistModel]) -> Void in
 //            self.artists = loadedArtists
 //        }, onError: {(err: Error) -> Void in
@@ -77,19 +67,6 @@ class HomeController: UIViewController, UITableViewDataSource, UITableViewDelega
 //            print(err)
 //        })
     }
-    
-//    override func viewDidLayoutSubviews() {
-//        super.viewDidLayoutSubviews()
-//
-//        tableView.sizeThatFits(view.bounds.size)
-//        tableView.frame = CGRect(
-//            x: view.bounds.minX + 5,
-//            y: view.bounds.minY + 5,
-//            width: view.bounds.width - 10,
-//            height: view.bounds.height - 10
-//        )
-//
-//    }
 }
 
 
