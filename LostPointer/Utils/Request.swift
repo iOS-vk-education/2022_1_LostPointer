@@ -24,16 +24,16 @@ public final class Request {
         
         request.allHTTPHeaderFields = HTTPCookie.requestHeaderFields(with: cookies!)
         
-        print("Headers: >>>")
-        print(request.allHTTPHeaderFields)
-        print("Headers: <<<")
+//        print("Headers: >>>")
+//        print(request.allHTTPHeaderFields)
+//        print("Headers: <<<")
         
-        print("Headers after: >>>")
+//        print("Headers after: >>>")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("application/json", forHTTPHeaderField: "Accept")
         request.httpMethod = method.rawValue
-        print(request.allHTTPHeaderFields)
-        print("Headers after: <<<")
+//        print(request.allHTTPHeaderFields)
+//        print("Headers after: <<<")
         
         let failure = { (error: Error) in
             DispatchQueue.main.async {
@@ -60,17 +60,18 @@ public final class Request {
                 failure(NSError(domain: "APIRequest", code: -2, userInfo: nil))
                 return
             }
-            print(String(decoding: data, as: UTF8.self))
+//            print(String(decoding: data, as: UTF8.self))
             var code = 0
             do {
                 let responseObject = try JSONDecoder().decode(CommonResponse.self, from: data)
                 code = Int(responseObject.status)
             } catch {
-                failure(NSError(domain: "APIRequest", code: -4, userInfo: nil))
+                // Это не ошибка
             }
 
-            if response.statusCode != 200 || code != 200 {
-                failure(NSError(domain: "APIRequest", code: -5, userInfo: nil))
+            if response.statusCode != 200 || (code != 0 && code != 200) {
+                print(response.statusCode, code)
+                failure(NSError(domain: "APIRequest", code: -5, userInfo: ["Error": "Response code is not 2xx"]))
                 print("Request error: ", data)
                 return
             }
