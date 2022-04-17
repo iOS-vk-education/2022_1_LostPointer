@@ -82,7 +82,7 @@ class ProfileController: UIViewController {
         let button = UIButton()
         button.setTitle("Log out", for: .normal)
         button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = UIColor(named: "accentColor")
+        button.backgroundColor = UIColor(named: "AccentColor")
         button.layer.cornerRadius = 10
         button.addTarget(self, action: #selector(logout), for: .touchUpInside)
         return button

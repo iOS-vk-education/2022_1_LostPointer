@@ -5,7 +5,7 @@ class TabController: UITabBarController, UITabBarControllerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
-        view.tintColor = UIColor(named: "accentColor")
+        view.tintColor = UIColor(named: "AccentColor")
         delegate = self
     }
 
@@ -35,7 +35,7 @@ class TabController: UITabBarController, UITabBarControllerDelegate {
         self.viewControllers = [home, favorites, search, profile]
     }
 
-    func tabBarController(_ tabBarController: UITabBarController,
+    private func tabBarController(_ tabBarController: UITabBarController,
                           shouldSelect viewController: UIViewController) {
         self.navigationController?.setViewControllers([viewController], animated: true)
         }

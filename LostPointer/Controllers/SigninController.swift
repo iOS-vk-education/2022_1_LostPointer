@@ -34,7 +34,7 @@ class SigninController: UIViewController {
         let button = UIButton(type: UIButton.ButtonType.roundedRect)
         button.setTitle("Sign In", for: .normal)
         button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = UIColor(named: "accentColor")
+        button.backgroundColor = UIColor(named: "AccentColor")
         button.layer.cornerRadius = 10
         button.addTarget(self, action: #selector(signinTap), for: .touchUpInside)
         return button
