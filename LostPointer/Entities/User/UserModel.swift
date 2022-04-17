@@ -46,6 +46,24 @@ struct UserModel: Codable {
         onSuccess(data)
         }, errorHandler: {(error: Error) -> Void in
             onError(error)
-    })
+        })
+    }
+
+    public static func validateProfileData(nickname: String? = nil, email: String? = nil,
+                                           oldPassword: String? = nil, password: String? = nil,
+                                           onSuccess: () -> Void, onError: (String) -> Void) {
+        if nickname != nil {
+
+        }
+
+        if email != nil {
+            if !email!.isEmail() {
+                onError("Incorrect email")
+            }
+        }
+
+        if oldPassword != nil && password != nil {
+
+        }
     }
 }

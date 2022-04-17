@@ -9,7 +9,7 @@ class ProfileController: UIViewController {
 
     private lazy var avatar: UIImageView = {
         let image = UIImageView()
-        image.layer.cornerRadius = 100
+        image.layer.cornerRadius = 90
         image.clipsToBounds = true
         return image
     }()
@@ -68,6 +68,20 @@ class ProfileController: UIViewController {
         return input
     }()
 
+    private lazy var confirmPasswordLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Confirm password"
+        label.textColor = .white
+        return label
+    }()
+
+    private lazy var confirmPasswordInput: UITextField = {
+        let input = UITextField()
+        input.placeholder = "Confirm password"
+        input.isSecureTextEntry = true
+        return input
+    }()
+
     private lazy var saveButton: UIButton = {
         let button = UIButton()
         button.setTitle("Save", for: .normal)
@@ -101,6 +115,8 @@ class ProfileController: UIViewController {
         view.addSubview(oldPasswordInput)
         view.addSubview(newPasswordLabel)
         view.addSubview(newPasswordInput)
+        view.addSubview(confirmPasswordLabel)
+        view.addSubview(confirmPasswordInput)
         view.addSubview(saveButton)
         view.addSubview(logoutButton)
 
@@ -132,10 +148,10 @@ class ProfileController: UIViewController {
         super.viewDidLayoutSubviews()
 
         avatar.frame = CGRect(
-            x: view.bounds.midX - 100,
-            y: view.bounds.minY + view.bounds.midY / 4,
-            width: 200,
-            height: 200
+            x: view.bounds.midX - 90,
+            y: view.bounds.minY + view.bounds.midY / 5,
+            width: 180,
+            height: 180
         )
 
         nicknameLabel.frame = CGRect(
@@ -186,9 +202,21 @@ class ProfileController: UIViewController {
             width: view.bounds.width - 40,
             height: 30
         )
-        saveButton.frame = CGRect(
+        confirmPasswordLabel.frame = CGRect(
             x: view.bounds.minX + 10,
             y: newPasswordInput.frame.maxY + 10,
+            width: view.bounds.width - 40,
+            height: 15
+        )
+        confirmPasswordInput.frame = CGRect(
+            x: view.bounds.minX + 10,
+            y: confirmPasswordLabel.frame.maxY + 10,
+            width: view.bounds.width - 40,
+            height: 30
+        )
+        saveButton.frame = CGRect(
+            x: view.bounds.minX + 10,
+            y: confirmPasswordInput.frame.maxY + 10,
             width: view.bounds.width - 20,
             height: 40
         )
@@ -201,6 +229,8 @@ class ProfileController: UIViewController {
     }
 
     @objc func saveProfile() {
+//        if newPasswordInput !=
+//        UserModel.validateProfileData();
 //        UserModel.updateProfile();
     }
 
