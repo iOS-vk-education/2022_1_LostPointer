@@ -1,7 +1,7 @@
 import UIKit
 
 class HomeController: UIViewController, UITableViewDataSource, UITableViewDelegate {
-    let tracksTableView = UITableView()
+    let tableView = UITableView()
     
     // var activityIndicator = UIActivityIndicatorView(style: .large)
     var tracks: [TrackModel] = []
@@ -9,17 +9,26 @@ class HomeController: UIViewController, UITableViewDataSource, UITableViewDelega
 //    var albums: [AlbumModel] = []
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.tracks.count
+        return 1 + self.tracks.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "TableViewCell", for: indexPath) as! TrackTableViewCell
-        cell.track = tracks[indexPath.row]
-        return cell
+        if (indexPath.row == 0) {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "AlbumsTableViewCell", for: indexPath)
+            return cell
+        } else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "TrackTableViewCell", for: indexPath) as! TrackTableViewCell
+            cell.track = tracks[indexPath.row - 1]
+            return cell
+        }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-       return 80
+        if (indexPath.row == 0) {
+            return 480
+        } else {
+            return 80
+        }
     }
     
     override func viewDidLoad() {
@@ -27,22 +36,23 @@ class HomeController: UIViewController, UITableViewDataSource, UITableViewDelega
         TrackModel.getHomeTracks(onSuccess: {(loadedTracks: [TrackModel]) -> Void in
             self.tracks = loadedTracks
             
-            self.view.addSubview(self.tracksTableView)
+            self.view.addSubview(self.tableView)
             
             self.view.backgroundColor = UIColor(named: "backgroundColor")
             
-            self.tracksTableView.translatesAutoresizingMaskIntoConstraints = false
+            self.tableView.translatesAutoresizingMaskIntoConstraints = false
             
-            self.tracksTableView.topAnchor.constraint(equalTo:self.view.safeAreaLayoutGuide.topAnchor).isActive = true
-            self.tracksTableView.leadingAnchor.constraint(equalTo:self.view.safeAreaLayoutGuide.leadingAnchor).isActive = true
-            self.tracksTableView.trailingAnchor.constraint(equalTo:self.view.safeAreaLayoutGuide.trailingAnchor).isActive = true
-            self.tracksTableView.bottomAnchor.constraint(equalTo:self.view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+            self.tableView.topAnchor.constraint(equalTo:self.view.safeAreaLayoutGuide.topAnchor).isActive = true
+            self.tableView.leadingAnchor.constraint(equalTo:self.view.safeAreaLayoutGuide.leadingAnchor).isActive = true
+            self.tableView.trailingAnchor.constraint(equalTo:self.view.safeAreaLayoutGuide.trailingAnchor).isActive = true
+            self.tableView.bottomAnchor.constraint(equalTo:self.view.safeAreaLayoutGuide.bottomAnchor).isActive = true
             
             
-            self.tracksTableView.dataSource = self
-            self.tracksTableView.delegate = self
+            self.tableView.dataSource = self
+            self.tableView.delegate = self
             
-            self.tracksTableView.register(TrackTableViewCell.self, forCellReuseIdentifier: "TableViewCell")
+            self.tableView.register(AlbumsTableViewCell.self, forCellReuseIdentifier: "AlbumsTableViewCell")
+            self.tableView.register(TrackTableViewCell.self, forCellReuseIdentifier: "TrackTableViewCell")
         }, onError: {(err: Error) -> Void in
             print(err)
         })
@@ -83,6 +93,17 @@ class HomeController: UIViewController, UITableViewDataSource, UITableViewDelega
 }
 
 
+class AlbumsTableViewCell: UITableViewCell {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+}
+
+
 class TrackTableViewCell: UITableViewCell {
     
     var track: TrackModel? {
@@ -95,7 +116,7 @@ class TrackTableViewCell: UITableViewCell {
                 artistNameLabel.text = artistName
             }
             if let album = trackItem.album {
-                albumImageView.image = UIImage(named: album.artwork!)
+                albumImageView.downloaded(from: "https://lostpointer.site/static/artworks/" + (album.artwork!) + "_128px.webp")
             }
             controlsImageView.image = UIImage(systemName: "play.fill")
         }
