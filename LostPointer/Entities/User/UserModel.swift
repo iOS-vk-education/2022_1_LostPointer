@@ -22,7 +22,7 @@ struct UserModel: Codable {
         })
     }
     
-    public func checkAuth(onSuccess: @escaping () -> Void?, onError: @escaping () -> Void?) {
+    public static func checkAuth(onSuccess: @escaping () -> Void?, onError: @escaping () -> Void?) {
         Request.fetch(url: "/auth", method: RequestMethods.GET, successHandler: {(_)->Void in
             onSuccess()
         }, errorHandler: {(_) -> Void in
