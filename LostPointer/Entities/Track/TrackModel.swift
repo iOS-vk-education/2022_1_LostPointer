@@ -19,7 +19,6 @@ struct TrackModel: Codable {
         var tracks: [TrackModel] = []
         Request.fetch(url: "/home/tracks", method: RequestMethods.GET, successHandler: {(data: Data) -> Void in
             do {
-//                print(String(data: data, encoding: String.Encoding.utf8))
                 tracks = try JSONDecoder().decode([TrackModel].self, from: data)
                 onSuccess(tracks)
             } catch {

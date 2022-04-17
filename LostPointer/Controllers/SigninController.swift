@@ -44,7 +44,6 @@ class SigninController: UIViewController {
         view.addSubview(loginInput)
         view.addSubview(passwordInput)
         view.addSubview(signinButton)
-//        view.backgroundColor = UIColor(named: "backgroundColor")
         view.setBackgroundImage(img: UIImage(named: "SigninImage")!)
     }
 
@@ -56,19 +55,16 @@ class SigninController: UIViewController {
         signinButton.sizeThatFits(view.bounds.size)
 
         loginInput.frame = CGRect(
-                x: view.bounds.minX + 20,
-                y: view.bounds.minY + view.bounds.midY / 2,
-                width: view.bounds.width - 40,
-                height: 30
-
+            x: view.bounds.minX + 20,
+            y: view.bounds.minY + view.bounds.midY / 2,
+            width: view.bounds.width - 40,
+            height: 30
         )
         passwordInput.frame = CGRect(
-
-                x: view.bounds.minX + 20,
-                y: loginInput.frame.maxY + 20,
-                width: view.bounds.width - 40,
-                height: 30
-
+            x: view.bounds.minX + 20,
+            y: loginInput.frame.maxY + 20,
+            width: view.bounds.width - 40,
+            height: 30
         )
 
         signinButton.frame = CGRect(
