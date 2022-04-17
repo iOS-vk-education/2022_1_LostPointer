@@ -44,7 +44,8 @@ class SigninController: UIViewController {
         view.addSubview(loginInput)
         view.addSubview(passwordInput)
         view.addSubview(signinButton)
-        view.backgroundColor = UIColor(named: "backgroundColor")
+//        view.backgroundColor = UIColor(named: "backgroundColor")
+        view.setBackgroundImage(img: UIImage(named: "SigninImage")!)
     }
     
     override func viewDidLayoutSubviews() {
@@ -79,8 +80,7 @@ class SigninController: UIViewController {
     }
     
     @objc func signinTap() {
-        let user = UserModel(email: loginInput.text ?? "", password: passwordInput.text ?? "")
-            user.authenticate {
+            UserModel.authenticate(email: loginInput.text ?? "", password: passwordInput.text ?? "") {
                 return self.navigationController?.setViewControllers([TabController()], animated: true)
             } onError: {
                 self.showToast(controller: self, message : "Incorrect credentials!", seconds: 1.0)

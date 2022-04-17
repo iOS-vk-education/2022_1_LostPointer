@@ -1,11 +1,16 @@
 import UIKit
 
 class ProfileController: UIViewController {
+    private lazy var activityIndicator: UIActivityIndicatorView = {
+        let spinner = UIActivityIndicatorView()
+        spinner.style = .large
+        return spinner
+    }()
+
     private lazy var avatar: UIImageView = {
         let image = UIImageView()
         image.layer.cornerRadius = 100
         image.clipsToBounds = true
-        image.downloaded(from: "https://lostpointer.site/static/users/3f5819a4-ae2d-408b-9750-f103c5649972_500px.webp")
         return image
     }()
     
@@ -98,6 +103,29 @@ class ProfileController: UIViewController {
         view.addSubview(newPasswordInput)
         view.addSubview(saveButton)
         view.addSubview(logoutButton)
+
+                activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+                view.addSubview(activityIndicator)
+                activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+                activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+                activityIndicator.startAnimating()
+        
+        UserModel.getProfileData(onSuccess: {(data: Data) -> Void in
+            do {
+                let profile = try JSONDecoder().decode(UserModel.self, from: data)
+                self.avatar.downloaded(from: "https://lostpointer.site" + profile.bigAvatar!)
+                self.nicknameInput.text = profile.nickname
+                self.emailInput.text = profile.email
+            } catch {
+                    
+                        print("UserModel unmarshaling error")
+                    }
+            self.activityIndicator.stopAnimating()
+        }, onError: {(error: Error) -> Void in
+            self.activityIndicator.startAnimating()
+            print(error)
+        })
+            
     }
     
     override func viewDidLayoutSubviews() {
@@ -177,10 +205,16 @@ class ProfileController: UIViewController {
     }
     
     @objc func logout() {
-        UserModel.logout(onSuccess: {() -> Void in
-            return (self.navigationController?.setViewControllers([SigninController()], animated: true))!
-        }, onError: {(err: Error) -> Void in
-            print(err)
-        });
+        print("Logout")
+        let alert = UIAlertController(title: "Log out", message: "Are you sure you want to log out?", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        alert.addAction(UIAlertAction(title: "Log out", style: .destructive, handler: {_ in
+            UserModel.logout(onSuccess: {() -> Void in
+                return (self.navigationController?.setViewControllers([SigninController()], animated: true))!
+            }, onError: {(err: Error) -> Void in
+                print(err)
+            });
+        }))
+        present(alert, animated: true, completion: nil)
     }
 }
