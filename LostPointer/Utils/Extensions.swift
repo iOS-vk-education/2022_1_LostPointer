@@ -30,6 +30,7 @@ extension UIViewController {
 }
 
 extension UIView {
+    // @todo=Как сделать так, чтобы не расплющивало))))00
     func setBackgroundImage(img: UIImage) {
         UIGraphicsBeginImageContext(self.frame.size)
         img.draw(in: self.bounds)
