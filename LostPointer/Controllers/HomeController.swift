@@ -1,76 +1,106 @@
 import UIKit
 
-class HomeController: UIViewController, UITableViewDataSource {
-    private lazy var tableView: UITableView = {
-        let table = UITableView()
-        return table
-    }()
+class HomeController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+    let tracksTableView = UITableView()
     
-    var activityIndicator = UIActivityIndicatorView(style: .large)
+    // var activityIndicator = UIActivityIndicatorView(style: .large)
     var tracks: [TrackModel] = []
-    var artists: [ArtistModel] = []
-    var albums: [AlbumModel] = []
+//    var artists: [ArtistModel] = []
+//    var albums: [AlbumModel] = []
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.tracks.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "TableViewCell",
-                                                     for: indexPath) as! TrackTableViewCell
-            cell.track = tracks[indexPath.row]
-            return cell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "TableViewCell", for: indexPath) as! TrackTableViewCell
+        cell.track = tracks[indexPath.row]
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+       return 80
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(named: "backgroundColor")
-        view.addSubview(tableView)
-        
-        // Spinner
-        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(activityIndicator)
-        activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
-        activityIndicator.startAnimating()
-        
         TrackModel.getHomeTracks(onSuccess: {(loadedTracks: [TrackModel]) -> Void in
             self.tracks = loadedTracks
-        }, onError: {(err: Error) -> Void in
-            print(err)
-        })
-        ArtistModel.getHomeArtists(onSuccess: {(loadedArtists: [ArtistModel]) -> Void in
-            self.artists = loadedArtists
-        }, onError: {(err: Error) -> Void in
-            print(err)
-        });
-        AlbumModel.getHomeAlbums(onSuccess: {(loadedAlbums: [AlbumModel]) -> Void in
-            self.albums = loadedAlbums
+            
+            self.view.addSubview(self.tracksTableView)
+            
+            self.view.backgroundColor = UIColor(named: "backgroundColor")
+            
+            self.tracksTableView.translatesAutoresizingMaskIntoConstraints = false
+            
+            self.tracksTableView.topAnchor.constraint(equalTo:self.view.safeAreaLayoutGuide.topAnchor).isActive = true
+            self.tracksTableView.leadingAnchor.constraint(equalTo:self.view.safeAreaLayoutGuide.leadingAnchor).isActive = true
+            self.tracksTableView.trailingAnchor.constraint(equalTo:self.view.safeAreaLayoutGuide.trailingAnchor).isActive = true
+            self.tracksTableView.bottomAnchor.constraint(equalTo:self.view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+            
+            
+            self.tracksTableView.dataSource = self
+            self.tracksTableView.delegate = self
+            
+            self.tracksTableView.register(TrackTableViewCell.self, forCellReuseIdentifier: "TableViewCell")
         }, onError: {(err: Error) -> Void in
             print(err)
         })
         
-        tableView.register(TrackTableViewCell.self,
-                               forCellReuseIdentifier: "TableViewCell")
-        tableView.dataSource = self
+        
+        
+        // Spinner
+//        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+//        view.addSubview(activityIndicator)
+//        activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+//        activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+//        activityIndicator.startAnimating()
+        
+//        ArtistModel.getHomeArtists(onSuccess: {(loadedArtists: [ArtistModel]) -> Void in
+//            self.artists = loadedArtists
+//        }, onError: {(err: Error) -> Void in
+//            print(err)
+//        });
+//        AlbumModel.getHomeAlbums(onSuccess: {(loadedAlbums: [AlbumModel]) -> Void in
+//            self.albums = loadedAlbums
+//        }, onError: {(err: Error) -> Void in
+//            print(err)
+//        })
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        
-        tableView.sizeThatFits(view.bounds.size)
-        tableView.frame = CGRect(
-            x: view.bounds.minX + 5,
-            y: view.bounds.minY + 5,
-            width: view.bounds.width - 10,
-            height: view.bounds.height - 10
-        )
-        
-    }
+//    override func viewDidLayoutSubviews() {
+//        super.viewDidLayoutSubviews()
+//
+//        tableView.sizeThatFits(view.bounds.size)
+//        tableView.frame = CGRect(
+//            x: view.bounds.minX + 5,
+//            y: view.bounds.minY + 5,
+//            width: view.bounds.width - 10,
+//            height: view.bounds.height - 10
+//        )
+//
+//    }
 }
 
 
 class TrackTableViewCell: UITableViewCell {
+    
+    var track: TrackModel? {
+        didSet {
+            guard let trackItem = track else {return}
+            if let title = trackItem.title {
+                titleLabel.text = title
+            }
+            if let artistName = trackItem.artist?.name {
+                artistNameLabel.text = artistName
+            }
+            if let album = trackItem.album {
+                albumImageView.image = UIImage(named: album.artwork!)
+            }
+            controlsImageView.image = UIImage(systemName: "play.fill")
+        }
+    }
+    
     let albumImageView: UIImageView = {
         let img = UIImageView()
         img.contentMode = .scaleAspectFill
@@ -83,6 +113,8 @@ class TrackTableViewCell: UITableViewCell {
         let label = UILabel()
         label.font = UIFont.boldSystemFont(ofSize: 20)
         label.textColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+        label.adjustsFontSizeToFitWidth = false
+        label.lineBreakMode = .byTruncatingTail
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -103,31 +135,12 @@ class TrackTableViewCell: UITableViewCell {
         return view
     }()
     
-    // в примере тут флаги справа, но у нас будут контролы play/pause
     let controlsImageView: UIImageView = {
         let img = UIImageView()
         img.contentMode = .scaleAspectFill // without this your image will shrink and looks ugly
         img.translatesAutoresizingMaskIntoConstraints = false
-        img.layer.cornerRadius = 13
-        img.clipsToBounds = true
         return img
     }()
-    
-    var track: TrackModel? {
-        didSet {
-            guard let trackItem = track else {return}
-            if let title = trackItem.title {
-                titleLabel.text = title
-            }
-            if let artistName = trackItem.artist?.name {
-                artistNameLabel.text = artistName
-            }
-            if let album = trackItem.album {
-                albumImageView.image = UIImage(named: album.artwork!)
-            }
-            controlsImageView.image = UIImage(systemName: "play.fill")
-        }
-    }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -149,6 +162,7 @@ class TrackTableViewCell: UITableViewCell {
         containerView.heightAnchor.constraint(equalToConstant:40).isActive = true
         
         titleLabel.topAnchor.constraint(equalTo:self.containerView.topAnchor).isActive = true
+        titleLabel.widthAnchor.constraint(equalTo:self.containerView.widthAnchor, constant: -30).isActive = true
         titleLabel.leadingAnchor.constraint(equalTo:self.containerView.leadingAnchor).isActive = true
         titleLabel.trailingAnchor.constraint(equalTo:self.containerView.trailingAnchor).isActive = true
         
