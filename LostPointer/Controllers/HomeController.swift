@@ -5,17 +5,21 @@ class HomeController: UIViewController, UITableViewDataSource, UITableViewDelega
     let tableView = UITableView()
 
     var tracks: [TrackModel] = []
-//    var artists: [ArtistModel] = []
+    var albumsCell: AlbumsCell?
+    var artistsCell: ArtistsCell?
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1 + self.tracks.count
+        return 1 + self.tracks.count + 1
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
         if indexPath.row == 0 {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "AlbumsCell", for: indexPath) as? AlbumsCell
-            return cell ?? UITableViewCell()
+            return self.albumsCell ?? UITableViewCell()
+            
+        } else if indexPath.row == self.tracks.count + 1 {
+            return self.artistsCell ?? UITableViewCell()
+            
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "TrackCell", for: indexPath) as? TrackCell
             cell?.track = tracks[indexPath.row - 1]
@@ -26,6 +30,8 @@ class HomeController: UIViewController, UITableViewDataSource, UITableViewDelega
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.row == 0 {
             return 480
+        } else if indexPath.row == self.tracks.count + 1 {
+            return 290
         } else {
             return 80
         }
@@ -52,6 +58,14 @@ class HomeController: UIViewController, UITableViewDataSource, UITableViewDelega
 
             self.tableView.register(AlbumsCell.self, forCellReuseIdentifier: "AlbumsCell")
             self.tableView.register(TrackCell.self, forCellReuseIdentifier: "TrackCell")
+            self.tableView.register(ArtistsCell.self, forCellReuseIdentifier: "ArtistsCell")
+            
+            self.albumsCell = self.tableView.dequeueReusableCell(withIdentifier: "AlbumsCell") as? AlbumsCell
+            self.artistsCell = self.tableView.dequeueReusableCell(withIdentifier: "ArtistsCell") as? ArtistsCell
+            self.albumsCell?.load()
+            self.artistsCell?.load()
+            
+            
         }, onError: {(err: Error) -> Void in
             print(err)
         })

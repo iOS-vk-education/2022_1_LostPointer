@@ -27,6 +27,8 @@
 		ED8EF223280C9233009F9673 /* TrackCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED8EF222280C9233009F9673 /* TrackCell.swift */; };
 		ED8EF225280C9254009F9673 /* AlbumsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED8EF224280C9254009F9673 /* AlbumsCell.swift */; };
 		ED8EF227280C928A009F9673 /* AlbumCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED8EF226280C9289009F9673 /* AlbumCell.swift */; };
+		ED8EF229280C9488009F9673 /* ArtistsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED8EF228280C9488009F9673 /* ArtistsCell.swift */; };
+		ED8EF22B280C94F8009F9673 /* ArtistCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED8EF22A280C94F8009F9673 /* ArtistCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,6 +54,8 @@
 		ED8EF222280C9233009F9673 /* TrackCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackCell.swift; sourceTree = "<group>"; };
 		ED8EF224280C9254009F9673 /* AlbumsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumsCell.swift; sourceTree = "<group>"; };
 		ED8EF226280C9289009F9673 /* AlbumCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumCell.swift; sourceTree = "<group>"; };
+		ED8EF228280C9488009F9673 /* ArtistsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistsCell.swift; sourceTree = "<group>"; };
+		ED8EF22A280C94F8009F9673 /* ArtistCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -120,6 +124,8 @@
 				ED8EF222280C9233009F9673 /* TrackCell.swift */,
 				ED8EF224280C9254009F9673 /* AlbumsCell.swift */,
 				ED8EF226280C9289009F9673 /* AlbumCell.swift */,
+				ED8EF228280C9488009F9673 /* ArtistsCell.swift */,
+				ED8EF22A280C94F8009F9673 /* ArtistCell.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -270,9 +276,11 @@
 				52A80886280C431E00D0DF26 /* SigninController.swift in Sources */,
 				5B1ADC1727E63E040081EFDB /* AlbumModel.swift in Sources */,
 				5B1ADC1327E63D140081EFDB /* ArtistModel.swift in Sources */,
+				ED8EF229280C9488009F9673 /* ArtistsCell.swift in Sources */,
 				5B1ADBF527E63AD10081EFDB /* SceneDelegate.swift in Sources */,
 				520C8EE32807564500A2BFA5 /* FavoritesController.swift in Sources */,
 				ED8EF223280C9233009F9673 /* TrackCell.swift in Sources */,
+				ED8EF22B280C94F8009F9673 /* ArtistCell.swift in Sources */,
 				ED8EF227280C928A009F9673 /* AlbumCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -6,11 +6,10 @@ class AlbumsCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDat
     var albums: [AlbumModel] = []
     var loaded: Bool = false
     
-    override func layoutSubviews() {
+    func load() {
         if loaded {
             return
         }
-        super.layoutSubviews()
         
         AlbumModel.getHomeAlbums(onSuccess: {(loadedAlbums: [AlbumModel]) -> Void in
             self.albums = loadedAlbums
@@ -42,7 +41,6 @@ class AlbumsCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDat
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        // swiftlint:disable force_cast
         let albumCell = collectionView.dequeueReusableCell(withReuseIdentifier: "AlbumCell", for: indexPath) as? AlbumCell
         albumCell?.album = albums[indexPath.item]
         return albumCell ?? UICollectionViewCell()
