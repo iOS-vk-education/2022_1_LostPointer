@@ -27,8 +27,8 @@ struct TrackModel: Codable {
                 print(NSError(domain: "TrackModel", code: -1, userInfo: ["Error": "Error unmarshaling tracks data"]))
             }
         },
-        errorHandler: {(Error) -> Void in
-            onError(Error)
+        errorHandler: {(err: Error) -> Void in
+            onError(err)
         }
         )
     }

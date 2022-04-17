@@ -127,6 +127,7 @@ class ProfileController: UIViewController {
 
     }
 
+    // swiftlint:disable function_body_length
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
