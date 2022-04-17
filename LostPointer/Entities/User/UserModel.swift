@@ -29,4 +29,12 @@ struct UserModel: Codable {
             onError()
         })
     }
+    
+    public static func logout(onSuccess: @escaping() -> Void?, onError: @escaping (Error) -> Void?) {
+        Request.fetch(url: "/user/logout", method: RequestMethods.POST, successHandler: {(_)->Void in
+            onSuccess()
+        }, errorHandler: {(err: Error) -> Void in
+            onError(err)
+        })
+    }
 }

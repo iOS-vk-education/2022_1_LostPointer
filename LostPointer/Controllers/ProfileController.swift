@@ -177,6 +177,10 @@ class ProfileController: UIViewController {
     }
     
     @objc func logout() {
-        // UserModel.logout();
+        UserModel.logout(onSuccess: {() -> Void in
+            return (self.navigationController?.setViewControllers([SigninController()], animated: true))!
+        }, onError: {(err: Error) -> Void in
+            print(err)
+        });
     }
 }
