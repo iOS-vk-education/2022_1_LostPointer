@@ -104,11 +104,11 @@ class ProfileController: UIViewController {
         view.addSubview(saveButton)
         view.addSubview(logoutButton)
 
-                activityIndicator.translatesAutoresizingMaskIntoConstraints = false
-                view.addSubview(activityIndicator)
-                activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-                activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
-                activityIndicator.startAnimating()
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(activityIndicator)
+        activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        activityIndicator.startAnimating()
 
         UserModel.getProfileData(onSuccess: {(data: Data) -> Void in
             do {
@@ -117,9 +117,8 @@ class ProfileController: UIViewController {
                 self.nicknameInput.text = profile.nickname
                 self.emailInput.text = profile.email
             } catch {
-
-                        print("UserModel unmarshaling error")
-                    }
+                print("UserModel unmarshaling error")
+            }
             self.activityIndicator.stopAnimating()
         }, onError: {(error: Error) -> Void in
             self.activityIndicator.startAnimating()
