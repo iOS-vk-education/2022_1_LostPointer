@@ -12,7 +12,7 @@ class TrackCell: UITableViewCell {
                 artistNameLabel.text = artistName
             }
             if let album = trackItem.album {
-                albumImageView.downloaded(from: "https://lostpointer.site/static/artworks/" + (album.artwork ?? "") + "_128px.webp")
+                albumImageView.downloaded(from: Constants.albumArtworkPrefix + (album.artwork ?? "") + Constants.albumArtworkSmallSuffix)
             }
             controlsImageView.image = UIImage(systemName: "play.fill")
         }
@@ -68,29 +68,31 @@ class TrackCell: UITableViewCell {
         self.contentView.addSubview(containerView)
         self.contentView.addSubview(controlsImageView)
 
-        albumImageView.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor).isActive = true
-        albumImageView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 10).isActive = true
-        albumImageView.widthAnchor.constraint(equalToConstant: 70).isActive = true
-        albumImageView.heightAnchor.constraint(equalToConstant: 70).isActive = true
+        NSLayoutConstraint.activate([
+            albumImageView.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor),
+            albumImageView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 10),
+            albumImageView.widthAnchor.constraint(equalToConstant: 70),
+            albumImageView.heightAnchor.constraint(equalToConstant: 70),
 
-        containerView.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor).isActive = true
-        containerView.leadingAnchor.constraint(equalTo: self.albumImageView.trailingAnchor, constant: 10).isActive = true
-        containerView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -10).isActive = true
-        containerView.heightAnchor.constraint(equalToConstant: 40).isActive = true
+            containerView.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor),
+            containerView.leadingAnchor.constraint(equalTo: self.albumImageView.trailingAnchor, constant: 10),
+            containerView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -10),
+            containerView.heightAnchor.constraint(equalToConstant: 40),
 
-        titleLabel.topAnchor.constraint(equalTo: self.containerView.topAnchor).isActive = true
-        titleLabel.widthAnchor.constraint(equalTo: self.containerView.widthAnchor, constant: -30).isActive = true
-        titleLabel.leadingAnchor.constraint(equalTo: self.containerView.leadingAnchor).isActive = true
-        titleLabel.trailingAnchor.constraint(equalTo: self.containerView.trailingAnchor).isActive = true
+            titleLabel.topAnchor.constraint(equalTo: self.containerView.topAnchor),
+            titleLabel.widthAnchor.constraint(equalTo: self.containerView.widthAnchor, constant: -30),
+            titleLabel.leadingAnchor.constraint(equalTo: self.containerView.leadingAnchor),
+            titleLabel.trailingAnchor.constraint(equalTo: self.containerView.trailingAnchor),
 
-        artistNameLabel.topAnchor.constraint(equalTo: self.titleLabel.bottomAnchor).isActive = true
-        artistNameLabel.leadingAnchor.constraint(equalTo: self.containerView.leadingAnchor).isActive = true
-        artistNameLabel.topAnchor.constraint(equalTo: self.titleLabel.bottomAnchor).isActive = true
+            artistNameLabel.topAnchor.constraint(equalTo: self.titleLabel.bottomAnchor),
+            artistNameLabel.leadingAnchor.constraint(equalTo: self.containerView.leadingAnchor),
+            artistNameLabel.topAnchor.constraint(equalTo: self.titleLabel.bottomAnchor),
 
-        controlsImageView.widthAnchor.constraint(equalToConstant: 26).isActive = true
-        controlsImageView.heightAnchor.constraint(equalToConstant: 26).isActive = true
-        controlsImageView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -20).isActive = true
-        controlsImageView.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor).isActive = true
+            controlsImageView.widthAnchor.constraint(equalToConstant: 26),
+            controlsImageView.heightAnchor.constraint(equalToConstant: 26),
+            controlsImageView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -20),
+            controlsImageView.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor)
+        ])
     }
 
     required init?(coder aDecoder: NSCoder) {

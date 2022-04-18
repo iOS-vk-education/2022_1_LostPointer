@@ -126,20 +126,21 @@ class ProfileController: UIViewController {
         activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
         activityIndicator.startAnimating()
 
-        UserModel.getProfileData(onSuccess: {(data: Data) -> Void in
-            do {
-                let profile = try JSONDecoder().decode(UserModel.self, from: data)
-                self.avatar.downloaded(from: "https://lostpointer.site" + profile.bigAvatar!)
-                self.nicknameInput.text = profile.nickname
-                self.emailInput.text = profile.email
-            } catch {
+        UserModel.getProfileData() {[weak self] data in
+            guard let profile = try? JSONDecoder().decode(UserModel.self, from: data) else {
                 print("UserModel unmarshaling error")
+                return
             }
-            self.activityIndicator.stopAnimating()
-        }, onError: {(error: Error) -> Void in
-            self.activityIndicator.startAnimating()
-            print(error)
-        })
+
+            self?.avatar.downloaded(from: Constants.baseUrl + profile.bigAvatar!)
+            self?.nicknameInput.text = profile.nickname
+            self?.emailInput.text = profile.email
+
+            self?.activityIndicator.stopAnimating()
+        } onError: {[weak self] err in
+            self?.activityIndicator.startAnimating()
+            print(err)
+        }
 
     }
 
@@ -236,23 +237,23 @@ class ProfileController: UIViewController {
                              nickname: nicknameInput.text,
                              oldPassword: oldPasswordInput.text)
 
-        user.updateProfileData(onSuccess: {() -> Void in
+        user.updateProfileData() {
             print("Success")
-        }, onError: {(err: String) -> Void in
-            showAlert(title: "Error", message: err)
-        })
+        } onError: {[weak self] err in
+            self?.showAlert(title: "Error", message: err)
+        }
     }
 
     @objc func logout() {
         print("Logout")
         let alert = UIAlertController(title: "Log out", message: "Are you sure you want to log out?", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-        alert.addAction(UIAlertAction(title: "Log out", style: .destructive, handler: {_ in
-            UserModel.logout(onSuccess: {() -> Void in
-                return (self.navigationController?.setViewControllers([SigninController()], animated: true))!
-            }, onError: {(err: Error) -> Void in
+        alert.addAction(UIAlertAction(title: "Log out", style: .destructive, handler: {[weak self] _ in
+            UserModel.logout() {
+                return self?.navigationController?.setViewControllers([SigninController()], animated: true)
+            } onError: {err in
                 print(err)
-            })
+            }
         }))
         present(alert, animated: true, completion: nil)
     }

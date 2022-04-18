@@ -6,10 +6,10 @@ class MainController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = UIColor(named: "backgroundColor")
 
-        UserModel.checkAuth {
-            return self.navigationController?.setViewControllers([TabController()], animated: false)
-        } onError: {
-            return self.navigationController?.setViewControllers([SigninController()], animated: false)
+        UserModel.checkAuth {[weak self] in
+            return self?.navigationController?.setViewControllers([TabController()], animated: false)
+        } onError: {[weak self] in
+            return self?.navigationController?.setViewControllers([SigninController()], animated: false)
         }
 
     }

@@ -1,7 +1,11 @@
 import UIKit
 
 struct UserModel: Codable {
-    let email, password, nickname, bigAvatar, oldPassword: String?
+    let email: String?
+    let password: String?
+    let nickname: String?
+    let bigAvatar: String?
+    let oldPassword: String?
 
     enum CodingKeys: String, CodingKey {
         case email, password, nickname
@@ -44,7 +48,7 @@ struct UserModel: Codable {
         })
     }
 
-    public static func getProfileData(onSuccess: @escaping(Data) -> Void?, onError: @escaping (Error) -> Void?) {
+    public static func getProfileData(onSuccess: @escaping(Data) -> Void, onError: @escaping (Error) -> Void) {
         Request.fetch(url: "/user/settings", method: RequestMethods.GET, successHandler: {(data: Data) -> Void in
         onSuccess(data)
         }, errorHandler: {(error: Error) -> Void in

@@ -11,9 +11,8 @@ struct CommonResponse: Decodable {
 }
 
 public final class Request {
-    private static var baseUrl = "https://lostpointer.site/api/v1"
     public static func fetch(url: String, method: RequestMethods, data: Data? = nil, successHandler: ((Data) -> Void)?, errorHandler: ((Error) -> Void)?) {
-        let url = URL(string: baseUrl + url)!
+        let url = URL(string: Constants.baseRequestUrl + url)!
 
         var request = URLRequest(url: url)
         if data != nil {
@@ -76,8 +75,10 @@ public final class Request {
                 return
             }
 
+            guard let url = URL(string: Constants.baseUrl) else {return}
+
             HTTPCookieStorage.shared.cookies(
-                for: response.url ?? URL(string: "https://lostpointer.site")!)
+                for: (response.url ?? url))
             success(data)
 
         }

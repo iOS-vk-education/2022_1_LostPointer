@@ -9,17 +9,17 @@ class HomeController: UIViewController, UITableViewDataSource, UITableViewDelega
     var artistsCell: ArtistsCell?
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1 + self.tracks.count + 1
+        1 + self.tracks.count + 1
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
         if indexPath.row == 0 {
             return self.albumsCell ?? UITableViewCell()
-            
+
         } else if indexPath.row == self.tracks.count + 1 {
             return self.artistsCell ?? UITableViewCell()
-            
+
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "TrackCell", for: indexPath) as? TrackCell
             cell?.track = tracks[indexPath.row - 1]
@@ -39,7 +39,7 @@ class HomeController: UIViewController, UITableViewDataSource, UITableViewDelega
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        TrackModel.getHomeTracks(onSuccess: {(loadedTracks: [TrackModel]) -> Void in
+        TrackModel.getHomeTracks() {loadedTracks in
             self.tracks = loadedTracks
 
             self.view.addSubview(self.tableView)
@@ -59,16 +59,15 @@ class HomeController: UIViewController, UITableViewDataSource, UITableViewDelega
             self.tableView.register(AlbumsCell.self, forCellReuseIdentifier: "AlbumsCell")
             self.tableView.register(TrackCell.self, forCellReuseIdentifier: "TrackCell")
             self.tableView.register(ArtistsCell.self, forCellReuseIdentifier: "ArtistsCell")
-            
+
             self.albumsCell = self.tableView.dequeueReusableCell(withIdentifier: "AlbumsCell") as? AlbumsCell
             self.artistsCell = self.tableView.dequeueReusableCell(withIdentifier: "ArtistsCell") as? ArtistsCell
             self.albumsCell?.load()
             self.artistsCell?.load()
-            
-            
-        }, onError: {(err: Error) -> Void in
+
+        } onError: {err in
             print(err)
-        })
+        }
     }
 
 }

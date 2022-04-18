@@ -7,16 +7,14 @@ struct ArtistModel: Codable {
 
     static func getHomeArtists(onSuccess: @escaping ([ArtistModel]) -> Void, onError: @escaping  (Error) -> Void) {
         var artists: [ArtistModel] = []
-        Request.fetch(url: "/home/artists", method: RequestMethods.GET, successHandler: {(data: Data) -> Void in
-            do {
-                artists = try JSONDecoder().decode([ArtistModel].self, from: data)
-                onSuccess(artists)
-            } catch {
-                print(error)
+        Request.fetch(url: "/home/artists", method: RequestMethods.GET) {data in
+            guard let artists = try? JSONDecoder().decode([ArtistModel].self, from: data) else {
+                print("Error unmarshaling Artist data")
+                return
             }
-        }, errorHandler: {(err: Error) -> Void in
+            onSuccess(artists)
+        } errorHandler: {err in
             onError(err)
         }
-        )
     }
 }
