@@ -102,28 +102,46 @@ class ProfileController: UIViewController {
         return button
     }()
 
+    private lazy var scrollView: UIScrollView = {
+        let scroll = UIScrollView()
+        scroll.translatesAutoresizingMaskIntoConstraints = false
+        return scroll
+    }()
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(named: "backgroundColor")
+        self.view.addSubview(scrollView)
 
-        view.addSubview(avatar)
-        view.addSubview(nicknameLabel)
-        view.addSubview(nicknameInput)
-        view.addSubview(emailLabel)
-        view.addSubview(emailInput)
-        view.addSubview(oldPasswordLabel)
-        view.addSubview(oldPasswordInput)
-        view.addSubview(newPasswordLabel)
-        view.addSubview(newPasswordInput)
-        view.addSubview(confirmPasswordLabel)
-        view.addSubview(confirmPasswordInput)
-        view.addSubview(saveButton)
-        view.addSubview(logoutButton)
+        NSLayoutConstraint.activate([
+            scrollView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 0),
+            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0),
+            scrollView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 0),
+            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0)
+        ])
+
+        scrollView.backgroundColor = UIColor(named: "backgroundColor")
+        scrollView.superview?.isUserInteractionEnabled = true
+        [avatar,
+         nicknameLabel, nicknameInput,
+         emailLabel, emailInput,
+         oldPasswordLabel, oldPasswordInput,
+         newPasswordLabel, newPasswordInput,
+         confirmPasswordLabel, confirmPasswordInput,
+         saveButton, logoutButton].forEach {[weak self] view in
+            self?.scrollView.addSubview(view)
+        }
 
         activityIndicator.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(activityIndicator)
-        activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        scrollView.addSubview(activityIndicator)
+
+        scrollView.layoutIfNeeded()
+        scrollView.isScrollEnabled = true
+        scrollView.contentSize = CGSize(width: self.view.frame.width, height: scrollView.frame.size.height)
+        NSLayoutConstraint.activate([
+            activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+
         activityIndicator.startAnimating()
 
         UserModel.getProfileData {[weak self] data in
@@ -148,40 +166,40 @@ class ProfileController: UIViewController {
         super.viewDidLayoutSubviews()
 
         avatar.frame = CGRect(
-            x: view.bounds.midX - 90,
-            y: view.bounds.minY + view.bounds.midY / 5,
+            x: scrollView.bounds.midX - 90,
+            y: scrollView.bounds.minY + view.bounds.midY / 5,
             width: 180,
             height: 180
         )
 
         nicknameLabel.frame = CGRect(
-            x: view.bounds.minX + 10,
+            x: scrollView.bounds.minX + 10,
             y: avatar.frame.maxY + 30,
-            width: view.bounds.width - 40,
+            width: scrollView.bounds.width - 40,
             height: 15
         )
         nicknameInput.frame = CGRect(
-            x: view.bounds.minX + 10,
+            x: scrollView.bounds.minX + 10,
             y: nicknameLabel.frame.maxY + 10,
-            width: view.bounds.width - 40,
+            width: scrollView.bounds.width - 40,
             height: 30
         )
         emailLabel.frame = CGRect(
-            x: view.bounds.minX + 10,
+            x: scrollView.bounds.minX + 10,
             y: nicknameInput.frame.maxY + 10,
-            width: view.bounds.width - 40,
+            width: scrollView.bounds.width - 40,
             height: 15
         )
         emailInput.frame = CGRect(
-            x: view.bounds.minX + 10,
+            x: scrollView.bounds.minX + 10,
             y: emailLabel.frame.maxY + 10,
             width: view.bounds.width - 40,
             height: 30
         )
         oldPasswordLabel.frame = CGRect(
-            x: view.bounds.minX + 10,
+            x: scrollView.bounds.minX + 10,
             y: emailInput.frame.maxY + 10,
-            width: view.bounds.width - 40,
+            width: scrollView.bounds.width - 40,
             height: 15
         )
         oldPasswordInput.frame = CGRect(
@@ -191,41 +209,46 @@ class ProfileController: UIViewController {
             height: 30
         )
         newPasswordLabel.frame = CGRect(
-            x: view.bounds.minX + 10,
+            x: scrollView.bounds.minX + 10,
             y: oldPasswordInput.frame.maxY + 10,
-            width: view.bounds.width - 40,
+            width: scrollView.bounds.width - 40,
             height: 15
         )
         newPasswordInput.frame = CGRect(
-            x: view.bounds.minX + 10,
+            x: scrollView.bounds.minX + 10,
             y: newPasswordLabel.frame.maxY + 10,
-            width: view.bounds.width - 40,
+            width: scrollView.bounds.width - 40,
             height: 30
         )
         confirmPasswordLabel.frame = CGRect(
-            x: view.bounds.minX + 10,
+            x: scrollView.bounds.minX + 10,
             y: newPasswordInput.frame.maxY + 10,
-            width: view.bounds.width - 40,
+            width: scrollView.bounds.width - 40,
             height: 15
         )
         confirmPasswordInput.frame = CGRect(
-            x: view.bounds.minX + 10,
+            x: scrollView.bounds.minX + 10,
             y: confirmPasswordLabel.frame.maxY + 10,
-            width: view.bounds.width - 40,
+            width: scrollView.bounds.width - 40,
             height: 30
         )
         saveButton.frame = CGRect(
-            x: view.bounds.minX + 10,
+            x: scrollView.bounds.minX + 10,
             y: confirmPasswordInput.frame.maxY + 10,
-            width: view.bounds.width - 20,
+            width: scrollView.bounds.width - 20,
             height: 40
         )
         logoutButton.frame = CGRect(
-            x: view.bounds.minX + 10,
+            x: scrollView.bounds.minX + 10,
             y: saveButton.frame.maxY + 10,
-            width: view.bounds.width - 20,
+            width: scrollView.bounds.width - 20,
             height: 40
         )
+
+        let contentRect: CGRect = scrollView.subviews.reduce(into: .zero) { rect, view in
+            rect = rect.union(view.frame)
+        }
+        scrollView.contentSize = contentRect.size
     }
 
     @objc func saveProfile() {
@@ -245,7 +268,8 @@ class ProfileController: UIViewController {
 
     @objc func logout() {
         print("Logout")
-        let alert = UIAlertController(title: "Log out", message: "Are you sure you want to log out?", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Log out", message: "Are you sure you want to log out?",
+                                      preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
         alert.addAction(UIAlertAction(title: "Log out", style: .destructive, handler: {[weak self] _ in
             UserModel.logout {
