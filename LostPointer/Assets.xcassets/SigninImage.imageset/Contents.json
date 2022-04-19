@@ -1,12 +1,12 @@
 {
   "images" : [
     {
-      "filename" : "signin-2.heic",
+      "filename" : "signin.heic",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "signin-1.heic",
+      "filename" : "signin.heic",
       "idiom" : "universal",
       "scale" : "2x"
     },
