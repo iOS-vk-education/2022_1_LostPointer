@@ -12,15 +12,15 @@ struct AlbumModel: Codable {
     static func getHomeAlbums(onSuccess: @escaping ([AlbumModel]) -> Void, onError: @escaping(Error) -> Void) {
         var albums: [AlbumModel] = []
 
-        Request.fetch(url: "/home/albums", method: RequestMethods.GET, successHandler: {(data: Data) -> Void in
-            do {
-                albums = try JSONDecoder().decode([AlbumModel].self, from: data)
+        Request.fetch(url: "/home/albums", method: RequestMethods.GET) {data in
+            guard let
+                    albums = try? JSONDecoder().decode([AlbumModel].self, from: data) else {
+                        print("Error unmarshaling Albums data")
+                        return
+                    }
                 onSuccess(albums)
-            } catch {
-                print(error)
-            }
-        }, errorHandler: {(err: Error) -> Void in
+        } errorHandler: {err in
             onError(err)
-        })
+        }
     }
 }
