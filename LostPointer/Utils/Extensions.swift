@@ -34,9 +34,14 @@ extension UIView {
     func setBackgroundImage(img: UIImage) {
         UIGraphicsBeginImageContext(self.frame.size)
         img.draw(in: self.bounds)
+        self.contentMode = .scaleAspectFit
+        self.translatesAutoresizingMaskIntoConstraints = false
         let patternImage: UIImage = UIGraphicsGetImageFromCurrentImageContext()!
         UIGraphicsEndImageContext()
-        self.backgroundColor = UIColor(patternImage: patternImage)
+//        self.backgroundColor = UIColor(patternImage: patternImage)
+        
+        self.layer.contents = img.cgImage;
+
     }
 }
 

@@ -11,7 +11,7 @@ class AlbumsCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDat
             return
         }
 
-        AlbumModel.getHomeAlbums(onSuccess: {(loadedAlbums: [AlbumModel]) -> Void in
+        AlbumModel.getHomeAlbums() {loadedAlbums in
             self.albums = loadedAlbums
 
             self.backgroundColor = UIColor(named: "backgroundColor")
@@ -31,13 +31,13 @@ class AlbumsCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDat
 
             self.addSubview(self.albumsCollectionView ?? UICollectionView())
             self.loaded = true
-        }, onError: {(err: Error) -> Void in
+        } onError: {err in
             print(err)
-        })
+        }
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 5
+        5
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
