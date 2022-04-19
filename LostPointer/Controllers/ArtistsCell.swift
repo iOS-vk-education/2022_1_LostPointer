@@ -11,7 +11,7 @@ class ArtistsCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDa
             return
         }
 
-        ArtistModel.getHomeArtists() { [weak self] loadedArtists in
+        ArtistModel.getHomeArtists { [weak self] loadedArtists in
             self?.artists = loadedArtists
 
             self?.backgroundColor = UIColor(named: "backgroundColor")

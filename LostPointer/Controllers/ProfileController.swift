@@ -126,7 +126,7 @@ class ProfileController: UIViewController {
         activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
         activityIndicator.startAnimating()
 
-        UserModel.getProfileData() {[weak self] data in
+        UserModel.getProfileData {[weak self] data in
             guard let profile = try? JSONDecoder().decode(UserModel.self, from: data) else {
                 print("UserModel unmarshaling error")
                 return
@@ -237,7 +237,7 @@ class ProfileController: UIViewController {
                              nickname: nicknameInput.text,
                              oldPassword: oldPasswordInput.text)
 
-        user.updateProfileData() {
+        user.updateProfileData {
             print("Success")
         } onError: {[weak self] err in
             self?.showAlert(title: "Error", message: err)
@@ -249,7 +249,7 @@ class ProfileController: UIViewController {
         let alert = UIAlertController(title: "Log out", message: "Are you sure you want to log out?", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
         alert.addAction(UIAlertAction(title: "Log out", style: .destructive, handler: {[weak self] _ in
-            UserModel.logout() {
+            UserModel.logout {
                 return self?.navigationController?.setViewControllers([SigninController()], animated: true)
             } onError: {err in
                 print(err)

@@ -11,7 +11,7 @@ class AlbumsCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDat
             return
         }
 
-        AlbumModel.getHomeAlbums() {loadedAlbums in
+        AlbumModel.getHomeAlbums {loadedAlbums in
             self.albums = loadedAlbums
 
             self.backgroundColor = UIColor(named: "backgroundColor")

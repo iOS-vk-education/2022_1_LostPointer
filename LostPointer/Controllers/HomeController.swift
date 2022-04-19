@@ -39,7 +39,7 @@ class HomeController: UIViewController, UITableViewDataSource, UITableViewDelega
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        TrackModel.getHomeTracks() {loadedTracks in
+        TrackModel.getHomeTracks {loadedTracks in
             self.tracks = loadedTracks
 
             self.view.addSubview(self.tableView)
