@@ -30,18 +30,11 @@ extension UIViewController {
 }
 
 extension UIView {
-    // @todo=Как сделать так, чтобы не расплющивало))))00
     func setBackgroundImage(img: UIImage) {
-        UIGraphicsBeginImageContext(self.frame.size)
-        img.draw(in: self.bounds)
-        self.contentMode = .scaleAspectFit
-        self.translatesAutoresizingMaskIntoConstraints = false
-        let patternImage: UIImage = UIGraphicsGetImageFromCurrentImageContext()!
-        UIGraphicsEndImageContext()
-//        self.backgroundColor = UIColor(patternImage: patternImage)
-        
-        self.layer.contents = img.cgImage;
-
+        let backgroundImage = UIImageView(frame: UIScreen.main.bounds)
+        backgroundImage.image = img
+        backgroundImage.contentMode = UIView.ContentMode.scaleAspectFill
+        self.insertSubview(backgroundImage, at: 0)
     }
 }
 
