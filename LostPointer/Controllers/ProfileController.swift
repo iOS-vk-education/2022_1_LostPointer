@@ -140,7 +140,6 @@ class ProfileController: UIViewController {
             self.activityIndicator.startAnimating()
             print(error)
         })
-
     }
 
     // swiftlint:disable function_body_length
