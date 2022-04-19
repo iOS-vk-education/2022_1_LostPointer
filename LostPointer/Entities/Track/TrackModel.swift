@@ -1,8 +1,31 @@
 import UIKit
 
-struct TrackModel {
-    let artwork: String
-    let artist: ArtistModel
-    let album: AlbumModel
-    let duration: Int32
+struct TrackModel: Codable {
+    let id: Int?
+    let title, genre: String?
+    let number: Int?
+    let listenCount: Int?
+    let duration: Int?
+    let album: AlbumModel?
+    let artist: ArtistModel?
+    let file: String
+
+    enum CodingKeys: String, CodingKey {
+        case id, title, genre, number, duration, album, artist, file
+        case listenCount = "listen_count"
+    }
+
+    static func getHomeTracks(onSuccess: @escaping ([TrackModel]) -> Void, onError: @escaping  (Error) -> Void) {
+        var tracks: [TrackModel] = []
+        Request.fetch(url: "/home/tracks", method: RequestMethods.GET) {data in
+            guard let tracks = try? JSONDecoder().decode([TrackModel].self, from: data) else {
+                print(NSError(domain: "TrackModel", code: -1, userInfo: ["Error": "Error unmarshaling tracks data"]))
+                return
+            }
+            onSuccess(tracks)
+        } errorHandler: {err in
+            onError(err)
+        }
+    }
+
 }

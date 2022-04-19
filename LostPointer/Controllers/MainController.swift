@@ -1,17 +1,17 @@
 import UIKit
 
 class MainController: UIViewController {
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupViews()
-        setupConstraints()
-        view.backgroundColor = .black
-    }
+        view.backgroundColor = UIColor(named: "backgroundColor")
 
-    private func setupConstraints() {
-    }
-
-    private func setupViews() {
+        UserModel.checkAuth {[weak self] in
+            return self?.navigationController?.setViewControllers([TabController()], animated: false)
+        } onError: {[weak self] in
+            return self?.navigationController?.setViewControllers([SigninController()], animated: false)
+        }
 
     }
+
 }
