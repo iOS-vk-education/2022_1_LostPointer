@@ -8,10 +8,8 @@ class MainController: UIViewController {
 
         UserModel.checkAuth {[weak self] in
             return self?.navigationController?.setViewControllers([TabController()], animated: false)
-        } onError: {[weak self] in
+        } onError: {[weak self] _ in
             return self?.navigationController?.setViewControllers([SigninController()], animated: false)
         }
-
     }
-
 }

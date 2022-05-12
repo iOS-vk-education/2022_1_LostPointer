@@ -10,8 +10,6 @@ struct AlbumModel: Codable {
     }
 
     static func getHomeAlbums(onSuccess: @escaping ([AlbumModel]) -> Void, onError: @escaping(Error) -> Void) {
-        var albums: [AlbumModel] = []
-
         Request.fetch(url: "/home/albums", method: RequestMethods.GET) {data in
             guard let
                     albums = try? JSONDecoder().decode([AlbumModel].self, from: data) else {
@@ -19,7 +17,7 @@ struct AlbumModel: Codable {
                         return
                     }
                 onSuccess(albums)
-        } errorHandler: {err in
+        } onError: {err in
             onError(err)
         }
     }

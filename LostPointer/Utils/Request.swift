@@ -11,8 +11,11 @@ struct CommonResponse: Decodable {
 }
 
 public final class Request {
-    public static func fetch(url: String, method: RequestMethods, data: Data? = nil, successHandler: ((Data) -> Void)?, errorHandler: ((Error) -> Void)?) {
-        let url = URL(string: Constants.baseRequestUrl + url)!
+    public static func fetch(url: String, method: RequestMethods, data: Data? = nil,
+                             onSuccess: ((Data) -> Void)?, onError: ((Error) -> Void)?) {
+        guard let url = URL(string: Constants.baseRequestUrl + url) else {
+            return
+        }
 
         var request = URLRequest(url: url)
         if data != nil {
@@ -23,26 +26,19 @@ public final class Request {
 
         request.allHTTPHeaderFields = HTTPCookie.requestHeaderFields(with: cookies!)
 
-//        print("Headers: >>>")
-//        print(request.allHTTPHeaderFields)
-//        print("Headers: <<<")
-
-//        print("Headers after: >>>")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("application/json", forHTTPHeaderField: "Accept")
         request.httpMethod = method.rawValue
-//        print(request.allHTTPHeaderFields)
-//        print("Headers after: <<<")
 
         let failure = { (error: Error) in
             DispatchQueue.main.async {
-                errorHandler?(error)
+                onError?(error)
             }
         }
 
         let success = { (response: Data) in
             DispatchQueue.main.async {
-                successHandler?(response)
+                onSuccess?(response)
             }
         }
 
@@ -59,7 +55,6 @@ public final class Request {
                 failure(NSError(domain: "APIRequest", code: -2, userInfo: nil))
                 return
             }
-//            print(String(decoding: data, as: UTF8.self))
             var code = 0
             do {
                 let responseObject = try JSONDecoder().decode(CommonResponse.self, from: data)

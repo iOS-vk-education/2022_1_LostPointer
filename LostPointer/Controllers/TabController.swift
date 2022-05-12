@@ -36,7 +36,7 @@ class TabController: UITabBarController, UITabBarControllerDelegate {
     }
 
     private func tabBarController(_ tabBarController: UITabBarController,
-                          shouldSelect viewController: UIViewController) {
+                                  shouldSelect viewController: UIViewController) {
         self.navigationController?.setViewControllers([viewController], animated: true)
-        }
+    }
 }

@@ -16,14 +16,13 @@ struct TrackModel: Codable {
     }
 
     static func getHomeTracks(onSuccess: @escaping ([TrackModel]) -> Void, onError: @escaping  (Error) -> Void) {
-        var tracks: [TrackModel] = []
         Request.fetch(url: "/home/tracks", method: RequestMethods.GET) {data in
             guard let tracks = try? JSONDecoder().decode([TrackModel].self, from: data) else {
                 print(NSError(domain: "TrackModel", code: -1, userInfo: ["Error": "Error unmarshaling tracks data"]))
                 return
             }
             onSuccess(tracks)
-        } errorHandler: {err in
+        } onError: {err in
             onError(err)
         }
     }

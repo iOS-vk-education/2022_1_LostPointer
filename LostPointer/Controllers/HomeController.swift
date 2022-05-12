@@ -48,10 +48,12 @@ class HomeController: UIViewController, UITableViewDataSource, UITableViewDelega
 
             self.tableView.translatesAutoresizingMaskIntoConstraints = false
 
-            self.tableView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor).isActive = true
-            self.tableView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor).isActive = true
-            self.tableView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor).isActive = true
-            self.tableView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+            NSLayoutConstraint.activate([
+                self.tableView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
+                self.tableView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor),
+                self.tableView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor),
+                self.tableView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor)
+            ])
 
             self.tableView.dataSource = self
             self.tableView.delegate = self
@@ -69,5 +71,4 @@ class HomeController: UIViewController, UITableViewDataSource, UITableViewDelega
             print(err)
         }
     }
-
 }
