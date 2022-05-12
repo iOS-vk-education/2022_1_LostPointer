@@ -82,6 +82,5 @@ class SigninController: UIViewController {
             } onError: {_ in
                 self.showToast(controller: self, message: "Incorrect credentials!", seconds: 1.0)
             }
-        }
-
+    }
 }

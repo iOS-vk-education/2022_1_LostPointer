@@ -11,7 +11,5 @@ class MainController: UIViewController {
         } onError: {[weak self] _ in
             return self?.navigationController?.setViewControllers([SigninController()], animated: false)
         }
-
     }
-
 }

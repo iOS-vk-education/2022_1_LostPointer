@@ -71,5 +71,4 @@ class HomeController: UIViewController, UITableViewDataSource, UITableViewDelega
             print(err)
         }
     }
-
 }

@@ -55,7 +55,6 @@ public final class Request {
                 failure(NSError(domain: "APIRequest", code: -2, userInfo: nil))
                 return
             }
-//            print(String(decoding: data, as: UTF8.self))
             var code = 0
             do {
                 let responseObject = try JSONDecoder().decode(CommonResponse.self, from: data)
