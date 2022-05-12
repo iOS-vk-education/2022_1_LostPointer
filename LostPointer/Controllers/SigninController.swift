@@ -77,10 +77,10 @@ class SigninController: UIViewController {
     }
 
     @objc func signinTap() {
-            UserModel.authenticate(email: loginInput.text ?? "", password: passwordInput.text ?? "") {
-                return self.navigationController?.setViewControllers([TabController()], animated: true)
-            } onError: {_ in
-                self.showToast(controller: self, message: "Incorrect credentials!", seconds: 1.0)
-            }
+        UserModel.authenticate(email: loginInput.text ?? "", password: passwordInput.text ?? "") {
+            return self.navigationController?.setViewControllers([TabController()], animated: true)
+        } onError: {_ in
+            self.showToast(controller: self, message: "Incorrect credentials!", seconds: 1.0)
+        }
     }
 }

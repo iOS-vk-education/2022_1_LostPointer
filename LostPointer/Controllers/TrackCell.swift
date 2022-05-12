@@ -54,7 +54,7 @@ class TrackCell: UITableViewCell {
 
     let controlsImageView: UIImageView = {
         let img = UIImageView()
-        img.contentMode = .scaleAspectFill // without this your image will shrink and looks ugly
+        img.contentMode = .scaleAspectFill
         img.translatesAutoresizingMaskIntoConstraints = false
         return img
     }()
