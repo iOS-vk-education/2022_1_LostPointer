@@ -22,9 +22,8 @@ public final class Request {
             request.httpBody = data
         }
 
-        let cookies = HTTPCookieStorage.shared.cookies(for: url)
-
-        request.allHTTPHeaderFields = HTTPCookie.requestHeaderFields(with: cookies!)
+        guard let cookies = HTTPCookieStorage.shared.cookies(for: url) else { return }
+        request.allHTTPHeaderFields = HTTPCookie.requestHeaderFields(with: cookies)
 
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("application/json", forHTTPHeaderField: "Accept")

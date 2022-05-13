@@ -20,7 +20,8 @@ class TrackCell: UITableViewCell {
                 artistNameLabel.text = artistName
             }
             if let album = trackItem.album {
-                albumImageView.downloaded(from: Constants.albumArtworkPrefix + (album.artwork ?? "") + Constants.albumArtworkSmallSuffix)
+                albumImageView.downloaded(from: Constants.albumArtworkPrefix +
+                                          (album.artwork ?? "") + Constants.albumArtworkSmallSuffix)
             }
             controlsImageView.image = UIImage(systemName: "\(playing ? "pause" : "play").fill")
         }
