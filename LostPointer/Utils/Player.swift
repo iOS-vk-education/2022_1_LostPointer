@@ -22,7 +22,7 @@ class AudioPlayer: UIViewController, AVAudioPlayerDelegate {
         guard let url = URL(string: Constants.tracksPath + track.file) else { return }
         playingCell = cell
         if let player = audioPlayer {
-            audioPlayer.stop()
+            player.stop()
         }
 
         cell.setPlaying(playing: true)
