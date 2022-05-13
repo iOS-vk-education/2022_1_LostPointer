@@ -11,6 +11,7 @@
 		520C8EDF280752A000A2BFA5 /* HomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 520C8EDE280752A000A2BFA5 /* HomeController.swift */; };
 		520C8EE1280752AA00A2BFA5 /* ProfileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 520C8EE0280752AA00A2BFA5 /* ProfileController.swift */; };
 		520C8EE32807564500A2BFA5 /* FavoritesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 520C8EE22807564500A2BFA5 /* FavoritesController.swift */; };
+		5268444C282EA0B8000A3EBD /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5268444B282EA0B8000A3EBD /* Player.swift */; };
 		52A80886280C431E00D0DF26 /* SigninController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A80885280C431E00D0DF26 /* SigninController.swift */; };
 		52D091D4280C766100461DF9 /* SearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52D091D3280C766100461DF9 /* SearchController.swift */; };
 		52D23D44280DC6C500E1D4C4 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52D23D43280DC6C500E1D4C4 /* Constants.swift */; };
@@ -36,6 +37,7 @@
 		520C8EDE280752A000A2BFA5 /* HomeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeController.swift; sourceTree = "<group>"; };
 		520C8EE0280752AA00A2BFA5 /* ProfileController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileController.swift; sourceTree = "<group>"; };
 		520C8EE22807564500A2BFA5 /* FavoritesController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesController.swift; sourceTree = "<group>"; };
+		5268444B282EA0B8000A3EBD /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		52A80885280C431E00D0DF26 /* SigninController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SigninController.swift; sourceTree = "<group>"; };
 		52D091D3280C766100461DF9 /* SearchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchController.swift; sourceTree = "<group>"; };
 		52D23D43280DC6C500E1D4C4 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -135,6 +137,7 @@
 				5B2E371327F9F91600530356 /* Request.swift */,
 				ED0EEDAC280C569A002A3D26 /* Extensions.swift */,
 				52D23D43280DC6C500E1D4C4 /* Constants.swift */,
+				5268444B282EA0B8000A3EBD /* Player.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -261,6 +264,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5268444C282EA0B8000A3EBD /* Player.swift in Sources */,
 				ED0EEDAD280C569A002A3D26 /* Extensions.swift in Sources */,
 				52D091D4280C766100461DF9 /* SearchController.swift in Sources */,
 				5B1ADC0F27E63BD30081EFDB /* MainController.swift in Sources */,

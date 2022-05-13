@@ -3,7 +3,7 @@ import UIKit
 class HomeController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
     let tableView = UITableView()
-
+    let player: AudioPlayer = AudioPlayer()
     var tracks: [TrackModel] = []
     var albumsCell: AlbumsCell?
     var artistsCell: ArtistsCell?
@@ -13,15 +13,13 @@ class HomeController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-
         if indexPath.row == 0 {
             return self.albumsCell ?? UITableViewCell()
-
         } else if indexPath.row == self.tracks.count + 1 {
             return self.artistsCell ?? UITableViewCell()
-
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "TrackCell", for: indexPath) as? TrackCell
+            cell?.btn.tag = indexPath.row
             cell?.track = tracks[indexPath.row - 1]
             return cell ?? UITableViewCell()
         }
@@ -35,6 +33,16 @@ class HomeController: UIViewController, UITableViewDataSource, UITableViewDelega
         } else {
             return 80
         }
+    }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let urlstring = Constants.tracksPath + tracks[indexPath.row - 1].file
+        if let track = self.tableView.cellForRow(at: indexPath) as? TrackCell {
+            track.togglePlaying()
+        } else {
+            return
+        }
+        player.downloadFileFromURL(url: URL(string: urlstring)!)
     }
 
     override func viewDidLoad() {
