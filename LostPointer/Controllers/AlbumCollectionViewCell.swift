@@ -8,7 +8,7 @@ final class AlbumCollectionViewCell: UICollectionViewCell {
             guard let albumItem = album else {return}
             if let artwork = albumItem.artwork {
                 albumImageView.downloaded(from: Constants.albumArtworkPrefix +
-                                          artwork + Constants.albumArtworkMediumSuffix)
+                                            artwork + Constants.albumArtworkMediumSuffix)
             }
         }
     }

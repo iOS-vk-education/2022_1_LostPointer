@@ -255,7 +255,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/zsh;
-			shellScript = "/opt/homebrew/bin/swiftlint --fix\n";
+			shellScript = "/opt/homebrew/bin/swiftlint autocorrect --format --fix\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

@@ -13,10 +13,10 @@ struct AlbumModel: Codable {
         Request.fetch(url: "/home/albums", method: RequestMethods.GET) {data in
             guard let
                     albums = try? JSONDecoder().decode([AlbumModel].self, from: data) else {
-                        print("Error unmarshaling Albums data")
-                        return
-                    }
-                onSuccess(albums)
+                print("Error unmarshaling Albums data")
+                return
+            }
+            onSuccess(albums)
         } onError: {err in
             onError(err)
         }

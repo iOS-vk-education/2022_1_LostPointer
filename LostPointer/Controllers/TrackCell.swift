@@ -21,7 +21,7 @@ class TrackCell: UITableViewCell {
             }
             if let album = trackItem.album {
                 albumImageView.downloaded(from: Constants.albumArtworkPrefix +
-                                          (album.artwork ?? "") + Constants.albumArtworkSmallSuffix)
+                                            (album.artwork ?? "") + Constants.albumArtworkSmallSuffix)
             }
             controlsImageView.image = UIImage(systemName: "\(playing ? "pause" : "play").fill")
         }
@@ -110,10 +110,9 @@ class TrackCell: UITableViewCell {
         delegate?.cellBtnTapped(tag: sender.tag)
     }
 
-    func togglePlaying() -> Bool {
-        playing = !playing
+    func setPlaying(playing: Bool) {
+        self.playing = playing
         controlsImageView.image = UIImage(systemName: "\(playing ? "pause" : "play").fill")
-        return playing
     }
 
     func getTrack() -> TrackModel? {

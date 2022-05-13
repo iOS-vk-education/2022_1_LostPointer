@@ -47,6 +47,6 @@ class AlbumsCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDat
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-       print("User tapped on item \(indexPath.row)")
+        print("User tapped on item \(indexPath.row)")
     }
 }
