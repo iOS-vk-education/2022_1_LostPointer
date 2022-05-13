@@ -110,8 +110,16 @@ class TrackCell: UITableViewCell {
         delegate?.cellBtnTapped(tag: sender.tag)
     }
 
-    func togglePlaying() {
+    func togglePlaying() -> Bool {
         playing = !playing
         controlsImageView.image = UIImage(systemName: "\(playing ? "pause" : "play").fill")
+        return playing
+    }
+
+    func getTrack() -> TrackModel? {
+        guard let track = track else {
+            return nil
+        }
+        return track
     }
 }

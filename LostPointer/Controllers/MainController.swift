@@ -4,8 +4,8 @@ class MainController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        UIApplication.shared.beginReceivingRemoteControlEvents() // ?
         view.backgroundColor = UIColor(named: "backgroundColor")
-
         UserModel.checkAuth {[weak self] in
             return self?.navigationController?.setViewControllers([TabController()], animated: false)
         } onError: {[weak self] _ in

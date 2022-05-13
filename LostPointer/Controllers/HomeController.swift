@@ -36,13 +36,16 @@ class HomeController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let urlstring = Constants.tracksPath + tracks[indexPath.row - 1].file
-        if let track = self.tableView.cellForRow(at: indexPath) as? TrackCell {
-            track.togglePlaying()
+        if let trackCell = self.tableView.cellForRow(at: indexPath) as? TrackCell {
+            if trackCell.togglePlaying() {
+                guard let track = trackCell.getTrack() else { return }
+                player.playTrack(track: track)
+            } else {
+                player.toggle()
+            }
         } else {
             return
         }
-        player.downloadFileFromURL(url: URL(string: urlstring)!)
     }
 
     override func viewDidLoad() {
