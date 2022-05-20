@@ -6,6 +6,3 @@
 Кучерявенко Алексей - https://github.com/frbgd
 
 Беляев Леонид - https://github.com/23-yo-designer-from-san-francisco
-
-Сим Роман - https://github.com/roman02s
-
