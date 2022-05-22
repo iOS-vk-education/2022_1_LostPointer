@@ -5,7 +5,10 @@ class PlayerController: UIViewController {
     private lazy var artwork: UIImageView = {
         let imgView = UIImageView()
         imgView.downloaded(from: "https://lostpointer.site/static/artworks/4bd10604-27a8-45d6-a0b6-b7f07b8a0fc3_512px.webp")
-
+        imgView.layer.shadowColor = UIColor.black.cgColor
+        imgView.layer.shadowOpacity = 0.3
+        imgView.layer.shadowOffset = .zero
+        imgView.layer.shadowRadius = 10
         return imgView
     }()
 
