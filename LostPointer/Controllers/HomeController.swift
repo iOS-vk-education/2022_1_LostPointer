@@ -37,11 +37,7 @@ class HomeController: UIViewController, UITableViewDataSource, UITableViewDelega
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let trackCell = self.tableView.cellForRow(at: indexPath) as? TrackCell {
-            //            if trackCell.togglePlaying() {
             player.playTrack(cell: trackCell)
-            //            } else {
-            //                player.toggle()
-            //            }
         } else {
             return
         }

@@ -8,36 +8,6 @@ class AudioPlayer: UIViewController, AVAudioPlayerDelegate {
     var playingCell: TrackCell?
     let mpic = MPNowPlayingInfoCenter.default()
 
-    func setupNowPlayingInfoCenter() {
-        do {
-            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [.mixWithOthers, .allowAirPlay])
-            print("Playback OK")
-            try AVAudioSession.sharedInstance().setActive(true)
-            print("Session is Active")
-        } catch {
-            print(error)
-        }
-        UIApplication.shared.beginReceivingRemoteControlEvents()
-        print("setup")
-        UIApplication.shared.beginReceivingRemoteControlEvents()
-        MPRemoteCommandCenter.shared().playCommand.addTarget {[weak self] _ in
-            self?.toggle()
-            return .success
-        }
-        MPRemoteCommandCenter.shared().pauseCommand.addTarget {[weak self] _ in
-            self?.toggle()
-            return .success
-        }
-        MPRemoteCommandCenter.shared().nextTrackCommand.addTarget {_ in
-            //          self.goForward()
-            return .success
-        }
-        MPRemoteCommandCenter.shared().previousTrackCommand.addTarget {_ in
-            //          self.goBackward()
-            return .success
-        }
-    }
-
     func playTrack(cell: TrackCell) {
         if let track = cell.getTrack() {
             if let playing = playingCell?.track {
@@ -55,10 +25,9 @@ class AudioPlayer: UIViewController, AVAudioPlayerDelegate {
         playingCell = cell
         if let player = audioPlayer {
             player.stop()
-        } else {
-            setupNowPlayingInfoCenter()
         }
 
+        // Пока не работает...
         mpic.nowPlayingInfo = [MPMediaItemPropertyTitle: "track",
                                MPMediaItemPropertyArtist: "artist",
                                MPNowPlayingInfoPropertyPlaybackRate: 1,
@@ -96,7 +65,7 @@ class AudioPlayer: UIViewController, AVAudioPlayerDelegate {
         do {
             audioPlayer = try AVAudioPlayer(contentsOf: url)
             audioPlayer.prepareToPlay()
-            audioPlayer.volume = 1 // ???
+            audioPlayer.volume = 1
             audioPlayer.play()
         } catch let error as NSError {
             print(error.localizedDescription)
