@@ -59,14 +59,12 @@ class AudioPlayer: UIViewController, AVAudioPlayerDelegate {
             setupNowPlayingInfoCenter()
         }
 
-                mpic.nowPlayingInfo = [MPMediaItemPropertyTitle: "track",
-                                       MPMediaItemPropertyArtist: "artist",
-                                       MPNowPlayingInfoPropertyPlaybackRate: 1,
-                                       MPMediaItemPropertyArtwork: ,
-                                       MPNowPlayingInfoPropertyElapsedPlaybackTime: 10,
-                                       MPMediaItemPropertyPlaybackDuration: 30
-                ]
-
+        mpic.nowPlayingInfo = [MPMediaItemPropertyTitle: "track",
+                               MPMediaItemPropertyArtist: "artist",
+                               MPNowPlayingInfoPropertyPlaybackRate: 1,
+                               MPNowPlayingInfoPropertyElapsedPlaybackTime: 10,
+                               MPMediaItemPropertyPlaybackDuration: 30
+        ]
 
         cell.setPlaying(playing: true)
         downloadFileFromURL(url: url)
