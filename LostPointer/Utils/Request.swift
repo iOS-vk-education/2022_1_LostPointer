@@ -63,9 +63,9 @@ public final class Request {
             }
 
             if response.statusCode != 200 || (code != 0 && code != 200) {
-                print(response.statusCode, code)
+                debugPrint(response.statusCode, code)
                 failure(NSError(domain: "APIRequest", code: -5, userInfo: ["Error": "Response code is not 2xx"]))
-                print("Request error: ", data)
+                debugPrint("Request error: ", data)
                 return
             }
 

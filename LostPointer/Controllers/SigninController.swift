@@ -2,6 +2,17 @@ import UIKit
 
 class SigninController: UIViewController {
 
+    var player: AudioPlayer!
+
+    init(player: AudioPlayer) {
+        self.player = player
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     func showToast(controller: UIViewController, message: String, seconds: Double) {
         let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
 
@@ -78,7 +89,7 @@ class SigninController: UIViewController {
 
     @objc func signinTap() {
         UserModel.authenticate(email: loginInput.text ?? "", password: passwordInput.text ?? "") {
-            return self.navigationController?.setViewControllers([TabController()], animated: true)
+            return self.navigationController?.setViewControllers([TabController(player: self.player)], animated: true)
         } onError: {_ in
             self.showToast(controller: self, message: "Incorrect credentials!", seconds: 1.0)
         }

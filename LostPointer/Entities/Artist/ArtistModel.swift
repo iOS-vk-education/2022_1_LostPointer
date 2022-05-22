@@ -8,7 +8,7 @@ struct ArtistModel: Codable {
     static func getHomeArtists(onSuccess: @escaping ([ArtistModel]) -> Void, onError: @escaping  (Error) -> Void) {
         Request.fetch(url: "/home/artists", method: RequestMethods.GET) {data in
             guard let artists = try? JSONDecoder().decode([ArtistModel].self, from: data) else {
-                print("Error unmarshaling Artist data")
+                debugPrint("Error unmarshaling Artist data")
                 return
             }
             onSuccess(artists)
