@@ -14,7 +14,8 @@ class PlayerController: UIViewController {
 
     private lazy var seekbar: UISlider = {
         let slider = UISlider()
-
+        slider.addTarget(self, action: #selector(sliderDidEndSliding), for: [.touchUpInside, .touchUpOutside])
+        slider.addTarget(self, action: #selector(sliderDidStartSliding), for: [.touchDown])
         return slider
     }()
 
@@ -30,6 +31,10 @@ class PlayerController: UIViewController {
         label.text = "5:00"
         label.textColor = .white
         return label
+    }()
+
+    private lazy var controls: PlayerControls = {
+        return PlayerControls()
     }()
 
     private lazy var volume: UISlider = {
@@ -68,15 +73,44 @@ class PlayerController: UIViewController {
             width: seekbar.bounds.width - 20,
             height: 40
         )
+        controls.frame = CGRect(
+            x: view.bounds.midX * 0.25,
+            y: totalTime.bounds.maxY + 30,
+            width: view.bounds.width,
+            height: 80
+        )
         volume.frame = CGRect(
             x: view.bounds.midX * 0.25,
             y: view.bounds.maxY * 0.75,
             width: view.bounds.width * 0.75,
             height: 40
         )
-        [artwork, seekbar, elapsedTime, totalTime, volume].forEach {subview in
+        [artwork, seekbar, elapsedTime,
+         totalTime, controls, volume].forEach {subview in
             view.addSubview(subview)
-        }
+         }
 
+    }
+
+    @objc
+    func sliderDidEndSliding() {
+        zoomIn()
+    }
+
+    private func zoomOut() {
+        UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 10, initialSpringVelocity: 10, options: []) { [weak self] in
+            self?.artwork.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
+        }
+    }
+
+    private func zoomIn() {
+        UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 10, initialSpringVelocity: 10, options: []) {[weak self] in
+            self?.artwork.transform = .identity
+        }
+    }
+
+    @objc
+    func sliderDidStartSliding() {
+        zoomOut()
     }
 }
