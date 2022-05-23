@@ -12,6 +12,32 @@ class PlayerController: UIViewController {
         return imgView
     }()
 
+    private lazy var trackTitle: UILabel = {
+        let title = UILabel()
+        guard let customFont = UIFont(name: "Montserrat-Bold", size: 24) else {
+            fatalError("Failed to load font")
+        }
+        title.font = UIFontMetrics.default.scaledFont(for: customFont)
+        title.text = "Последняя дискотека"
+        title.textColor = .white
+        title.textAlignment = .center
+
+        return title
+    }()
+
+    private lazy var artist: UILabel = {
+        let artist = UILabel()
+        guard let customFont = UIFont(name: "Montserrat-Semibold", size: 16) else {
+            fatalError("Failed to load font")
+        }
+        artist.font = UIFontMetrics.default.scaledFont(for: customFont)
+        artist.text = "Монеточка"
+        artist.textColor = .white
+        artist.textAlignment = .center
+
+        return artist
+    }()
+
     private lazy var seekbar: UISlider = {
         let slider = UISlider()
         slider.addTarget(self, action: #selector(sliderDidEndSliding), for: [.touchUpInside, .touchUpOutside])
@@ -48,16 +74,25 @@ class PlayerController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.applyGradient(isVertical: true, colorArray: [UIColor("#CF1994"), .black])
-        //        view.backgroundColor = // UIColor(named: "backgroundColor")
         artwork.frame = CGRect(
             x: view.bounds.midX * 0.2,
             y: view.bounds.midY * 0.15,
             width: view.bounds.width * 0.8,
             height: view.bounds.width * 0.8
         )
+        trackTitle.frame = CGRect(x: view.bounds.minX,
+                                  y: view.bounds.height / 2 - 10,
+                                  width: view.bounds.width,
+                                  height: 30)
+        artist.frame = CGRect(
+            x: view.bounds.minX,
+            y: view.bounds.height / 2 + 20,
+            width: view.bounds.width,
+            height: 20
+        )
         seekbar.frame = CGRect(
             x: view.bounds.midX * 0.1,
-            y: view.bounds.midY,
+            y: artist.frame.maxY + 30,
             width: view.bounds.width * 0.9,
             height: 40
         )
@@ -81,20 +116,15 @@ class PlayerController: UIViewController {
         )
         volume.frame = CGRect(
             x: view.bounds.midX * 0.25,
-            y: view.bounds.maxY * 0.75,
+            y: view.bounds.maxY * 0.8,
             width: view.bounds.width * 0.75,
             height: 40
         )
-        [artwork, seekbar, elapsedTime,
+        [artwork, trackTitle, artist, seekbar, elapsedTime,
          totalTime, controls, volume].forEach {subview in
             view.addSubview(subview)
          }
 
-    }
-
-    @objc
-    func sliderDidEndSliding() {
-        zoomIn()
     }
 
     private func zoomOut() {
@@ -112,5 +142,10 @@ class PlayerController: UIViewController {
     @objc
     func sliderDidStartSliding() {
         zoomOut()
+    }
+
+    @objc
+    func sliderDidEndSliding() {
+        zoomIn()
     }
 }

@@ -23,6 +23,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         application.beginReceivingRemoteControlEvents()
 
+        for family in UIFont.familyNames.sorted() {
+            let names = UIFont.fontNames(forFamilyName: family)
+            debugPrint("Family: \(family) Font names: \(names)")
+        }
+
         return true
     }
 }
