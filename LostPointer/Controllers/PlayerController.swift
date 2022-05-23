@@ -59,8 +59,30 @@ class PlayerController: UIViewController {
         return label
     }()
 
-    private lazy var controls: PlayerControls = {
-        return PlayerControls()
+    //    private lazy var controls: PlayerControls = {
+    //        return PlayerControls()
+    //    }()
+
+    private lazy var prev: UIImageView = {
+        let img = UIImageView()
+        img.image = UIImage(systemName: "backward.fill")
+        img.tintColor = .white
+        return img
+    }()
+
+    private lazy var pause: UIImageView = {
+        let img = UIImageView()
+        img.image = UIImage(systemName: "play.fill")
+        //        UIImage(systemName: "pause.fill")
+        img.tintColor = .white
+        return img
+    }()
+
+    private lazy var nextTrack: UIImageView = {
+        let img = UIImageView()
+        img.image = UIImage(systemName: "forward.fill")
+        img.tintColor = .white
+        return img
     }()
 
     private lazy var volume: UISlider = {
@@ -108,12 +130,31 @@ class PlayerController: UIViewController {
             width: seekbar.bounds.width - 20,
             height: 40
         )
-        controls.frame = CGRect(
-            x: view.bounds.midX * 0.25,
-            y: totalTime.bounds.maxY + 30,
-            width: view.bounds.width,
-            height: 80
+        //        controls.frame = CGRect(
+        //            x: view.bounds.midX * 0.25,
+        //            y: totalTime.bounds.maxY + 30,
+        //            width: view.bounds.width,
+        //            height: 80
+        //        )
+        pause.frame = CGRect(
+            x: view.bounds.midX - 25,
+            y: totalTime.frame.maxY + 10,
+            width: 50,
+            height: 50
         )
+        prev.frame = CGRect(
+            x: pause.frame.minX - 100,
+            y: totalTime.frame.maxY + 10,
+            width: 70,
+            height: 50
+        )
+        nextTrack.frame = CGRect(
+            x: pause.frame.maxX + 30,
+            y: totalTime.frame.maxY + 10,
+            width: 70,
+            height: 50
+        )
+
         volume.frame = CGRect(
             x: view.bounds.midX * 0.25,
             y: view.bounds.maxY * 0.8,
@@ -121,7 +162,7 @@ class PlayerController: UIViewController {
             height: 40
         )
         [artwork, trackTitle, artist, seekbar, elapsedTime,
-         totalTime, controls, volume].forEach {subview in
+         totalTime, prev, pause, nextTrack, volume].forEach {subview in
             view.addSubview(subview)
          }
 
