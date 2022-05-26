@@ -129,7 +129,7 @@ class ProfileController: UIViewController {
          confirmPasswordLabel, confirmPasswordInput,
          saveButton, logoutButton].forEach {[weak self] view in
             self?.scrollView.addSubview(view)
-        }
+         }
 
         activityIndicator.translatesAutoresizingMaskIntoConstraints = false
         scrollView.addSubview(activityIndicator)

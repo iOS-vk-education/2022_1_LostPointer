@@ -51,7 +51,7 @@ struct UserModel: Codable {
 
     public static func getProfileData(onSuccess: @escaping(Data) -> Void, onError: @escaping (Error) -> Void) {
         Request.fetch(url: "/user/settings", method: RequestMethods.GET) {data in
-        onSuccess(data)
+            onSuccess(data)
         } onError: {err in
             onError(err)
         }

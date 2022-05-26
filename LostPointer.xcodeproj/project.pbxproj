@@ -11,13 +11,13 @@
 		520C8EDF280752A000A2BFA5 /* HomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 520C8EDE280752A000A2BFA5 /* HomeController.swift */; };
 		520C8EE1280752AA00A2BFA5 /* ProfileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 520C8EE0280752AA00A2BFA5 /* ProfileController.swift */; };
 		520C8EE32807564500A2BFA5 /* FavoritesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 520C8EE22807564500A2BFA5 /* FavoritesController.swift */; };
+		5268444C282EA0B8000A3EBD /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5268444B282EA0B8000A3EBD /* Player.swift */; };
 		52A80886280C431E00D0DF26 /* SigninController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A80885280C431E00D0DF26 /* SigninController.swift */; };
 		52D091D4280C766100461DF9 /* SearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52D091D3280C766100461DF9 /* SearchController.swift */; };
 		52D23D44280DC6C500E1D4C4 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52D23D43280DC6C500E1D4C4 /* Constants.swift */; };
 		5B1ADBF327E63AD10081EFDB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B1ADBF227E63AD10081EFDB /* AppDelegate.swift */; };
 		5B1ADBF527E63AD10081EFDB /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B1ADBF427E63AD10081EFDB /* SceneDelegate.swift */; };
 		5B1ADBFC27E63AD20081EFDB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5B1ADBFB27E63AD20081EFDB /* Assets.xcassets */; };
-		5B1ADBFF27E63AD20081EFDB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5B1ADBFD27E63AD20081EFDB /* LaunchScreen.storyboard */; };
 		5B1ADC0F27E63BD30081EFDB /* MainController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B1ADC0E27E63BD30081EFDB /* MainController.swift */; };
 		5B1ADC1127E63CDB0081EFDB /* TrackModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B1ADC1027E63CDB0081EFDB /* TrackModel.swift */; };
 		5B1ADC1327E63D140081EFDB /* ArtistModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B1ADC1227E63D140081EFDB /* ArtistModel.swift */; };
@@ -37,6 +37,7 @@
 		520C8EDE280752A000A2BFA5 /* HomeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeController.swift; sourceTree = "<group>"; };
 		520C8EE0280752AA00A2BFA5 /* ProfileController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileController.swift; sourceTree = "<group>"; };
 		520C8EE22807564500A2BFA5 /* FavoritesController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesController.swift; sourceTree = "<group>"; };
+		5268444B282EA0B8000A3EBD /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		52A80885280C431E00D0DF26 /* SigninController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SigninController.swift; sourceTree = "<group>"; };
 		52D091D3280C766100461DF9 /* SearchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchController.swift; sourceTree = "<group>"; };
 		52D23D43280DC6C500E1D4C4 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -44,7 +45,6 @@
 		5B1ADBF227E63AD10081EFDB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5B1ADBF427E63AD10081EFDB /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		5B1ADBFB27E63AD20081EFDB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		5B1ADBFE27E63AD20081EFDB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5B1ADC0027E63AD20081EFDB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5B1ADC0E27E63BD30081EFDB /* MainController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainController.swift; sourceTree = "<group>"; };
 		5B1ADC1027E63CDB0081EFDB /* TrackModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackModel.swift; sourceTree = "<group>"; };
@@ -96,7 +96,6 @@
 				5B1ADBF227E63AD10081EFDB /* AppDelegate.swift */,
 				5B1ADBF427E63AD10081EFDB /* SceneDelegate.swift */,
 				5B1ADBFB27E63AD20081EFDB /* Assets.xcassets */,
-				5B1ADBFD27E63AD20081EFDB /* LaunchScreen.storyboard */,
 				5B1ADC0027E63AD20081EFDB /* Info.plist */,
 			);
 			path = LostPointer;
@@ -138,6 +137,7 @@
 				5B2E371327F9F91600530356 /* Request.swift */,
 				ED0EEDAC280C569A002A3D26 /* Extensions.swift */,
 				52D23D43280DC6C500E1D4C4 /* Constants.swift */,
+				5268444B282EA0B8000A3EBD /* Player.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -184,7 +184,7 @@
 				5B1ADBEB27E63AD10081EFDB /* Sources */,
 				5B1ADBEC27E63AD10081EFDB /* Frameworks */,
 				5B1ADBED27E63AD10081EFDB /* Resources */,
-				5BB5898A27E8FE9F008A78F2 /* ShellScript */,
+				52D9FDC1282EB598009EDF48 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -233,7 +233,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5B1ADBFF27E63AD20081EFDB /* LaunchScreen.storyboard in Resources */,
 				5B1ADBFC27E63AD20081EFDB /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -241,7 +240,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		5BB5898A27E8FE9F008A78F2 /* ShellScript */ = {
+		52D9FDC1282EB598009EDF48 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -255,8 +254,8 @@
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "if which swiftlint > /dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+			shellPath = /bin/zsh;
+			shellScript = "/opt/homebrew/bin/swiftlint autocorrect --format --fix\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -265,6 +264,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5268444C282EA0B8000A3EBD /* Player.swift in Sources */,
 				ED0EEDAD280C569A002A3D26 /* Extensions.swift in Sources */,
 				52D091D4280C766100461DF9 /* SearchController.swift in Sources */,
 				5B1ADC0F27E63BD30081EFDB /* MainController.swift in Sources */,
@@ -290,17 +290,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXVariantGroup section */
-		5B1ADBFD27E63AD20081EFDB /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				5B1ADBFE27E63AD20081EFDB /* Base */,
-			);
-			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		5B1ADC0127E63AD20081EFDB /* Debug */ = {

@@ -3,7 +3,7 @@ import UIKit
 class HomeController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
     let tableView = UITableView()
-
+    let player: AudioPlayer = AudioPlayer()
     var tracks: [TrackModel] = []
     var albumsCell: AlbumsCell?
     var artistsCell: ArtistsCell?
@@ -13,15 +13,13 @@ class HomeController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-
         if indexPath.row == 0 {
             return self.albumsCell ?? UITableViewCell()
-
         } else if indexPath.row == self.tracks.count + 1 {
             return self.artistsCell ?? UITableViewCell()
-
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "TrackCell", for: indexPath) as? TrackCell
+            cell?.btn.tag = indexPath.row
             cell?.track = tracks[indexPath.row - 1]
             return cell ?? UITableViewCell()
         }
@@ -34,6 +32,14 @@ class HomeController: UIViewController, UITableViewDataSource, UITableViewDelega
             return 290
         } else {
             return 80
+        }
+    }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if let trackCell = self.tableView.cellForRow(at: indexPath) as? TrackCell {
+            player.playTrack(cell: trackCell)
+        } else {
+            return
         }
     }
 

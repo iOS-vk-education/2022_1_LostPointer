@@ -28,11 +28,14 @@ class ArtistsCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDa
             )
 
             self?.artistsCollectionView = UICollectionView(frame: frame, collectionViewLayout: layout)
-            self?.artistsCollectionView?.heightAnchor.constraint(equalToConstant: self?.frame.height ?? 0 / 2).isActive = true
-            self?.artistsCollectionView?.register(AlbumCollectionViewCell.self, forCellWithReuseIdentifier: AlbumCollectionViewCell.identifier)
+            self?.artistsCollectionView?.heightAnchor.constraint(
+                equalToConstant: self?.frame.height ?? 0 / 2).isActive = true
+            self?.artistsCollectionView?.register(AlbumCollectionViewCell.self,
+                                                  forCellWithReuseIdentifier: AlbumCollectionViewCell.identifier)
             self?.artistsCollectionView?.backgroundColor = UIColor.black
 
-            self?.artistsCollectionView?.register(ArtistCell.self, forCellWithReuseIdentifier: ArtistCell.identifier)
+            self?.artistsCollectionView?.register(
+                ArtistCell.self, forCellWithReuseIdentifier: ArtistCell.identifier)
             self?.artistsCollectionView?.backgroundColor = UIColor.black
 
             self?.artistsCollectionView?.delegate = self
@@ -45,15 +48,18 @@ class ArtistsCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDa
         }
     }
 
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int { 4 }
+    func collectionView(_ collectionView: UICollectionView,
+                        numberOfItemsInSection section: Int) -> Int { 4 }
 
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let artistCell = collectionView.dequeueReusableCell(withReuseIdentifier: "ArtistCell", for: indexPath) as? ArtistCell
+    func collectionView(_ collectionView: UICollectionView,
+                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let artistCell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: "ArtistCell", for: indexPath) as? ArtistCell
         artistCell?.artist = artists[indexPath.item]
         return artistCell ?? UICollectionViewCell()
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-       print("User tapped on item \(indexPath.row)")
+        print("User tapped on item \(indexPath.row)")
     }
 }

@@ -1,7 +1,15 @@
 import UIKit
 
+protocol TrackCellDelegate: AnyObject {
+    func cellBtnTapped(tag: Int)
+}
 class TrackCell: UITableViewCell {
-
+    var playing: Bool = false
+    let btn: UIButton = {
+        let btn = UIButton()
+        return btn
+    }()
+    weak var delegate: TrackCellDelegate?
     var track: TrackModel? {
         didSet {
             guard let trackItem = track else {return}
@@ -12,9 +20,10 @@ class TrackCell: UITableViewCell {
                 artistNameLabel.text = artistName
             }
             if let album = trackItem.album {
-                albumImageView.downloaded(from: Constants.albumArtworkPrefix + (album.artwork ?? "") + Constants.albumArtworkSmallSuffix)
+                albumImageView.downloaded(from: Constants.albumArtworkPrefix +
+                                            (album.artwork ?? "") + Constants.albumArtworkSmallSuffix)
             }
-            controlsImageView.image = UIImage(systemName: "play.fill")
+            controlsImageView.image = UIImage(systemName: "\(playing ? "pause" : "play").fill")
         }
     }
 
@@ -44,17 +53,15 @@ class TrackCell: UITableViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-
     let containerView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.clipsToBounds = true
         return view
     }()
-
     let controlsImageView: UIImageView = {
         let img = UIImageView()
-        img.contentMode = .scaleAspectFill // without this your image will shrink and looks ugly
+        img.contentMode = .scaleAspectFill
         img.translatesAutoresizingMaskIntoConstraints = false
         return img
     }()
@@ -97,5 +104,21 @@ class TrackCell: UITableViewCell {
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+    }
+
+    @IBAction func btnCellTapped(_ sender: UIButton) {
+        delegate?.cellBtnTapped(tag: sender.tag)
+    }
+
+    func setPlaying(playing: Bool) {
+        self.playing = playing
+        controlsImageView.image = UIImage(systemName: "\(playing ? "pause" : "play").fill")
+    }
+
+    func getTrack() -> TrackModel? {
+        guard let track = track else {
+            return nil
+        }
+        return track
     }
 }
