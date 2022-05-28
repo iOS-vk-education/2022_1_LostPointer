@@ -2,6 +2,15 @@ import UIKit
 import AVFAudio
 
 class PlayerController: UIViewController {
+    var player: AudioPlayer
+    init(player: AudioPlayer) {
+        self.player = player
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     private lazy var artwork: UIImageView = {
         let imgView = UIImageView()
         imgView.downloaded(from: "https://lostpointer.site/static/artworks/4bd10604-27a8-45d6-a0b6-b7f07b8a0fc3_512px.webp")
@@ -68,8 +77,13 @@ class PlayerController: UIViewController {
 
     private lazy var pause: UIImageView = {
         let img = UIImageView()
-        img.image = UIImage(systemName: "play.fill")
+        img.image = UIImage(systemName: "\(player.isPlaying() ? "pause" : "play").fill")
         img.tintColor = .white
+
+        let tap = UITapGestureRecognizer(target: self, action: #selector(play))
+        img.addGestureRecognizer(tap)
+        img.isUserInteractionEnabled = true
+
         return img
     }()
 
@@ -155,6 +169,11 @@ class PlayerController: UIViewController {
             view.addSubview(subview)
          }
 
+    }
+
+    @objc
+    func play() {
+        zoomOut()
     }
 
     private func zoomOut() {

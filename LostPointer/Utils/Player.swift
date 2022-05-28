@@ -4,7 +4,7 @@ import MediaPlayer
 
 class AudioPlayer: NSObject, AVAudioPlayerDelegate {
 
-    var player: AVAudioPlayer!
+    var player: AVAudioPlayer?
     var playingCell: TrackCell?
     let mpic = MPNowPlayingInfoCenter.default()
     var nowPlayingInfo: [String: AnyObject]?
@@ -41,17 +41,17 @@ class AudioPlayer: NSObject, AVAudioPlayerDelegate {
     }
 
     private func setupCommandCenter() {
-        MPNowPlayingInfoCenter.default().nowPlayingInfo = [MPMediaItemPropertyTitle: "Your App Name"]
+        MPNowPlayingInfoCenter.default().nowPlayingInfo = [MPMediaItemPropertyTitle: "LostPointer"]
 
         let commandCenter = MPRemoteCommandCenter.shared()
         commandCenter.playCommand.isEnabled = true
         commandCenter.pauseCommand.isEnabled = true
-        commandCenter.playCommand.addTarget { [weak self] (_) -> MPRemoteCommandHandlerStatus in
-            self?.player.play()
+        commandCenter.playCommand.addTarget { [weak self] _ -> MPRemoteCommandHandlerStatus in
+            self?.player?.play()
             return .success
         }
-        commandCenter.pauseCommand.addTarget { [weak self] (_) -> MPRemoteCommandHandlerStatus in
-            self?.player.pause()
+        commandCenter.pauseCommand.addTarget { [weak self] _ -> MPRemoteCommandHandlerStatus in
+            self?.player?.pause()
             return .success
         }
     }
@@ -102,6 +102,7 @@ class AudioPlayer: NSObject, AVAudioPlayerDelegate {
     }
     func toggle() {
         if let cell = playingCell {
+            guard let player = player else { return }
             if player.isPlaying {
                 player.pause()
                 cell.setPlaying(playing: false)
@@ -114,9 +115,9 @@ class AudioPlayer: NSObject, AVAudioPlayerDelegate {
     func play(url: URL) {
         do {
             player = try AVAudioPlayer(contentsOf: url)
-            player.prepareToPlay()
-            player.volume = 1
-            player.play()
+            player?.prepareToPlay()
+            player?.volume = 1
+            player?.play()
             self.updateNowPlayingInfoForCurrentPlaybackItem()
             self.updateCommandCenter()
             debugPrint("playing")
@@ -221,5 +222,10 @@ class AudioPlayer: NSObject, AVAudioPlayerDelegate {
         debugPrint("Config now playing info")
         self.nowPlayingInfoCenter.nowPlayingInfo = nowPlayingInfo
         self.nowPlayingInfo = nowPlayingInfo
+    }
+
+    func isPlaying() -> Bool {
+        guard let player = player else { return false }
+        return player.isPlaying
     }
 }
