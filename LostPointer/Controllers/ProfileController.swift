@@ -1,6 +1,15 @@
 import UIKit
 
 class ProfileController: UIViewController {
+    var player: AudioPlayer
+    init(player: AudioPlayer) {
+        self.player = player
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     private lazy var activityIndicator: UIActivityIndicatorView = {
         let spinner = UIActivityIndicatorView()
         spinner.style = .large
@@ -146,7 +155,7 @@ class ProfileController: UIViewController {
 
         UserModel.getProfileData {[weak self] data in
             guard let profile = try? JSONDecoder().decode(UserModel.self, from: data) else {
-                print("UserModel unmarshaling error")
+                debugPrint("UserModel unmarshaling error")
                 return
             }
 
@@ -157,7 +166,7 @@ class ProfileController: UIViewController {
             self?.activityIndicator.stopAnimating()
         } onError: {[weak self] err in
             self?.activityIndicator.startAnimating()
-            print(err)
+            debugPrint(err)
         }
     }
 
@@ -260,22 +269,23 @@ class ProfileController: UIViewController {
                              oldPassword: oldPasswordInput.text)
 
         user.updateProfileData {
-            print("Success")
+            debugPrint("Success")
         } onError: {[weak self] err in
             self?.showAlert(title: "Error", message: err)
         }
     }
 
     @objc func logout() {
-        print("Logout")
+        debugPrint("Logout")
         let alert = UIAlertController(title: "Log out", message: "Are you sure you want to log out?",
                                       preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
         alert.addAction(UIAlertAction(title: "Log out", style: .destructive, handler: {[weak self] _ in
             UserModel.logout {
-                return self?.navigationController?.setViewControllers([SigninController()], animated: true)
+                guard let player = self?.player else { return nil }
+                return self?.navigationController?.setViewControllers([SigninController(player: player)], animated: true)
             } onError: {err in
-                print(err)
+                debugPrint(err)
             }
         }))
         present(alert, animated: true, completion: nil)

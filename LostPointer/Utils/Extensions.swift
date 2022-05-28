@@ -56,3 +56,49 @@ extension UITextField {
     }
 }
 // swiftlint:enable all
+
+extension UIColor {
+
+    convenience init(_ hex: String, alpha: CGFloat = 1.0) {
+        var cString = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
+
+        if cString.hasPrefix("#") { cString.removeFirst() }
+
+        if cString.count != 6 {
+            self.init("ff0000") // return red color for wrong hex input
+            return
+        }
+
+        var rgbValue: UInt64 = 0
+        Scanner(string: cString).scanHexInt64(&rgbValue)
+
+        self.init(red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
+                  green: CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0,
+                  blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
+                  alpha: alpha)
+    }
+
+}
+
+extension UIView {
+
+    func applyGradient(isVertical: Bool, colorArray: [UIColor]) {
+        layer.sublayers?.filter({ $0 is CAGradientLayer }).forEach({ $0.removeFromSuperlayer() })
+
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.colors = colorArray.map({ $0.cgColor })
+        if isVertical {
+            // top to bottom
+            gradientLayer.locations = [0.0, 1.0]
+        } else {
+            // left to right
+            gradientLayer.startPoint = CGPoint(x: 0.0, y: 0.5)
+            gradientLayer.endPoint = CGPoint(x: 1.0, y: 0.5)
+        }
+
+        backgroundColor = .clear
+        gradientLayer.frame = bounds
+        layer.insertSublayer(gradientLayer, at: 0)
+    }
+
+}

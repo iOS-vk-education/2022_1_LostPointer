@@ -44,7 +44,7 @@ class ArtistsCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDa
             self?.addSubview(self?.artistsCollectionView ?? UICollectionView())
             self?.loaded = true
         } onError: {err in
-            print(err)
+            debugPrint(err)
         }
     }
 
@@ -60,6 +60,6 @@ class ArtistsCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDa
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("User tapped on item \(indexPath.row)")
+        debugPrint("User tapped on item \(indexPath.row)")
     }
 }

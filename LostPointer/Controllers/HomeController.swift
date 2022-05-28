@@ -3,10 +3,19 @@ import UIKit
 class HomeController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
     let tableView = UITableView()
-    let player: AudioPlayer = AudioPlayer()
+    let player: AudioPlayer
     var tracks: [TrackModel] = []
     var albumsCell: AlbumsCell?
     var artistsCell: ArtistsCell?
+
+    init (player: AudioPlayer) {
+        self.player = player
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         1 + self.tracks.count + 1
@@ -74,7 +83,7 @@ class HomeController: UIViewController, UITableViewDataSource, UITableViewDelega
             self.artistsCell?.load()
 
         } onError: {err in
-            print(err)
+            debugPrint(err)
         }
     }
 }

@@ -75,7 +75,7 @@ struct UserModel: Codable {
 
     public func updateProfileData(onSuccess: () -> Void, onError: (String) -> Void) {
         validateProfileData(onSuccess: {() -> Void in
-            print("Updating")
+            debugPrint("Updating")
         }, onError: {(err: String) -> Void in
             onError(err)
         })
