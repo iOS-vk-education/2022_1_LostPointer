@@ -34,6 +34,7 @@
 		ED8EF227280C928A009F9673 /* AlbumCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED8EF226280C9289009F9673 /* AlbumCollectionViewCell.swift */; };
 		ED8EF229280C9488009F9673 /* ArtistsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED8EF228280C9488009F9673 /* ArtistsCell.swift */; };
 		ED8EF22B280C94F8009F9673 /* ArtistCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED8EF22A280C94F8009F9673 /* ArtistCell.swift */; };
+		EDB8473128425A72005D2E82 /* TitleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDB8473028425A72005D2E82 /* TitleCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -66,6 +67,7 @@
 		ED8EF226280C9289009F9673 /* AlbumCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumCollectionViewCell.swift; sourceTree = "<group>"; };
 		ED8EF228280C9488009F9673 /* ArtistsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistsCell.swift; sourceTree = "<group>"; };
 		ED8EF22A280C94F8009F9673 /* ArtistCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistCell.swift; sourceTree = "<group>"; };
+		EDB8473028425A72005D2E82 /* TitleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -147,6 +149,7 @@
 				ED8EF228280C9488009F9673 /* ArtistsCell.swift */,
 				ED8EF22A280C94F8009F9673 /* ArtistCell.swift */,
 				52821F45283AC2BC0091C4C4 /* PlayerController.swift */,
+				EDB8473028425A72005D2E82 /* TitleCell.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -304,6 +307,7 @@
 				52D23D44280DC6C500E1D4C4 /* Constants.swift in Sources */,
 				52A80886280C431E00D0DF26 /* SigninController.swift in Sources */,
 				5B1ADC1727E63E040081EFDB /* AlbumModel.swift in Sources */,
+				EDB8473128425A72005D2E82 /* TitleCell.swift in Sources */,
 				5B1ADC1327E63D140081EFDB /* ArtistModel.swift in Sources */,
 				ED8EF229280C9488009F9673 /* ArtistsCell.swift in Sources */,
 				520C8EE32807564500A2BFA5 /* FavoritesController.swift in Sources */,

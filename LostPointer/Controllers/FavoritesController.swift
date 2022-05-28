@@ -5,6 +5,7 @@ class FavoritesController: UIViewController, UITableViewDataSource, UITableViewD
     let tableView = UITableView()
     let player: AudioPlayer
     var tracks: [TrackModel] = []
+    var titleCell: TitleCell?
 
     init (player: AudioPlayer) {
         self.player = player
@@ -16,14 +17,20 @@ class FavoritesController: UIViewController, UITableViewDataSource, UITableViewD
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        self.tracks.count
+        1 + self.tracks.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "TrackCell", for: indexPath) as? TrackCell
-        cell?.btn.tag = indexPath.row
-        cell?.track = tracks[indexPath.row]
-        return cell ?? UITableViewCell()
+        if indexPath.row == 0 {
+            let cell = self.titleCell
+            cell?.titleLabel.text = "Favorites"
+            return cell ?? UITableViewCell()
+        } else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "TrackCell", for: indexPath) as? TrackCell
+            cell?.btn.tag = indexPath.row
+            cell?.track = tracks[indexPath.row - 1]
+            return cell ?? UITableViewCell()
+        }
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -59,7 +66,10 @@ class FavoritesController: UIViewController, UITableViewDataSource, UITableViewD
             self.tableView.dataSource = self
             self.tableView.delegate = self
 
+            self.tableView.register(TitleCell.self, forCellReuseIdentifier: "TitleCell")
             self.tableView.register(TrackCell.self, forCellReuseIdentifier: "TrackCell")
+
+            self.titleCell = self.tableView.dequeueReusableCell(withIdentifier: "TitleCell") as? TitleCell
 
         } onError: {err in
             debugPrint(err)
