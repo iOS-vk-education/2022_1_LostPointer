@@ -224,7 +224,7 @@ class AudioPlayer: NSObject, AVAudioPlayerDelegate {
         self.nowPlayingInfo = nowPlayingInfo
     }
 
-    func isPlaying() -> Bool {
+    var isPlaying: Bool {
         guard let player = player else { return false }
         return player.isPlaying
     }
