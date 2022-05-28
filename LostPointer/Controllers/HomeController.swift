@@ -8,6 +8,8 @@ class HomeController: UIViewController, UITableViewDataSource, UITableViewDelega
     var albumsCell: HomeAlbumsCell?
     var artistsCell: ArtistsCell?
 
+    let refreshControl = UIRefreshControl()
+
     init (player: AudioPlayer) {
         self.player = player
         super.init(nibName: nil, bundle: nil)
@@ -95,8 +97,21 @@ class HomeController: UIViewController, UITableViewDataSource, UITableViewDelega
         return configuration
     }
 
+    @objc func refresh(_ sender: AnyObject) {
+        self.load()
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
+        refreshControl.addTarget(self, action: #selector(self.refresh(_:)), for: .valueChanged)
+        tableView.addSubview(refreshControl)
+
+        self.load()
+    }
+
+    func load() {
         TrackModel.getHomeTracks {loadedTracks in
             self.tracks = loadedTracks
 
@@ -125,8 +140,11 @@ class HomeController: UIViewController, UITableViewDataSource, UITableViewDelega
             self.albumsCell?.load(player: self.player, navigator: self.navigationController)
             self.artistsCell?.load(player: self.player, navigator: self.navigationController)
 
+            self.refreshControl.endRefreshing()
+
         } onError: {err in
             debugPrint(err)
+            self.refreshControl.endRefreshing()
         }
     }
 }

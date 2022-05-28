@@ -7,6 +7,8 @@ class FavoritesController: UIViewController, UITableViewDataSource, UITableViewD
     var tracks: [TrackModel] = []
     var titleCell: TitleCell?
 
+    let refreshControl = UIRefreshControl()
+
     init (player: AudioPlayer) {
         self.player = player
         super.init(nibName: nil, bundle: nil)
@@ -88,8 +90,21 @@ class FavoritesController: UIViewController, UITableViewDataSource, UITableViewD
         return configuration
     }
 
+    @objc func refresh(_ sender: AnyObject) {
+        self.load()
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
+        refreshControl.addTarget(self, action: #selector(self.refresh(_:)), for: .valueChanged)
+        tableView.addSubview(refreshControl)
+
+        self.load()
+    }
+
+    func load() {
         TrackModel.getFavoritesTrack {loadedTracks in
             self.tracks = loadedTracks
 
@@ -114,8 +129,10 @@ class FavoritesController: UIViewController, UITableViewDataSource, UITableViewD
 
             self.titleCell = self.tableView.dequeueReusableCell(withIdentifier: "TitleCell") as? TitleCell
 
+            self.refreshControl.endRefreshing()
         } onError: {err in
             debugPrint(err)
+            self.refreshControl.endRefreshing()
         }
     }
 }
