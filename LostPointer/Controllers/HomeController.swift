@@ -1,11 +1,11 @@
 import UIKit
 
-class HomeController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class HomeController: UIViewController, UITableViewDataSource, UITableViewDelegate, UINavigationControllerDelegate {
 
     let tableView = UITableView()
     let player: AudioPlayer
     var tracks: [TrackModel] = []
-    var albumsCell: AlbumsCell?
+    var albumsCell: HomeAlbumsCell?
     var artistsCell: ArtistsCell?
 
     init (player: AudioPlayer) {
@@ -48,7 +48,7 @@ class HomeController: UIViewController, UITableViewDataSource, UITableViewDelega
         if let trackCell = self.tableView.cellForRow(at: indexPath) as? TrackCell {
             player.playTrack(cell: trackCell)
         } else {
-            return
+            self.navigationController?.pushViewController(ArtistController(player: self.player, id: 369), animated: true)
         }
     }
 
@@ -71,10 +71,10 @@ class HomeController: UIViewController, UITableViewDataSource, UITableViewDelega
                 }
             }
             let openAlbumAction = UIAction(title: "Open album page", image: UIImage(systemName: "music.mic.circle"), identifier: nil) { _ in
-                // Put button handler here
+                self.navigationController?.pushViewController(AlbumController(player: self.player, id: track.album?.id ?? 0), animated: true)
             }
             let openArtistAction = UIAction(title: "Open artist page", image: UIImage(systemName: "person.circle"), identifier: nil) { _ in
-                // Put button handler here
+                self.navigationController?.pushViewController(ArtistController(player: self.player, id: track.artist?.id ?? 0), animated: true)
             }
             let playlistAction = UIAction(title: "Add to the playlist...", image: nil, identifier: nil) { _ in
                 // Put button handler here
@@ -108,11 +108,11 @@ class HomeController: UIViewController, UITableViewDataSource, UITableViewDelega
             self.tableView.dataSource = self
             self.tableView.delegate = self
 
-            self.tableView.register(AlbumsCell.self, forCellReuseIdentifier: "AlbumsCell")
+            self.tableView.register(HomeAlbumsCell.self, forCellReuseIdentifier: "HomeAlbumsCell")
             self.tableView.register(TrackCell.self, forCellReuseIdentifier: "TrackCell")
             self.tableView.register(ArtistsCell.self, forCellReuseIdentifier: "ArtistsCell")
 
-            self.albumsCell = self.tableView.dequeueReusableCell(withIdentifier: "AlbumsCell") as? AlbumsCell
+            self.albumsCell = self.tableView.dequeueReusableCell(withIdentifier: "HomeAlbumsCell") as? HomeAlbumsCell
             self.artistsCell = self.tableView.dequeueReusableCell(withIdentifier: "ArtistsCell") as? ArtistsCell
             self.albumsCell?.load()
             self.artistsCell?.load()

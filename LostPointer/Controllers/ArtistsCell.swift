@@ -30,10 +30,6 @@ class ArtistsCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDa
             self?.artistsCollectionView = UICollectionView(frame: frame, collectionViewLayout: layout)
             self?.artistsCollectionView?.heightAnchor.constraint(
                 equalToConstant: self?.frame.height ?? 0 / 2).isActive = true
-            self?.artistsCollectionView?.register(AlbumCollectionViewCell.self,
-                                                  forCellWithReuseIdentifier: AlbumCollectionViewCell.identifier)
-            self?.artistsCollectionView?.backgroundColor = UIColor.black
-
             self?.artistsCollectionView?.register(
                 ArtistCell.self, forCellWithReuseIdentifier: ArtistCell.identifier)
             self?.artistsCollectionView?.backgroundColor = UIColor.black

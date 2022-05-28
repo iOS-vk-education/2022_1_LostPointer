@@ -1,15 +1,15 @@
 import UIKit
 
 struct TrackModel: Codable {
-    let id: Int?
-    let title, genre: String?
-    let number: Int?
-    let listenCount: Int?
-    let duration: Int?
-    let album: AlbumModel?
-    let artist: ArtistModel?
-    let is_in_favorites: Bool?
-    let file: String
+    var id: Int?
+    var title, genre: String?
+    var number: Int?
+    var listenCount: Int?
+    var duration: Int?
+    var album: AlbumModel?
+    var artist: ArtistModel?
+    var is_in_favorites: Bool?
+    var file: String
 
     enum CodingKeys: String, CodingKey {
         case id, title, genre, number, duration, album, artist, is_in_favorites, file

@@ -6,43 +6,52 @@ class AlbumsCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDat
     var albums: [AlbumModel] = []
     var loaded: Bool = false
 
-    func load() {
+    func load(albums: [AlbumModel]) {
         if loaded {
             return
         }
 
-        AlbumModel.getHomeAlbums {loadedAlbums in
-            self.albums = loadedAlbums
+        self.albums = albums
 
-            self.backgroundColor = UIColor(named: "backgroundColor")
+        self.backgroundColor = UIColor(named: "backgroundColor")
 
-            let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
-            layout.sectionInset = UIEdgeInsets(top: 20, left: 10, bottom: 20, right: 10)
-            layout.itemSize = CGSize(width: 230, height: 380)
-            layout.scrollDirection = .horizontal
+        let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
+        layout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        layout.itemSize = CGSize(width: 130, height: 130)
 
-            self.albumsCollectionView = UICollectionView(frame: self.frame, collectionViewLayout: layout)
-            self.albumsCollectionView?.heightAnchor.constraint(equalToConstant: self.frame.height / 2).isActive = true
-            self.albumsCollectionView?.register(AlbumCollectionViewCell.self, forCellWithReuseIdentifier: "AlbumCell")
-            self.albumsCollectionView?.backgroundColor = UIColor.black
+        let pairs = Int(self.albums.count / 2) + self.albums.count % 2
+        let height = 160 * pairs
 
-            self.albumsCollectionView?.delegate = self
-            self.albumsCollectionView?.dataSource = self
+        let frame = CGRect(
+            x: (UIScreen.main.bounds.size.width - self.contentView.bounds.size.width) / 2,
+            y: 0,
+            width: self.contentView.bounds.size.width ,
+            height: CGFloat(height)
+        )
 
-            self.addSubview(self.albumsCollectionView ?? UICollectionView())
-            self.loaded = true
-        } onError: {err in
-            debugPrint(err)
-        }
+        self.albumsCollectionView = UICollectionView(frame: frame, collectionViewLayout: layout)
+        self.albumsCollectionView?.heightAnchor.constraint(
+            equalToConstant: self.frame.height ).isActive = true
+        self.albumsCollectionView?.register(
+            AlbumCell.self, forCellWithReuseIdentifier: AlbumCell.identifier)
+        self.albumsCollectionView?.backgroundColor = UIColor.black
+
+        self.albumsCollectionView?.delegate = self
+        self.albumsCollectionView?.dataSource = self
+
+        self.addSubview(self.albumsCollectionView ?? UICollectionView())
+        self.loaded = true
+
     }
 
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int { 5 }
+    func collectionView(_ collectionView: UICollectionView,
+                        numberOfItemsInSection section: Int) -> Int { self.albums.count }
 
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let albumCell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: "AlbumCell", for: indexPath) as? AlbumCollectionViewCell
-        albumCell?.album = albums[indexPath.item]
+            withReuseIdentifier: "AlbumCell", for: indexPath) as? AlbumCell
+        albumCell?.album = self.albums[indexPath.item]
         return albumCell ?? UICollectionViewCell()
     }
 

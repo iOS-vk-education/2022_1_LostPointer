@@ -1,14 +1,17 @@
 import UIKit
 
-class FavoritesController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class AlbumController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
     let tableView = UITableView()
     let player: AudioPlayer
+    let albumId: Int
+    var album: FullAlbumModel?
     var tracks: [TrackModel] = []
     var titleCell: TitleCell?
 
-    init (player: AudioPlayer) {
+    init (player: AudioPlayer, id: Int) {
         self.player = player
+        self.albumId = id
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -23,12 +26,12 @@ class FavoritesController: UIViewController, UITableViewDataSource, UITableViewD
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.row == 0 {
             let cell = self.titleCell
-            cell?.titleLabel.text = "Favorites"
+            cell?.titleLabel.text = self.album?.title
             return cell ?? UITableViewCell()
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "TrackCell", for: indexPath) as? TrackCell
             cell?.btn.tag = indexPath.row
-            cell?.track = tracks[indexPath.row - 1]
+            cell?.track = self.tracks[indexPath.row - 1]
             return cell ?? UITableViewCell()
         }
     }
@@ -63,9 +66,6 @@ class FavoritesController: UIViewController, UITableViewDataSource, UITableViewD
                     // Put button handler here
                 }
             }
-            let openAlbumAction = UIAction(title: "Open album page", image: UIImage(systemName: "music.mic.circle"), identifier: nil) { _ in
-                self.navigationController?.pushViewController(AlbumController(player: self.player, id: track.album?.id ?? 0), animated: true)
-            }
             let openArtistAction = UIAction(title: "Open artist page", image: UIImage(systemName: "person.circle"), identifier: nil) { _ in
                 self.navigationController?.pushViewController(ArtistController(player: self.player, id: track.artist?.id ?? 0), animated: true)
             }
@@ -75,15 +75,21 @@ class FavoritesController: UIViewController, UITableViewDataSource, UITableViewD
             let shareAction = UIAction(title: "Share", image: UIImage(systemName: "square.and.arrow.up"), identifier: nil) { _ in
                 // Put button handler here
             }
-            return UIMenu(title: menuTitle, children: [likeAction, openAlbumAction, openArtistAction, playlistAction, shareAction])
+            return UIMenu(title: menuTitle, children: [likeAction, openArtistAction, playlistAction, shareAction])
         }
         return configuration
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        TrackModel.getFavoritesTrack {loadedTracks in
-            self.tracks = loadedTracks
+        FullAlbumModel.getAlbum(id: self.albumId) {loadedAlbum in
+            self.album = loadedAlbum
+
+            for var track in self.album?.tracks ?? [] {
+                track.album = AlbumModel(id: self.album?.id, year: self.album?.year, tracksDuration: self.album?.tracksDuration, title: self.album?.title, artwork: self.album?.artwork, artworkColor: self.album?.artworkColor)
+                track.artist = ArtistModel(id: self.album?.artist?.id, name: self.album?.artist?.name, avatar: self.album?.artist?.avatar, tracks: [], albums: [])
+                self.tracks.append(track)
+            }
 
             self.view.addSubview(self.tableView)
 
