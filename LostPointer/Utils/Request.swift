@@ -4,6 +4,16 @@ public enum RequestMethods: String {
     case GET
     case POST
     case PATCH
+    case DELETE
+}
+
+struct MessageModel: Codable {
+    var status: Int?
+    var message: String?
+
+    enum CodingKeys: String, CodingKey {
+        case status, message
+    }
 }
 
 struct CommonResponse: Decodable {
@@ -62,7 +72,7 @@ public final class Request {
                 // Это не ошибка
             }
 
-            if response.statusCode != 200 || (code != 0 && code != 200) {
+            if response.statusCode != 200 && response.statusCode != 201 || (code != 0 && code != 200 && code != 201) {
                 debugPrint(response.statusCode, code)
                 failure(NSError(domain: "APIRequest", code: -5, userInfo: ["Error": "Response code is not 2xx"]))
                 debugPrint("Request error: ", data)

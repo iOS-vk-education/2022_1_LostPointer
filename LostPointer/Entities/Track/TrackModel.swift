@@ -42,4 +42,30 @@ struct TrackModel: Codable {
             onError(err)
         }
     }
+
+    static func likeTrack(id: Int, onSucess: @escaping (MessageModel) -> Void, onError: @escaping (Error) -> Void) {
+        Request.fetch(url: "/track/like/\(id)", method: RequestMethods.POST) {data in
+            guard let tracks = try? JSONDecoder().decode(MessageModel.self, from: data) else {
+                debugPrint(NSError(domain: "TrackModel",
+                                   code: -1, userInfo: ["Error": "Error unmarshalling message data (like)"]))
+                return
+            }
+            onSucess(tracks)
+        } onError: {err in
+            onError(err)
+        }
+    }
+
+    static func dislikeTrack(id: Int, onSucess: @escaping (MessageModel) -> Void, onError: @escaping (Error) -> Void) {
+        Request.fetch(url: "/track/like/\(id)", method: RequestMethods.DELETE) {data in
+            guard let tracks = try? JSONDecoder().decode(MessageModel.self, from: data) else {
+                debugPrint(NSError(domain: "TrackModel",
+                                   code: -1, userInfo: ["Error": "Error unmarshalling message data (like)"]))
+                return
+            }
+            onSucess(tracks)
+        } onError: {err in
+            onError(err)
+        }
+    }
 }

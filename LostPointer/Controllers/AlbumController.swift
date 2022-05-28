@@ -59,11 +59,19 @@ class AlbumController: UIViewController, UITableViewDataSource, UITableViewDeleg
         let configuration = UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ -> UIMenu? in
 
             var likeAction = UIAction(title: "Like", image: UIImage(systemName: "heart"), identifier: nil) { _ in
-                // Put button handler here
+                TrackModel.likeTrack(id: track.id ?? 0) {_ in
+                    self.tracks[indexPath.row - 1].isInFavorites = true
+                } onError: {err in
+                    debugPrint(err)
+                }
             }
             if track.isInFavorites ?? false {
                 likeAction = UIAction(title: "Dislike", image: UIImage(systemName: "heart.slash"), identifier: nil) { _ in
-                    // Put button handler here
+                    TrackModel.dislikeTrack(id: track.id ?? 0) {_ in
+                        self.tracks[indexPath.row - 1].isInFavorites = false
+                    } onError: {err in
+                        debugPrint(err)
+                    }
                 }
             }
             let openArtistAction = UIAction(title: "Open artist page", image: UIImage(systemName: "person.circle"), identifier: nil) { _ in

@@ -39,6 +39,7 @@
 		EDB847352842A846005D2E82 /* AlbumsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDB847342842A846005D2E82 /* AlbumsCell.swift */; };
 		EDB847372842A851005D2E82 /* AlbumCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDB847362842A851005D2E82 /* AlbumCell.swift */; };
 		EDB847392842B041005D2E82 /* AlbumController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDB847382842B041005D2E82 /* AlbumController.swift */; };
+		EDF2ABA92842D46B00908D57 /* FullAlbumModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDF2ABA82842D46B00908D57 /* FullAlbumModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -76,6 +77,7 @@
 		EDB847342842A846005D2E82 /* AlbumsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumsCell.swift; sourceTree = "<group>"; };
 		EDB847362842A851005D2E82 /* AlbumCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumCell.swift; sourceTree = "<group>"; };
 		EDB847382842B041005D2E82 /* AlbumController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumController.swift; sourceTree = "<group>"; };
+		EDF2ABA82842D46B00908D57 /* FullAlbumModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullAlbumModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -205,6 +207,7 @@
 			isa = PBXGroup;
 			children = (
 				5B1ADC1627E63E040081EFDB /* AlbumModel.swift */,
+				EDF2ABA82842D46B00908D57 /* FullAlbumModel.swift */,
 			);
 			path = Album;
 			sourceTree = "<group>";
@@ -315,6 +318,7 @@
 				5B1ADC1527E63D2D0081EFDB /* UserModel.swift in Sources */,
 				5B1ADBF327E63AD10081EFDB /* AppDelegate.swift in Sources */,
 				ED8EF225280C9254009F9673 /* HomeAlbumsCell.swift in Sources */,
+				EDF2ABA92842D46B00908D57 /* FullAlbumModel.swift in Sources */,
 				520C8EDF280752A000A2BFA5 /* HomeController.swift in Sources */,
 				5B1ADC1127E63CDB0081EFDB /* TrackModel.swift in Sources */,
 				520C8EDD2807504100A2BFA5 /* TabController.swift in Sources */,
