@@ -81,7 +81,13 @@ class AlbumController: UIViewController, UITableViewDataSource, UITableViewDeleg
                 // Put button handler here
             }
             let shareAction = UIAction(title: "Share", image: UIImage(systemName: "square.and.arrow.up"), identifier: nil) { _ in
-                // Put button handler here
+                guard let url = URL(string: "https://lostpointer.site/album/\(track.album?.id ?? 0)") else {
+                    return
+                }
+                let shareSheetVC = UIActivityViewController(
+                    activityItems: [url], applicationActivities: nil
+                )
+                self.present(shareSheetVC, animated: true)
             }
             return UIMenu(title: menuTitle, children: [likeAction, openArtistAction, playlistAction, shareAction])
         }

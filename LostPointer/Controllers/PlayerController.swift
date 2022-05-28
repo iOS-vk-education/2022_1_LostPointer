@@ -49,7 +49,7 @@ class PlayerController: UIViewController, TabBarCustomPresentable {
 
     private lazy var seekbar: UISlider = {
         let slider = UISlider()
-        
+
         slider.addTarget(self, action: #selector(sliderDidEndSliding), for: [.touchUpInside, .touchUpOutside])
         slider.addTarget(self, action: #selector(sliderDidStartSliding), for: [.touchDown])
         return slider
