@@ -32,8 +32,7 @@ struct TrackModel: Codable {
     static func getFavoritesTrack(onSucess: @escaping ([TrackModel]) -> Void, onError: @escaping (Error) -> Void) {
         Request.fetch(url: "/track/favorites", method: RequestMethods.GET) {data in
             guard let tracks = try? JSONDecoder().decode([TrackModel].self, from: data) else {
-                debugPrint(NSError(domain: "TrackModel",
-                                   code: -1, userInfo: ["Error": "Error unmarshalling tracks data (favorites)"]))
+                debugPrint("Error unmarshalling tracks data (favorites)")
                 return
             }
             onSucess(tracks)
@@ -45,8 +44,7 @@ struct TrackModel: Codable {
     static func likeTrack(id: Int, onSucess: @escaping (MessageModel) -> Void, onError: @escaping (Error) -> Void) {
         Request.fetch(url: "/track/like/\(id)", method: RequestMethods.POST) {data in
             guard let tracks = try? JSONDecoder().decode(MessageModel.self, from: data) else {
-                debugPrint(NSError(domain: "TrackModel",
-                                   code: -1, userInfo: ["Error": "Error unmarshalling message data (like)"]))
+                debugPrint("Error unmarshalling message data (like)")
                 return
             }
             onSucess(tracks)
@@ -58,8 +56,7 @@ struct TrackModel: Codable {
     static func dislikeTrack(id: Int, onSucess: @escaping (MessageModel) -> Void, onError: @escaping (Error) -> Void) {
         Request.fetch(url: "/track/like/\(id)", method: RequestMethods.DELETE) {data in
             guard let tracks = try? JSONDecoder().decode(MessageModel.self, from: data) else {
-                debugPrint(NSError(domain: "TrackModel",
-                                   code: -1, userInfo: ["Error": "Error unmarshalling message data (like)"]))
+                debugPrint("Error unmarshalling message data (dislike)")
                 return
             }
             onSucess(tracks)
