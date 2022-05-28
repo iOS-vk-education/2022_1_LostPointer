@@ -58,12 +58,12 @@ class FavoritesController: UIViewController, UITableViewDataSource, UITableViewD
             var likeAction = UIAction(title: "Like", image: UIImage(systemName: "heart"), identifier: nil) { _ in
                 // Put button handler here
             }
-            if track.is_in_favorites ?? false {
+            if track.isInFavorites ?? false {
                 likeAction = UIAction(title: "Dislike", image: UIImage(systemName: "heart.slash"), identifier: nil) { _ in
                     // Put button handler here
                 }
             }
-            let openAlbumAction = UIAction(title: "Open album page", image: UIImage(systemName: "music.mic.circle"), identifier: nil) { _ in
+            let openAlbumAction = UIAction(title: "Open album page", image: UIImage(systemName: "opticaldisc"), identifier: nil) { _ in
                 self.navigationController?.pushViewController(AlbumController(player: self.player, id: track.album?.id ?? 0), animated: true)
             }
             let openArtistAction = UIAction(title: "Open artist page", image: UIImage(systemName: "person.circle"), identifier: nil) { _ in

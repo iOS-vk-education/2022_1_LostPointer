@@ -61,7 +61,7 @@ class AlbumController: UIViewController, UITableViewDataSource, UITableViewDeleg
             var likeAction = UIAction(title: "Like", image: UIImage(systemName: "heart"), identifier: nil) { _ in
                 // Put button handler here
             }
-            if track.is_in_favorites ?? false {
+            if track.isInFavorites ?? false {
                 likeAction = UIAction(title: "Dislike", image: UIImage(systemName: "heart.slash"), identifier: nil) { _ in
                     // Put button handler here
                 }

@@ -1,15 +1,22 @@
 import UIKit
+import AudioToolbox
 
 class HomeAlbumsCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataSource {
     var albumsCollectionView: UICollectionView?
 
+    var player: AudioPlayer?
+    var navigator: UINavigationController?
+
     var albums: [AlbumModel] = []
     var loaded: Bool = false
 
-    func load() {
+    func load(player: AudioPlayer, navigator: UINavigationController?) {
         if loaded {
             return
         }
+
+        self.player = player
+        self.navigator = navigator
 
         AlbumModel.getHomeAlbums {loadedAlbums in
             self.albums = loadedAlbums
@@ -47,6 +54,8 @@ class HomeAlbumsCell: UITableViewCell, UICollectionViewDelegate, UICollectionVie
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        debugPrint("User tapped on item \(indexPath.row)")
+        if let player = self.player {
+            self.navigator?.pushViewController(AlbumController(player: player, id: self.albums[indexPath.row].id ?? 0), animated: true)
+        }
     }
 }

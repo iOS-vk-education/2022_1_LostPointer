@@ -8,12 +8,13 @@ struct TrackModel: Codable {
     var duration: Int?
     var album: AlbumModel?
     var artist: ArtistModel?
-    var is_in_favorites: Bool?
+    var isInFavorites: Bool?
     var file: String
 
     enum CodingKeys: String, CodingKey {
-        case id, title, genre, number, duration, album, artist, is_in_favorites, file
+        case id, title, genre, number, duration, album, artist, file
         case listenCount = "listen_count"
+        case isInFavorites = "is_in_favorites"
     }
 
     static func getHomeTracks(onSuccess: @escaping ([TrackModel]) -> Void, onError: @escaping  (Error) -> Void) {

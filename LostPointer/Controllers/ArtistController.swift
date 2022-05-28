@@ -73,12 +73,12 @@ class ArtistController: UIViewController, UITableViewDataSource, UITableViewDele
             var likeAction = UIAction(title: "Like", image: UIImage(systemName: "heart"), identifier: nil) { _ in
                 // Put button handler here
             }
-            if track.is_in_favorites ?? false {
+            if track.isInFavorites ?? false {
                 likeAction = UIAction(title: "Dislike", image: UIImage(systemName: "heart.slash"), identifier: nil) { _ in
                     // Put button handler here
                 }
             }
-            let openAlbumAction = UIAction(title: "Open album page", image: UIImage(systemName: "music.mic.circle"), identifier: nil) { _ in
+            let openAlbumAction = UIAction(title: "Open album page", image: UIImage(systemName: "opticaldisc"), identifier: nil) { _ in
                 self.navigationController?.pushViewController(AlbumController(player: self.player, id: track.album?.id ?? 0), animated: true)
             }
             let playlistAction = UIAction(title: "Add to the playlist...", image: nil, identifier: nil) { _ in
@@ -124,7 +124,7 @@ class ArtistController: UIViewController, UITableViewDataSource, UITableViewDele
 
             self.albumsCell = self.tableView.dequeueReusableCell(withIdentifier: "AlbumsCell") as? AlbumsCell
             self.titleCell = self.tableView.dequeueReusableCell(withIdentifier: "TitleCell") as? TitleCell
-            self.albumsCell?.load(albums: self.artist?.albums ?? [])
+            self.albumsCell?.load(albums: self.artist?.albums ?? [], player: self.player, navigator: self.navigationController)
 
         } onError: {err in
             debugPrint(err)

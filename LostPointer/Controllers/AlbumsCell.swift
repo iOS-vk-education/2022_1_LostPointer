@@ -3,15 +3,20 @@ import UIKit
 class AlbumsCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataSource {
     var albumsCollectionView: UICollectionView?
 
+    var player: AudioPlayer?
+    var navigator: UINavigationController?
+
     var albums: [AlbumModel] = []
     var loaded: Bool = false
 
-    func load(albums: [AlbumModel]) {
+    func load(albums: [AlbumModel], player: AudioPlayer, navigator: UINavigationController?) {
         if loaded {
             return
         }
 
         self.albums = albums
+        self.player = player
+        self.navigator = navigator
 
         self.backgroundColor = UIColor(named: "backgroundColor")
 
@@ -56,6 +61,8 @@ class AlbumsCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDat
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        debugPrint("User tapped on item \(indexPath.row)")
+        if let player = self.player {
+            self.navigator?.pushViewController(AlbumController(player: player, id: self.albums[indexPath.row].id ?? 0), animated: true)
+        }
     }
 }
