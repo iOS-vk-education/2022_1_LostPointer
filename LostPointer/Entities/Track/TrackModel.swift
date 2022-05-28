@@ -1,24 +1,26 @@
 import UIKit
 
 struct TrackModel: Codable {
-    let id: Int?
-    let title, genre: String?
-    let number: Int?
-    let listenCount: Int?
-    let duration: Int?
-    let album: AlbumModel?
-    let artist: ArtistModel?
-    let file: String
+    var id: Int?
+    var title, genre: String?
+    var number: Int?
+    var listenCount: Int?
+    var duration: Int?
+    var album: AlbumModel?
+    var artist: ArtistModel?
+    var isInFavorites: Bool?
+    var file: String
 
     enum CodingKeys: String, CodingKey {
         case id, title, genre, number, duration, album, artist, file
         case listenCount = "listen_count"
+        case isInFavorites = "is_in_favorites"
     }
 
     static func getHomeTracks(onSuccess: @escaping ([TrackModel]) -> Void, onError: @escaping  (Error) -> Void) {
         Request.fetch(url: "/home/tracks", method: RequestMethods.GET) {data in
             guard let tracks = try? JSONDecoder().decode([TrackModel].self, from: data) else {
-                debugPrint("Error unmarshaling tracks data")
+                debugPrint("Error unmarshaling tracks data (home)")
                 return
             }
             onSuccess(tracks)
@@ -27,4 +29,39 @@ struct TrackModel: Codable {
         }
     }
 
+    static func getFavoritesTrack(onSucess: @escaping ([TrackModel]) -> Void, onError: @escaping (Error) -> Void) {
+        Request.fetch(url: "/track/favorites", method: RequestMethods.GET) {data in
+            guard let tracks = try? JSONDecoder().decode([TrackModel].self, from: data) else {
+                debugPrint("Error unmarshalling tracks data (favorites)")
+                return
+            }
+            onSucess(tracks)
+        } onError: {err in
+            onError(err)
+        }
+    }
+
+    static func likeTrack(id: Int, onSucess: @escaping (MessageModel) -> Void, onError: @escaping (Error) -> Void) {
+        Request.fetch(url: "/track/like/\(id)", method: RequestMethods.POST) {data in
+            guard let tracks = try? JSONDecoder().decode(MessageModel.self, from: data) else {
+                debugPrint("Error unmarshalling message data (like)")
+                return
+            }
+            onSucess(tracks)
+        } onError: {err in
+            onError(err)
+        }
+    }
+
+    static func dislikeTrack(id: Int, onSucess: @escaping (MessageModel) -> Void, onError: @escaping (Error) -> Void) {
+        Request.fetch(url: "/track/like/\(id)", method: RequestMethods.DELETE) {data in
+            guard let tracks = try? JSONDecoder().decode(MessageModel.self, from: data) else {
+                debugPrint("Error unmarshalling message data (dislike)")
+                return
+            }
+            onSucess(tracks)
+        } onError: {err in
+            onError(err)
+        }
+    }
 }

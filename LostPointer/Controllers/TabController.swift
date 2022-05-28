@@ -27,7 +27,7 @@ final class TabController: UITabBarController, UITabBarControllerDelegate {
                                        image: UIImage(systemName: "house"),
                                        selectedImage: UIImage(systemName: "house.fill"))
 
-        let favorites = FavoritesController()
+        let favorites = FavoritesController(player: self.player)
         favorites.tabBarItem = UITabBarItem(title: "Favorites",
                                             image: UIImage(systemName: "heart"),
                                             selectedImage: UIImage(systemName: "heart.fill"))

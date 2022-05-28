@@ -1,17 +1,17 @@
 import UIKit
 
-final class HomeController: UIViewController, UITableViewDataSource, UITableViewDelegate, UINavigationControllerDelegate {
+class AlbumController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
     let tableView = UITableView()
     let player: AudioPlayer
+    let albumId: Int
+    var album: FullAlbumModel?
     var tracks: [TrackModel] = []
-    var albumsCell: HomeAlbumsCell?
-    var artistsCell: ArtistsCell?
+    var titleCell: TitleCell?
 
-    let refreshControl = UIRefreshControl()
-
-    init (player: AudioPlayer) {
+    init (player: AudioPlayer, id: Int) {
         self.player = player
+        self.albumId = id
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -20,42 +20,36 @@ final class HomeController: UIViewController, UITableViewDataSource, UITableView
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        1 + self.tracks.count + 1
+        1 + self.tracks.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.row == 0 {
-            return self.albumsCell ?? UITableViewCell()
-        } else if indexPath.row == self.tracks.count + 1 {
-            return self.artistsCell ?? UITableViewCell()
+            let cell = self.titleCell
+            cell?.titleLabel.text = self.album?.title
+            return cell ?? UITableViewCell()
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "TrackCell", for: indexPath) as? TrackCell
             cell?.btn.tag = indexPath.row
-            cell?.track = tracks[indexPath.row - 1]
+            cell?.track = self.tracks[indexPath.row - 1]
             return cell ?? UITableViewCell()
         }
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.row == 0 {
-            return 480
-        } else if indexPath.row == self.tracks.count + 1 {
-            return 290
-        } else {
-            return 80
-        }
+        return 80
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let trackCell = self.tableView.cellForRow(at: indexPath) as? TrackCell {
             player.playTrack(cell: trackCell)
         } else {
-            self.navigationController?.pushViewController(ArtistController(player: self.player, id: 369), animated: true)
+            return
         }
     }
 
     func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
-        if indexPath.row == 0 || indexPath.row == self.tracks.count + 1 {
+        if indexPath.row == 0 {
             return nil
         }
 
@@ -80,9 +74,6 @@ final class HomeController: UIViewController, UITableViewDataSource, UITableView
                     }
                 }
             }
-            let openAlbumAction = UIAction(title: "Open album page", image: UIImage(systemName: "opticaldisc"), identifier: nil) { _ in
-                self.navigationController?.pushViewController(AlbumController(player: self.player, id: track.album?.id ?? 0), animated: true)
-            }
             let openArtistAction = UIAction(title: "Open artist page", image: UIImage(systemName: "person.circle"), identifier: nil) { _ in
                 self.navigationController?.pushViewController(ArtistController(player: self.player, id: track.artist?.id ?? 0), animated: true)
             }
@@ -98,28 +89,27 @@ final class HomeController: UIViewController, UITableViewDataSource, UITableView
                 )
                 self.present(shareSheetVC, animated: true)
             }
-            return UIMenu(title: menuTitle, children: [likeAction, openAlbumAction, openArtistAction, playlistAction, shareAction])
+            return UIMenu(title: menuTitle, children: [likeAction, openArtistAction, playlistAction, shareAction])
         }
         return configuration
     }
 
-    @objc func refresh(_ sender: AnyObject) {
-        self.load()
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
+        FullAlbumModel.getAlbum(id: self.albumId) {loadedAlbum in
+            self.album = loadedAlbum
 
-        refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
-        refreshControl.addTarget(self, action: #selector(self.refresh(_:)), for: .valueChanged)
-        tableView.addSubview(refreshControl)
-
-        self.load()
-    }
-
-    func load() {
-        TrackModel.getHomeTracks {loadedTracks in
-            self.tracks = loadedTracks
+            for var track in self.album?.tracks ?? [] {
+                track.album = AlbumModel(
+                    id: self.album?.id,
+                    year: self.album?.year,
+                    tracksDuration: self.album?.tracksDuration,
+                    title: self.album?.title,
+                    artwork: self.album?.artwork,
+                    artworkColor: self.album?.artworkColor)
+                track.artist = ArtistModel(id: self.album?.artist?.id, name: self.album?.artist?.name, avatar: self.album?.artist?.avatar, tracks: [], albums: [])
+                self.tracks.append(track)
+            }
 
             self.view.addSubview(self.tableView)
 
@@ -137,20 +127,13 @@ final class HomeController: UIViewController, UITableViewDataSource, UITableView
             self.tableView.dataSource = self
             self.tableView.delegate = self
 
-            self.tableView.register(HomeAlbumsCell.self, forCellReuseIdentifier: "HomeAlbumsCell")
+            self.tableView.register(TitleCell.self, forCellReuseIdentifier: "TitleCell")
             self.tableView.register(TrackCell.self, forCellReuseIdentifier: "TrackCell")
-            self.tableView.register(ArtistsCell.self, forCellReuseIdentifier: "ArtistsCell")
 
-            self.albumsCell = self.tableView.dequeueReusableCell(withIdentifier: "HomeAlbumsCell") as? HomeAlbumsCell
-            self.artistsCell = self.tableView.dequeueReusableCell(withIdentifier: "ArtistsCell") as? ArtistsCell
-            self.albumsCell?.load(player: self.player, navigator: self.navigationController)
-            self.artistsCell?.load(player: self.player, navigator: self.navigationController)
-
-            self.refreshControl.endRefreshing()
+            self.titleCell = self.tableView.dequeueReusableCell(withIdentifier: "TitleCell") as? TitleCell
 
         } onError: {err in
             debugPrint(err)
-            self.refreshControl.endRefreshing()
         }
     }
 }

@@ -1,7 +1,7 @@
 import UIKit
 
-final class AlbumCollectionViewCell: UICollectionViewCell {
-    static var identifier = "AlbumCollectionViewCell"
+class AlbumCell: UICollectionViewCell {
+    static var identifier = "AlbumCell"
 
     var album: AlbumModel? {
         didSet {
@@ -14,27 +14,24 @@ final class AlbumCollectionViewCell: UICollectionViewCell {
     }
 
     let albumImageView: UIImageView = {
-        let image = UIImageView()
-        image.contentMode = .scaleAspectFit
-        image.translatesAutoresizingMaskIntoConstraints = false
-        return image
+        let img = UIImageView()
+        img.contentMode = .scaleAspectFit
+        img.translatesAutoresizingMaskIntoConstraints = false
+        return img
     }()
 
     override init(frame: CGRect) {
         super.init(frame: .zero)
-
         contentView.addSubview(albumImageView)
         contentView.clipsToBounds = true
         contentView.layer.cornerRadius = 12
 
-        NSLayoutConstraint.activate([
-            albumImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            albumImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            albumImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor)
-        ])
+        albumImageView.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
+        albumImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
+        albumImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
     }
 
-    required init?(coder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 }
