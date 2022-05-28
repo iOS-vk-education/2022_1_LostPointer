@@ -8,10 +8,11 @@ struct TrackModel: Codable {
     let duration: Int?
     let album: AlbumModel?
     let artist: ArtistModel?
+    let is_in_favorites: Bool?
     let file: String
 
     enum CodingKeys: String, CodingKey {
-        case id, title, genre, number, duration, album, artist, file
+        case id, title, genre, number, duration, album, artist, is_in_favorites, file
         case listenCount = "listen_count"
     }
 

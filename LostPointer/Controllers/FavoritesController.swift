@@ -45,6 +45,36 @@ class FavoritesController: UIViewController, UITableViewDataSource, UITableViewD
         }
     }
 
+    func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        if indexPath.row == 0 {
+            return nil
+        }
+
+        let track = self.tracks[indexPath.row - 1]
+        let menuTitle = (track.artist?.name ?? "Artist") + " - " + (track.title  ?? "Track")
+
+        let configuration = UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ -> UIMenu? in
+
+            let likeAction = UIAction(title: "Dislike", image: UIImage(systemName: "heart.slash"), identifier: nil) { _ in
+                // Put button handler here
+            }
+            let openAlbumAction = UIAction(title: "Open album page", image: UIImage(systemName: "music.mic.circle"), identifier: nil) { _ in
+                // Put button handler here
+            }
+            let openArtistAction = UIAction(title: "Open artist page", image: UIImage(systemName: "person.circle"), identifier: nil) { _ in
+                // Put button handler here
+            }
+            let playlistAction = UIAction(title: "Add to the playlist...", image: nil, identifier: nil) { _ in
+                // Put button handler here
+            }
+            let shareAction = UIAction(title: "Share", image: UIImage(systemName: "square.and.arrow.up"), identifier: nil) { _ in
+                // Put button handler here
+            }
+            return UIMenu(title: menuTitle, children: [likeAction, openAlbumAction, openArtistAction, playlistAction, shareAction])
+        }
+        return configuration
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         TrackModel.getFavoritesTrack {loadedTracks in
