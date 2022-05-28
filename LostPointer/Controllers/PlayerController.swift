@@ -1,7 +1,10 @@
 import UIKit
 import AVFAudio
 
-class PlayerController: UIViewController {
+protocol TabBarCustomPresentable {
+
+}
+class PlayerController: UIViewController, TabBarCustomPresentable {
     var player: AudioPlayer
     init(player: AudioPlayer) {
         self.player = player
@@ -102,6 +105,10 @@ class PlayerController: UIViewController {
         return slider
     }()
 
+    override func viewDidLayoutSubviews() {
+        debugPrint("layoutsub")
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.applyGradient(isVertical: true, colorArray: [UIColor("#CF1994"), .black])
@@ -168,22 +175,40 @@ class PlayerController: UIViewController {
          totalTime, prev, pause, nextTrack, volume].forEach {subview in
             view.addSubview(subview)
          }
-
     }
 
     @objc
     func play() {
-        zoomOut()
+        if player.isPlaying() {
+            player.player?.pause()
+        } else {
+            player.player?.play()
+        }
+        updatePlaying()
+    }
+
+    private func updatePlaying() {
+        if player.isPlaying() {
+            zoomOut()
+            pause.image = UIImage(systemName: "play.fill")
+        } else {
+            zoomIn()
+            pause.image = UIImage(systemName: "pause.fill")
+        }
     }
 
     private func zoomOut() {
-        UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 10, initialSpringVelocity: 10, options: []) { [weak self] in
+        UIView.animate(withDuration: 0.3, delay: 0,
+                       usingSpringWithDamping: 10, initialSpringVelocity: 10,
+                       options: []) { [weak self] in
             self?.artwork.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
         }
     }
 
     private func zoomIn() {
-        UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 10, initialSpringVelocity: 10, options: []) {[weak self] in
+        UIView.animate(withDuration: 0.3, delay: 0,
+                       usingSpringWithDamping: 10, initialSpringVelocity: 10,
+                       options: []) {[weak self] in
             self?.artwork.transform = .identity
         }
     }
