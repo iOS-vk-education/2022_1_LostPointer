@@ -2,7 +2,7 @@ import UIKit
 
 class SigninController: UIViewController {
 
-    var player: AudioPlayer!
+    var player: AudioPlayer
 
     init(player: AudioPlayer) {
         self.player = player

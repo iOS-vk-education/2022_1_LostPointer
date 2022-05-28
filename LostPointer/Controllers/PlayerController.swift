@@ -59,10 +59,6 @@ class PlayerController: UIViewController {
         return label
     }()
 
-    //    private lazy var controls: PlayerControls = {
-    //        return PlayerControls()
-    //    }()
-
     private lazy var prev: UIImageView = {
         let img = UIImageView()
         img.image = UIImage(systemName: "backward.fill")
@@ -73,7 +69,6 @@ class PlayerController: UIViewController {
     private lazy var pause: UIImageView = {
         let img = UIImageView()
         img.image = UIImage(systemName: "play.fill")
-        //        UIImage(systemName: "pause.fill")
         img.tintColor = .white
         return img
     }()
@@ -130,12 +125,6 @@ class PlayerController: UIViewController {
             width: seekbar.bounds.width - 20,
             height: 40
         )
-        //        controls.frame = CGRect(
-        //            x: view.bounds.midX * 0.25,
-        //            y: totalTime.bounds.maxY + 30,
-        //            width: view.bounds.width,
-        //            height: 80
-        //        )
         pause.frame = CGRect(
             x: view.bounds.midX - 25,
             y: totalTime.frame.maxY + 10,
