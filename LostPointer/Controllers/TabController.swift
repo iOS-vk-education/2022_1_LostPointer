@@ -1,6 +1,6 @@
 import UIKit
 
-class TabController: UITabBarController, UITabBarControllerDelegate {
+final class TabController: UITabBarController, UITabBarControllerDelegate {
 
     var player: AudioPlayer!
 

@@ -1,8 +1,9 @@
-import UIKit
 import AVFAudio
+import MediaPlayer
+import UIKit
 
 protocol TabBarCustomPresentable {}
-class PlayerController: UIViewController, TabBarCustomPresentable {
+final class PlayerController: UIViewController, TabBarCustomPresentable {
     var player: AudioPlayer
     init(player: AudioPlayer) {
         self.player = player
@@ -27,7 +28,6 @@ class PlayerController: UIViewController, TabBarCustomPresentable {
             fatalError("Failed to load font")
         }
         title.font = UIFontMetrics.default.scaledFont(for: customFont)
-        title.text = "Последняя дискотека"
         title.textColor = .white
         title.textAlignment = .center
 
@@ -40,7 +40,6 @@ class PlayerController: UIViewController, TabBarCustomPresentable {
             fatalError("Failed to load font")
         }
         artist.font = UIFontMetrics.default.scaledFont(for: customFont)
-        artist.text = "Монеточка"
         artist.textColor = .white
         artist.textAlignment = .center
 
@@ -49,9 +48,9 @@ class PlayerController: UIViewController, TabBarCustomPresentable {
 
     private lazy var seekbar: UISlider = {
         let slider = UISlider()
-        
-        slider.addTarget(self, action: #selector(sliderDidEndSliding), for: [.touchUpInside, .touchUpOutside])
-        slider.addTarget(self, action: #selector(sliderDidStartSliding), for: [.touchDown])
+        slider.minimumValue = 0
+        slider.addTarget(self, action: #selector(seekEnd), for: [.touchUpInside, .touchUpOutside])
+        slider.addTarget(self, action: #selector(seekStart), for: [.touchDown])
         return slider
     }()
 
@@ -106,18 +105,15 @@ class PlayerController: UIViewController, TabBarCustomPresentable {
         slider.minimumValue = 0
         slider.maximumValue = 1
         slider.setValue(AVAudioSession.sharedInstance().outputVolume, animated: false)
+        slider.addTarget(self, action: #selector(volumeChanged), for: [.touchDragInside])
         return slider
     }()
-
-    //    override func viewDidLayoutSubviews() {
-    //        debugPrint("layoutsub")
-    //    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         let track = player.playingCell?.track
         if let art = track?.album?.artwork {
-            artwork.downloaded(from: "https://lostpointer.site/static/artworks/\(art)_512px.webp")
+            artwork.downloaded(from: "\(Constants.albumArtworkPrefix)\(art)_512px.webp")
         }
         if let artworkColor = track?.album?.artworkColor {
             let color = UIColor(artworkColor)
@@ -127,11 +123,14 @@ class PlayerController: UIViewController, TabBarCustomPresentable {
         }
 
         if let time = track?.duration {
-            totalTime.text = "\(time / 3600):\(time / 60):\(time % 60)"
+            totalTime.text = Helpers.convertSecondsToHrMinuteSec(seconds: time)
         }
 
         trackTitle.text = track?.title
         artist.text = track?.artist?.name
+        if let dur = track?.duration {
+            seekbar.maximumValue = Float(dur)
+        }
 
         updatePlaying()
 
@@ -220,7 +219,6 @@ class PlayerController: UIViewController, TabBarCustomPresentable {
         }
     }
 
-    // zoom in or zoom out
     private func zoom(out: Bool) {
         UIView.animate(withDuration: 0.3, delay: 0,
                        usingSpringWithDamping: 10, initialSpringVelocity: 10,
@@ -230,19 +228,36 @@ class PlayerController: UIViewController, TabBarCustomPresentable {
     }
 
     @objc
-    func sliderDidStartSliding() {
+    func seekStart() {
         zoom(out: true)
     }
 
     @objc
-    func sliderDidEndSliding() {
+    func seekEnd() {
         if player.isPlaying {
             zoom(out: false)
         }
+        player.player?.currentTime = TimeInterval(seekbar.value)
+    }
+
+    @objc
+    func volumeChanged() {
+        // На симуляторе не работает... Проверить не на чем
+        debugPrint("Setting volume to \(volume.value * 100)%")
+        let volumeView = MPVolumeView()
+        if let view = volumeView.subviews.first as? UISlider {
+            view.value = volume.value
+
+        }
+    }
+
+    private func deallocObservers(player: AVPlayer) {
+        player.removeObserver(self, forKeyPath: "status")
     }
 
     @objc
     func timeUpdated() {
-
+        guard let player = player.player else { return }
+        elapsedTime.text = Helpers.convertSecondsToHrMinuteSec(seconds: Int(player.currentTime))
     }
 }

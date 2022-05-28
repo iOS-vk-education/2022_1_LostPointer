@@ -1,6 +1,6 @@
 import UIKit
 
-class ProfileController: UIViewController {
+final class ProfileController: UIViewController {
     var player: AudioPlayer
     init(player: AudioPlayer) {
         self.player = player

@@ -1,7 +1,7 @@
 import UIKit
 import AVKit
 
-class MainController: UIViewController {
+final class MainController: UIViewController {
 
     var player: AudioPlayer!
 

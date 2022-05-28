@@ -13,6 +13,7 @@
 		520C8EE32807564500A2BFA5 /* FavoritesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 520C8EE22807564500A2BFA5 /* FavoritesController.swift */; };
 		5268444C282EA0B8000A3EBD /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5268444B282EA0B8000A3EBD /* Player.swift */; };
 		52821F46283AC2BC0091C4C4 /* PlayerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52821F45283AC2BC0091C4C4 /* PlayerController.swift */; };
+		52A014BD2842E30D0067C4E6 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A014BC2842E30D0067C4E6 /* Helpers.swift */; };
 		52A80886280C431E00D0DF26 /* SigninController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A80885280C431E00D0DF26 /* SigninController.swift */; };
 		52B6358F283B0A6600AC11A4 /* Montserrat-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 52B6358B283B099C00AC11A4 /* Montserrat-Bold.ttf */; };
 		52B63590283B0A6900AC11A4 /* Montserrat-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 52B6358C283B09A900AC11A4 /* Montserrat-SemiBold.ttf */; };
@@ -43,6 +44,7 @@
 		520C8EE22807564500A2BFA5 /* FavoritesController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesController.swift; sourceTree = "<group>"; };
 		5268444B282EA0B8000A3EBD /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		52821F45283AC2BC0091C4C4 /* PlayerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerController.swift; sourceTree = "<group>"; };
+		52A014BC2842E30D0067C4E6 /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
 		52A80885280C431E00D0DF26 /* SigninController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SigninController.swift; sourceTree = "<group>"; };
 		52B6358B283B099C00AC11A4 /* Montserrat-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-Bold.ttf"; sourceTree = "<group>"; };
 		52B6358C283B09A900AC11A4 /* Montserrat-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-SemiBold.ttf"; sourceTree = "<group>"; };
@@ -158,6 +160,7 @@
 				ED0EEDAC280C569A002A3D26 /* Extensions.swift */,
 				52D23D43280DC6C500E1D4C4 /* Constants.swift */,
 				5268444B282EA0B8000A3EBD /* Player.swift */,
+				52A014BC2842E30D0067C4E6 /* Helpers.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -292,6 +295,7 @@
 				ED0EEDAD280C569A002A3D26 /* Extensions.swift in Sources */,
 				52D091D4280C766100461DF9 /* SearchController.swift in Sources */,
 				5B1ADC0F27E63BD30081EFDB /* MainController.swift in Sources */,
+				52A014BD2842E30D0067C4E6 /* Helpers.swift in Sources */,
 				5B2E371427F9F91600530356 /* Request.swift in Sources */,
 				52821F46283AC2BC0091C4C4 /* PlayerController.swift in Sources */,
 				5B1ADC1527E63D2D0081EFDB /* UserModel.swift in Sources */,
@@ -442,8 +446,10 @@
 				DEVELOPMENT_TEAM = H538896S3S;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = LostPointer/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "LP Music";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -470,8 +476,10 @@
 				DEVELOPMENT_TEAM = H538896S3S;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = LostPointer/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "LP Music";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;

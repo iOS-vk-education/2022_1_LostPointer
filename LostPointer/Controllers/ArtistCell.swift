@@ -1,6 +1,6 @@
 import UIKit
 
-class ArtistCell: UICollectionViewCell {
+final class ArtistCell: UICollectionViewCell {
     static var identifier = "ArtistCell"
 
     var artist: ArtistModel? {

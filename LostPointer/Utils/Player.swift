@@ -2,7 +2,7 @@ import UIKit
 import AVFoundation
 import MediaPlayer
 
-class AudioPlayer: NSObject, AVAudioPlayerDelegate {
+final class AudioPlayer: NSObject, AVAudioPlayerDelegate {
 
     var player: AVAudioPlayer?
     var playingCell: TrackCell?

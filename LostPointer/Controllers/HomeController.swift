@@ -1,6 +1,6 @@
 import UIKit
 
-class HomeController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+final class HomeController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
     let tableView = UITableView()
     let player: AudioPlayer

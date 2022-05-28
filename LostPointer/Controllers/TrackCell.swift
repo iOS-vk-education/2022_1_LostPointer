@@ -3,7 +3,7 @@ import UIKit
 protocol TrackCellDelegate: AnyObject {
     func cellBtnTapped(tag: Int)
 }
-class TrackCell: UITableViewCell {
+final class TrackCell: UITableViewCell {
     var playing: Bool = false
     let btn: UIButton = {
         let btn = UIButton()

@@ -1,6 +1,6 @@
 import UIKit
 
-class AlbumsCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataSource {
+final class AlbumsCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataSource {
     var albumsCollectionView: UICollectionView?
 
     var albums: [AlbumModel] = []

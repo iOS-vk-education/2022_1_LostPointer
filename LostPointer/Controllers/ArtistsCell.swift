@@ -1,6 +1,6 @@
 import UIKit
 
-class ArtistsCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataSource {
+final class ArtistsCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataSource {
     var artistsCollectionView: UICollectionView?
 
     var artists: [ArtistModel] = []
