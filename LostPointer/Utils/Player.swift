@@ -188,16 +188,16 @@ final class AudioPlayer: NSObject {
         print("Now playing updated with", nowPlayingInfo)
         self.configureNowPlayingInfo(nowPlayingInfo as [String: AnyObject]?)
 
-        //        self.updateNowPlayingInfoElapsedTime()
+        self.updateNowPlayingInfoElapsedTime()
     }
 
-    //        func updateNowPlayingInfoElapsedTime() {
-    //            guard var nowPlayingInfo = self.nowPlayingInfo, let audioPlayer = self.player else { return }
-    //
-    //            nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = NSNumber(value: audioPlayer.currentTime as Double)
-    //
-    //            self.configureNowPlayingInfo(nowPlayingInfo)
-    //        }
+    func updateNowPlayingInfoElapsedTime() {
+        guard var nowPlayingInfo = self.nowPlayingInfo, let audioPlayer = self.player else { return }
+
+        //                nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = NSNumber(value: player.currentTime as Double)
+
+        self.configureNowPlayingInfo(nowPlayingInfo)
+    }
 
     func configureNowPlayingInfo(_ nowPlayingInfo: [String: AnyObject]?) {
         debugPrint("Config now playing info")

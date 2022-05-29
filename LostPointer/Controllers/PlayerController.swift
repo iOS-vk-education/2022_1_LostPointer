@@ -5,6 +5,8 @@ import UIKit
 protocol TabBarCustomPresentable {}
 final class PlayerController: UIViewController, TabBarCustomPresentable {
     var player: AudioPlayer
+    var timeObserverToken: Any?
+
     init(player: AudioPlayer) {
         self.player = player
         super.init(nibName: nil, bundle: nil)
@@ -192,6 +194,16 @@ final class PlayerController: UIViewController, TabBarCustomPresentable {
             width: view.bounds.width * 0.75,
             height: 40
         )
+
+        let timeScale = CMTimeScale(NSEC_PER_SEC)
+        let time = CMTime(seconds: 0.5, preferredTimescale: timeScale)
+        if let player = player.player {
+            timeObserverToken = player.addPeriodicTimeObserver(forInterval: time,
+                                                               queue: .main) {
+                [weak self] time in
+                self?.elapsedTime.text = Helpers.convertSecondsToHrMinuteSec(seconds: Int(CMTimeGetSeconds(time)))
+            }
+        }
 
         [artwork, trackTitle, artist, seekbar, elapsedTime,
          totalTime, prev, pause, nextTrack, volume].forEach {subview in
