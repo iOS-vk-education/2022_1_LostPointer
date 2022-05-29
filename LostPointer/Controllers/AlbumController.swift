@@ -13,6 +13,13 @@ final class AlbumController: UIViewController, UITableViewDataSource, UITableVie
         self.player = player
         self.albumId = id
         super.init(nibName: nil, bundle: nil)
+
+        self.tableView.translatesAutoresizingMaskIntoConstraints = false
+        self.tableView.dataSource = self
+        self.tableView.delegate = self
+
+        self.tableView.register(TitleCell.self, forCellReuseIdentifier: "TitleCell")
+        self.tableView.register(TrackCell.self, forCellReuseIdentifier: "TrackCell")
     }
 
     required init?(coder: NSCoder) {
@@ -63,6 +70,7 @@ final class AlbumController: UIViewController, UITableViewDataSource, UITableVie
                     self.tracks[indexPath.row - 1].isInFavorites = true
                 } onError: {err in
                     debugPrint(err)
+                    self.showAlert(title: "Error", message: err.localizedDescription)
                 }
             }
             if track.isInFavorites ?? false {
@@ -71,6 +79,7 @@ final class AlbumController: UIViewController, UITableViewDataSource, UITableVie
                         self.tracks[indexPath.row - 1].isInFavorites = false
                     } onError: {err in
                         debugPrint(err)
+                        self.showAlert(title: "Error", message: err.localizedDescription)
                     }
                 }
             }
@@ -116,8 +125,6 @@ final class AlbumController: UIViewController, UITableViewDataSource, UITableVie
 
             self?.view.backgroundColor = UIColor(named: "backgroundColor")
 
-            self?.tableView.translatesAutoresizingMaskIntoConstraints = false
-
             guard let safeArea = self?.view.safeAreaLayoutGuide else { return }
 
             NSLayoutConstraint.activate([
@@ -127,16 +134,11 @@ final class AlbumController: UIViewController, UITableViewDataSource, UITableVie
                 tableView.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor)
             ])
 
-            self?.tableView.dataSource = self
-            self?.tableView.delegate = self
-
-            self?.tableView.register(TitleCell.self, forCellReuseIdentifier: "TitleCell")
-            self?.tableView.register(TrackCell.self, forCellReuseIdentifier: "TrackCell")
-
             self?.titleCell = self?.tableView.dequeueReusableCell(withIdentifier: "TitleCell") as? TitleCell
 
-        } onError: {err in
+        } onError: {[weak self] err in
             debugPrint(err)
+            self?.showAlert(title: "Error", message: err.localizedDescription)
         }
     }
 }

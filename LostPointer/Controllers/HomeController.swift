@@ -13,6 +13,14 @@ final class HomeController: UIViewController, UITableViewDataSource, UITableView
     init (player: AudioPlayer) {
         self.player = player
         super.init(nibName: nil, bundle: nil)
+
+        self.tableView.translatesAutoresizingMaskIntoConstraints = false
+        self.tableView.dataSource = self
+        self.tableView.delegate = self
+
+        self.tableView.register(HomeAlbumsCell.self, forCellReuseIdentifier: "HomeAlbumsCell")
+        self.tableView.register(TrackCell.self, forCellReuseIdentifier: "TrackCell")
+        self.tableView.register(ArtistsCell.self, forCellReuseIdentifier: "ArtistsCell")
     }
 
     required init?(coder: NSCoder) {
@@ -69,6 +77,7 @@ final class HomeController: UIViewController, UITableViewDataSource, UITableView
                     self.tracks[indexPath.row - 1].isInFavorites = true
                 } onError: {err in
                     debugPrint(err)
+                    self.showAlert(title: "Error", message: err.localizedDescription)
                 }
             }
             if track.isInFavorites ?? false {
@@ -77,6 +86,7 @@ final class HomeController: UIViewController, UITableViewDataSource, UITableView
                         self.tracks[indexPath.row - 1].isInFavorites = false
                     } onError: {err in
                         debugPrint(err)
+                        self.showAlert(title: "Error", message: err.localizedDescription)
                     }
                 }
             }
@@ -118,39 +128,34 @@ final class HomeController: UIViewController, UITableViewDataSource, UITableView
     }
 
     func load() {
-        TrackModel.getHomeTracks {loadedTracks in
-            self.tracks = loadedTracks
+        TrackModel.getHomeTracks {[weak self] loadedTracks in
+            self?.tracks = loadedTracks
 
-            self.view.addSubview(self.tableView)
+            guard let tableView = self?.tableView else { return }
+            self?.view.addSubview(tableView)
 
-            self.view.backgroundColor = UIColor(named: "backgroundColor")
+            self?.view.backgroundColor = UIColor(named: "backgroundColor")
 
-            self.tableView.translatesAutoresizingMaskIntoConstraints = false
+            guard let safeArea = self?.view.safeAreaLayoutGuide else { return }
 
             NSLayoutConstraint.activate([
-                self.tableView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
-                self.tableView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor),
-                self.tableView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor),
-                self.tableView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor)
+                tableView.topAnchor.constraint(equalTo: safeArea.topAnchor),
+                tableView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor),
+                tableView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor),
+                tableView.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor)
             ])
 
-            self.tableView.dataSource = self
-            self.tableView.delegate = self
+            self?.albumsCell = tableView.dequeueReusableCell(withIdentifier: "HomeAlbumsCell") as? HomeAlbumsCell
+            self?.artistsCell = tableView.dequeueReusableCell(withIdentifier: "ArtistsCell") as? ArtistsCell
+            self?.albumsCell?.load(player: self?.player, navigator: self?.navigationController)
+            self?.artistsCell?.load(player: self?.player, navigator: self?.navigationController)
 
-            self.tableView.register(HomeAlbumsCell.self, forCellReuseIdentifier: "HomeAlbumsCell")
-            self.tableView.register(TrackCell.self, forCellReuseIdentifier: "TrackCell")
-            self.tableView.register(ArtistsCell.self, forCellReuseIdentifier: "ArtistsCell")
+            self?.refreshControl.endRefreshing()
 
-            self.albumsCell = self.tableView.dequeueReusableCell(withIdentifier: "HomeAlbumsCell") as? HomeAlbumsCell
-            self.artistsCell = self.tableView.dequeueReusableCell(withIdentifier: "ArtistsCell") as? ArtistsCell
-            self.albumsCell?.load(player: self.player, navigator: self.navigationController)
-            self.artistsCell?.load(player: self.player, navigator: self.navigationController)
-
-            self.refreshControl.endRefreshing()
-
-        } onError: {err in
+        } onError: {[weak self] err in
             debugPrint(err)
-            self.refreshControl.endRefreshing()
+            self?.showAlert(title: "Error", message: err.localizedDescription)
+            self?.refreshControl.endRefreshing()
         }
     }
 }

@@ -166,6 +166,7 @@ final class ProfileController: UIViewController {
             self?.activityIndicator.stopAnimating()
         } onError: {[weak self] err in
             self?.activityIndicator.startAnimating()
+            self?.showAlert(title: "Error", message: err.localizedDescription)
             debugPrint(err)
         }
     }
@@ -285,8 +286,9 @@ final class ProfileController: UIViewController {
             UserModel.logout {
                 guard let player = self?.player else { return nil }
                 return self?.navigationController?.setViewControllers([SigninController(player: player)], animated: true)
-            } onError: {err in
+            } onError: {[weak self] err in
                 debugPrint(err)
+                return self?.showAlert(title: "Error", message: err.localizedDescription)
             }
         }))
         present(alert, animated: true, completion: nil)
