@@ -6,6 +6,7 @@ protocol TabBarCustomPresentable {}
 final class PlayerController: UIViewController, TabBarCustomPresentable {
     var player: AudioPlayer
     var timeObserverToken: Any?
+    var stateObserverToken: Any?
 
     init(player: AudioPlayer) {
         self.player = player
@@ -198,11 +199,14 @@ final class PlayerController: UIViewController, TabBarCustomPresentable {
         let timeScale = CMTimeScale(NSEC_PER_SEC)
         let time = CMTime(seconds: 0.5, preferredTimescale: timeScale)
         if let player = player.player {
-            timeObserverToken = player.addPeriodicTimeObserver(forInterval: time,
-                                                               queue: .main) {
+            timeObserverToken = player.addPeriodicTimeObserver(
+                forInterval: time,
+                queue: .main
+            ) {
                 [weak self] time in
                 self?.elapsedTime.text = Helpers.convertSecondsToHrMinuteSec(seconds: Int(CMTimeGetSeconds(time)))
             }
+
         }
 
         [artwork, trackTitle, artist, seekbar, elapsedTime,
@@ -214,15 +218,18 @@ final class PlayerController: UIViewController, TabBarCustomPresentable {
     @objc
     func play() {
         if player.isPlaying {
+            debugPrint("Is playing, pausing")
             player.player?.pause()
         } else {
+            debugPrint("Is not playing, playing")
             player.player?.play()
         }
         updatePlaying()
     }
 
-    private func updatePlaying() {
-        if player.isPlaying {
+    private func updatePlaying(playing: Bool = false) {
+        let playingStatus = playing || player.isPlaying
+        if playingStatus {
             zoom(out: false)
             pause.image = UIImage(systemName: "pause.fill")
         } else {
@@ -254,17 +261,12 @@ final class PlayerController: UIViewController, TabBarCustomPresentable {
 
     @objc
     func volumeChanged() {
-        // На симуляторе не работает... Проверить не на чем
         debugPrint("Setting volume to \(volume.value * 100)%")
         let volumeView = MPVolumeView()
         if let view = volumeView.subviews.first as? UISlider {
             view.value = volume.value
 
         }
-    }
-
-    private func deallocObservers(player: AVPlayer) {
-        player.removeObserver(self, forKeyPath: "status")
     }
 
     @objc

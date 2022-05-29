@@ -207,6 +207,7 @@ final class AudioPlayer: NSObject {
 
     var isPlaying: Bool {
         guard let player = player else { return false }
+        debugPrint("Player is playing \(player.timeControlStatus == .playing)")
         return player.timeControlStatus == .playing
     }
 }
