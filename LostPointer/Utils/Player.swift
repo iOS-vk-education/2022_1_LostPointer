@@ -2,9 +2,10 @@ import UIKit
 import AVFoundation
 import MediaPlayer
 
-final class AudioPlayer: NSObject, AVAudioPlayerDelegate {
+final class AudioPlayer: NSObject {
 
-    var player: AVAudioPlayer?
+    var player: AVPlayer?
+    var playerItem: AVPlayerItem?
     var playingCell: TrackCell?
     let mpic = MPNowPlayingInfoCenter.default()
     var nowPlayingInfo: [String: AnyObject]?
@@ -42,7 +43,6 @@ final class AudioPlayer: NSObject, AVAudioPlayerDelegate {
 
     private func setupCommandCenter() {
         MPNowPlayingInfoCenter.default().nowPlayingInfo = [MPMediaItemPropertyTitle: "LostPointer"]
-
         let commandCenter = MPRemoteCommandCenter.shared()
         commandCenter.playCommand.isEnabled = true
         commandCenter.pauseCommand.isEnabled = true
@@ -84,26 +84,14 @@ final class AudioPlayer: NSObject, AVAudioPlayerDelegate {
                                MPNowPlayingInfoPropertyElapsedPlaybackTime: 10,
                                MPMediaItemPropertyPlaybackDuration: 30
         ]
-
+        play(url: url)
         cell.setPlaying(playing: true)
-        downloadFileFromURL(url: url)
     }
 
-    func downloadFileFromURL(url: URL) {
-        var downloadTask: URLSessionDownloadTask
-        downloadTask = URLSession.shared.downloadTask(with: url) { [weak self] (url, _, _) in
-            if let url = url {
-                self?.play(url: url)
-            } else {
-                return
-            }
-        }
-        downloadTask.resume()
-    }
     func toggle() {
         if let cell = playingCell {
             guard let player = player else { return }
-            if player.isPlaying {
+            if player.timeControlStatus == .playing {
                 player.pause()
                 cell.setPlaying(playing: false)
             } else {
@@ -113,19 +101,12 @@ final class AudioPlayer: NSObject, AVAudioPlayerDelegate {
         }
     }
     func play(url: URL) {
-        do {
-            player = try AVAudioPlayer(contentsOf: url)
-            player?.prepareToPlay()
-            player?.volume = 1
-            player?.play()
-            self.updateNowPlayingInfoForCurrentPlaybackItem()
-            self.updateCommandCenter()
-            debugPrint("playing")
-        } catch let error as NSError {
-            debugPrint(error.localizedDescription)
-        } catch {
-            debugPrint("AVAudioPlayer init failed")
-        }
+        player = AVPlayer(url: url)
+        player?.volume = 1
+        player?.play()
+        updateNowPlayingInfoForCurrentPlaybackItem()
+        self.updateCommandCenter()
+        debugPrint("playing")
     }
 
     func next() {
@@ -207,16 +188,16 @@ final class AudioPlayer: NSObject, AVAudioPlayerDelegate {
         print("Now playing updated with", nowPlayingInfo)
         self.configureNowPlayingInfo(nowPlayingInfo as [String: AnyObject]?)
 
-        self.updateNowPlayingInfoElapsedTime()
+        //        self.updateNowPlayingInfoElapsedTime()
     }
 
-    func updateNowPlayingInfoElapsedTime() {
-        guard var nowPlayingInfo = self.nowPlayingInfo, let audioPlayer = self.player else { return }
-
-        nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = NSNumber(value: audioPlayer.currentTime as Double)
-
-        self.configureNowPlayingInfo(nowPlayingInfo)
-    }
+    //        func updateNowPlayingInfoElapsedTime() {
+    //            guard var nowPlayingInfo = self.nowPlayingInfo, let audioPlayer = self.player else { return }
+    //
+    //            nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = NSNumber(value: audioPlayer.currentTime as Double)
+    //
+    //            self.configureNowPlayingInfo(nowPlayingInfo)
+    //        }
 
     func configureNowPlayingInfo(_ nowPlayingInfo: [String: AnyObject]?) {
         debugPrint("Config now playing info")
@@ -226,6 +207,6 @@ final class AudioPlayer: NSObject, AVAudioPlayerDelegate {
 
     var isPlaying: Bool {
         guard let player = player else { return false }
-        return player.isPlaying
+        return player.timeControlStatus == .playing
     }
 }

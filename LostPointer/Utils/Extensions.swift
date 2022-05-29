@@ -1,4 +1,12 @@
 import UIKit
+import AVFoundation
+
+extension AVPlayer {
+    func stop() {
+        self.seek(to: CMTime.zero)
+        self.pause()
+    }
+}
 
 extension UIImageView {
     func downloaded(from url: URL, contentMode mode: ContentMode = .scaleAspectFit) {

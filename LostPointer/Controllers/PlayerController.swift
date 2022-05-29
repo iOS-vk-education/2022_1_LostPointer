@@ -237,7 +237,7 @@ final class PlayerController: UIViewController, TabBarCustomPresentable {
         if player.isPlaying {
             zoom(out: false)
         }
-        player.player?.currentTime = TimeInterval(seekbar.value)
+        player.player?.seek(to: CMTimeMake(value: Int64(seekbar.value), timescale: 1))
     }
 
     @objc
@@ -258,6 +258,6 @@ final class PlayerController: UIViewController, TabBarCustomPresentable {
     @objc
     func timeUpdated() {
         guard let player = player.player else { return }
-        elapsedTime.text = Helpers.convertSecondsToHrMinuteSec(seconds: Int(player.currentTime))
+        elapsedTime.text = Helpers.convertSecondsToHrMinuteSec(seconds: Int(CMTimeGetSeconds(player.currentTime())))
     }
 }
