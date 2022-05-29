@@ -1,6 +1,6 @@
 import UIKit
 
-class AlbumController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+final class AlbumController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
     let tableView = UITableView()
     let player: AudioPlayer
@@ -96,41 +96,44 @@ class AlbumController: UIViewController, UITableViewDataSource, UITableViewDeleg
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        FullAlbumModel.getAlbum(id: self.albumId) {loadedAlbum in
-            self.album = loadedAlbum
+        FullAlbumModel.getAlbum(id: self.albumId) {[weak self] loadedAlbum in
+            self?.album = loadedAlbum
 
-            for var track in self.album?.tracks ?? [] {
+            for var track in self?.album?.tracks ?? [] {
                 track.album = AlbumModel(
-                    id: self.album?.id,
-                    year: self.album?.year,
-                    tracksDuration: self.album?.tracksDuration,
-                    title: self.album?.title,
-                    artwork: self.album?.artwork,
-                    artworkColor: self.album?.artworkColor)
-                track.artist = ArtistModel(id: self.album?.artist?.id, name: self.album?.artist?.name, avatar: self.album?.artist?.avatar, tracks: [], albums: [])
-                self.tracks.append(track)
+                    id: self?.album?.id,
+                    year: self?.album?.year,
+                    tracksDuration: self?.album?.tracksDuration,
+                    title: self?.album?.title,
+                    artwork: self?.album?.artwork,
+                    artworkColor: self?.album?.artworkColor)
+                track.artist = ArtistModel(id: self?.album?.artist?.id, name: self?.album?.artist?.name, avatar: self?.album?.artist?.avatar, tracks: [], albums: [])
+                self?.tracks.append(track)
             }
 
-            self.view.addSubview(self.tableView)
+            guard let tableView = self?.tableView else { return }
+            self?.view.addSubview(tableView)
 
-            self.view.backgroundColor = UIColor(named: "backgroundColor")
+            self?.view.backgroundColor = UIColor(named: "backgroundColor")
 
-            self.tableView.translatesAutoresizingMaskIntoConstraints = false
+            self?.tableView.translatesAutoresizingMaskIntoConstraints = false
+
+            guard let safeArea = self?.view.safeAreaLayoutGuide else { return }
 
             NSLayoutConstraint.activate([
-                self.tableView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
-                self.tableView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor),
-                self.tableView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor),
-                self.tableView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor)
+                tableView.topAnchor.constraint(equalTo: safeArea.topAnchor),
+                tableView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor),
+                tableView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor),
+                tableView.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor)
             ])
 
-            self.tableView.dataSource = self
-            self.tableView.delegate = self
+            self?.tableView.dataSource = self
+            self?.tableView.delegate = self
 
-            self.tableView.register(TitleCell.self, forCellReuseIdentifier: "TitleCell")
-            self.tableView.register(TrackCell.self, forCellReuseIdentifier: "TrackCell")
+            self?.tableView.register(TitleCell.self, forCellReuseIdentifier: "TitleCell")
+            self?.tableView.register(TrackCell.self, forCellReuseIdentifier: "TrackCell")
 
-            self.titleCell = self.tableView.dequeueReusableCell(withIdentifier: "TitleCell") as? TitleCell
+            self?.titleCell = self?.tableView.dequeueReusableCell(withIdentifier: "TitleCell") as? TitleCell
 
         } onError: {err in
             debugPrint(err)
