@@ -1,6 +1,6 @@
 import UIKit
 
-class ProfileController: UIViewController {
+final class ProfileController: UIViewController {
     var player: AudioPlayer
     init(player: AudioPlayer) {
         self.player = player
@@ -187,6 +187,7 @@ class ProfileController: UIViewController {
             width: scrollView.bounds.width - 40,
             height: 15
         )
+        // subview, layoutSubviews
         nicknameInput.frame = CGRect(
             x: scrollView.bounds.minX + 10,
             y: nicknameLabel.frame.maxY + 10,

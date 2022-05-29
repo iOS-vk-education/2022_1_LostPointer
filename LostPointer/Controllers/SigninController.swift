@@ -1,6 +1,6 @@
 import UIKit
 
-class SigninController: UIViewController {
+final class SigninController: UIViewController {
 
     var player: AudioPlayer
 

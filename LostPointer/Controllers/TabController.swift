@@ -1,6 +1,6 @@
 import UIKit
 
-class TabController: UITabBarController, UITabBarControllerDelegate {
+final class TabController: UITabBarController, UITabBarControllerDelegate {
 
     var player: AudioPlayer!
 
@@ -23,12 +23,11 @@ class TabController: UITabBarController, UITabBarControllerDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         let home = HomeController(player: self.player)
-        // Иконки тут - https://developer.apple.com/sf-symbols/
         home.tabBarItem = UITabBarItem(title: "Home",
                                        image: UIImage(systemName: "house"),
                                        selectedImage: UIImage(systemName: "house.fill"))
 
-        let favorites = FavoritesController()
+        let favorites = FavoritesController(player: self.player)
         favorites.tabBarItem = UITabBarItem(title: "Favorites",
                                             image: UIImage(systemName: "heart"),
                                             selectedImage: UIImage(systemName: "heart.fill"))
@@ -42,25 +41,33 @@ class TabController: UITabBarController, UITabBarControllerDelegate {
         profile.tabBarItem = UITabBarItem(title: "Profile",
                                           image: UIImage(systemName: "person.crop.circle"),
                                           selectedImage: UIImage(systemName: "person.crop.circle.fill"))
-        let player = PlayerController()
-        player.tabBarItem = UITabBarItem(title: "player", image: nil, tag: 1)
+
+        let player = PlayerController(player: self.player)
+        player.tabBarItem = UITabBarItem(title: "Profile",
+                                         image: UIImage(systemName: "person.crop.circle"),
+                                         tag: .max)
 
         self.viewControllers = [home, favorites, search, profile, player]
     }
 
     private func tabBarController(_ tabBarController: UITabBarController,
                                   shouldSelect viewController: UIViewController) {
+        debugPrint("tabbarController called")
         self.navigationController?.setViewControllers([viewController], animated: true)
     }
 
     func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
-        if viewController is PlayerController {
-            viewController.definesPresentationContext = true
-            viewController.modalPresentationStyle = .fullScreen
-            let vc = UINavigationController(rootViewController: viewController)
-            self.present(vc, animated: true, completion: nil)
+        if viewController is TabBarCustomPresentable {
             return false
         }
         return true
+    }
+
+    override func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
+        debugPrint(item.tag)
+        if item.tag == .max {
+            let player = PlayerController(player: player)
+            present(player, animated: true, completion: nil)
+        }
     }
 }

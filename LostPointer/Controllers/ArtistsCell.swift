@@ -1,15 +1,21 @@
 import UIKit
 
-class ArtistsCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataSource {
+final class ArtistsCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataSource {
     var artistsCollectionView: UICollectionView?
+
+    var player: AudioPlayer?
+    var navigator: UINavigationController?
 
     var artists: [ArtistModel] = []
     var loaded: Bool = false
 
-    func load() {
+    func load(player: AudioPlayer, navigator: UINavigationController?) {
         if loaded {
             return
         }
+
+        self.player = player
+        self.navigator = navigator
 
         ArtistModel.getHomeArtists { [weak self] loadedArtists in
             self?.artists = loadedArtists
@@ -30,10 +36,6 @@ class ArtistsCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDa
             self?.artistsCollectionView = UICollectionView(frame: frame, collectionViewLayout: layout)
             self?.artistsCollectionView?.heightAnchor.constraint(
                 equalToConstant: self?.frame.height ?? 0 / 2).isActive = true
-            self?.artistsCollectionView?.register(AlbumCollectionViewCell.self,
-                                                  forCellWithReuseIdentifier: AlbumCollectionViewCell.identifier)
-            self?.artistsCollectionView?.backgroundColor = UIColor.black
-
             self?.artistsCollectionView?.register(
                 ArtistCell.self, forCellWithReuseIdentifier: ArtistCell.identifier)
             self?.artistsCollectionView?.backgroundColor = UIColor.black
@@ -60,6 +62,8 @@ class ArtistsCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDa
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        debugPrint("User tapped on item \(indexPath.row)")
+        if let player = self.player {
+            self.navigator?.pushViewController(ArtistController(player: player, id: self.artists[indexPath.row].id ?? 0), animated: true)
+        }
     }
 }

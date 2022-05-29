@@ -14,5 +14,7 @@
 		<string>audio</string>
 		<string>fetch</string>
 	</array>
+	<key>UIStatusBarStyle</key>
+	<string>UIStatusBarStyleDarkContent</string>
 </dict>
 </plist>
