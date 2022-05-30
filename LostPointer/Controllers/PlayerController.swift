@@ -215,7 +215,7 @@ final class PlayerController: UIViewController, TabBarCustomPresentable {
         }
 
         [artwork, trackTitle, artist, seekbar, elapsedTime,
-         totalTime, prev, pause, nextTrack, volume].forEach {subview in
+         totalTime, prev, pause, nextTrack, volume].forEach { subview in
             view.addSubview(subview)
          }
     }
@@ -267,6 +267,7 @@ final class PlayerController: UIViewController, TabBarCustomPresentable {
     @objc
     func volumeChanged() {
         debugPrint("Setting volume to \(volume.value * 100)%")
+        // На реальном айфоне не работает
         let volumeView = MPVolumeView()
         if let view = volumeView.subviews.first as? UISlider {
             view.value = volume.value

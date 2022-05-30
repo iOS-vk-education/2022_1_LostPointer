@@ -128,10 +128,10 @@ final class HomeController: UIViewController, UITableViewDataSource, UITableView
             self.tableView.translatesAutoresizingMaskIntoConstraints = false
 
             NSLayoutConstraint.activate([
-                self.tableView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
+                self.tableView.topAnchor.constraint(equalTo: self.view.topAnchor),
                 self.tableView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor),
                 self.tableView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor),
-                self.tableView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor)
+                self.tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
             ])
 
             self.tableView.dataSource = self
