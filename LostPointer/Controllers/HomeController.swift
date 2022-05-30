@@ -49,6 +49,7 @@ final class HomeController: UIViewController, UITableViewDataSource, UITableView
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let trackCell = self.tableView.cellForRow(at: indexPath) as? TrackCell {
             player.playTrack(cell: trackCell)
+            //            player.setContext(context: )
         } else {
             self.navigationController?.pushViewController(ArtistController(player: self.player, id: 369), animated: true)
         }

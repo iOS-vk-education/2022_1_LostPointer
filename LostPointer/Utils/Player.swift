@@ -54,6 +54,11 @@ final class AudioPlayer: NSObject {
             return .success
         }
     }
+
+    func setContext(context: [TrackCell]) {
+
+    }
+
     func playTrack(cell: TrackCell) {
         if let track = cell.getTrack() {
             if let playing = playingCell?.track {
@@ -172,11 +177,9 @@ final class AudioPlayer: NSObject {
         ] as [String: Any]
 
         if let artwork = track?.album?.artwork {
-            if let image = UIImage(named: artwork) {
-                nowPlayingInfo[MPMediaItemPropertyArtwork] = MPMediaItemArtwork(image: image)
-            } else {
-                debugPrint("artwork error")
-            }
+            nowPlayingInfo[MPMediaItemPropertyArtwork] = MPMediaItemArtwork(
+                image: Downloader.downloadImageWithURL(url:
+                                                        "\(Constants.albumArtworkPrefix)\(artwork)_512px.webp"))
         }
 
         print("Now playing updated with", nowPlayingInfo)

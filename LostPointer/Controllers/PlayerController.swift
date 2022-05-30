@@ -2,11 +2,6 @@ import AVFAudio
 import MediaPlayer
 import UIKit
 
-enum PlayerArrowButton {
-    case prev
-    case next
-}
-
 protocol TabBarCustomPresentable {}
 final class PlayerController: UIViewController, TabBarCustomPresentable {
     var player: AudioPlayer
@@ -297,12 +292,8 @@ final class PlayerController: UIViewController, TabBarCustomPresentable {
     }
 
     @objc
-    func nextClicked() { handleArrows(btn: .next) }
+    func nextClicked() { player.next() }
 
     @objc
-    func prevClicked() { handleArrows(btn: .prev) }
-
-    private func handleArrows(btn: PlayerArrowButton) {
-        debugPrint(btn)
-    }
+    func prevClicked() { player.prev() }
 }

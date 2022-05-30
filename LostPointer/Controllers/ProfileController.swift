@@ -198,6 +198,17 @@ final class ProfileController: UIViewController {
         view = webView
     }
 
+    public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Swift.Void) {
+        if navigationAction.navigationType == .other {
+            if let redirectedUrl = navigationAction.request.url {
+                debugPrint(redirectedUrl)
+            }
+            decisionHandler(.cancel)
+            return
+        }
+        decisionHandler(.allow)
+    }
+
     @objc func logout() {
         debugPrint("Logout")
         let alert = UIAlertController(title: "Log out", message: "Are you sure you want to log out?",
