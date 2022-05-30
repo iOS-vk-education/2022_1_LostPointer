@@ -2,6 +2,11 @@ import AVFAudio
 import MediaPlayer
 import UIKit
 
+enum PlayerArrowButton {
+    case prev
+    case next
+}
+
 protocol TabBarCustomPresentable {}
 final class PlayerController: UIViewController, TabBarCustomPresentable {
     var player: AudioPlayer
@@ -81,6 +86,11 @@ final class PlayerController: UIViewController, TabBarCustomPresentable {
         let img = UIImageView()
         img.image = UIImage(systemName: "backward.fill")
         img.tintColor = .white
+
+        let tap = UITapGestureRecognizer(target: self, action: #selector(prevClicked))
+        img.addGestureRecognizer(tap)
+        img.isUserInteractionEnabled = true
+
         return img
     }()
 
@@ -100,6 +110,11 @@ final class PlayerController: UIViewController, TabBarCustomPresentable {
         let img = UIImageView()
         img.image = UIImage(systemName: "forward.fill")
         img.tintColor = .white
+
+        let tap = UITapGestureRecognizer(target: self, action: #selector(nextClicked))
+        img.addGestureRecognizer(tap)
+        img.isUserInteractionEnabled = true
+
         return img
     }()
 
@@ -209,7 +224,7 @@ final class PlayerController: UIViewController, TabBarCustomPresentable {
             ) { [weak self] time in
                 let sec = Int(CMTimeGetSeconds(time))
                 self?.elapsedTime.text = Helpers.convertSecondsToHrMinuteSec(seconds: sec)
-                self?.seekbar.setValue(Float(sec), animated: true)
+                self?.seekbar.setValue(Float(sec), animated: false)
             }
 
         }
@@ -279,5 +294,15 @@ final class PlayerController: UIViewController, TabBarCustomPresentable {
     func timeUpdated() {
         guard let player = player.player else { return }
         elapsedTime.text = Helpers.convertSecondsToHrMinuteSec(seconds: Int(CMTimeGetSeconds(player.currentTime())))
+    }
+
+    @objc
+    func nextClicked() { handleArrows(btn: .next) }
+
+    @objc
+    func prevClicked() { handleArrows(btn: .prev) }
+
+    private func handleArrows(btn: PlayerArrowButton) {
+        debugPrint(btn)
     }
 }
