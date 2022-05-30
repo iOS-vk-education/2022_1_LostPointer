@@ -86,9 +86,6 @@ final class AlbumController: UIViewController, UITableViewDataSource, UITableVie
             let openArtistAction = UIAction(title: "Open artist page", image: UIImage(systemName: "person.circle"), identifier: nil) { _ in
                 self.navigationController?.pushViewController(ArtistController(player: self.player, id: track.artist?.id ?? 0), animated: true)
             }
-            let playlistAction = UIAction(title: "Add to the playlist...", image: nil, identifier: nil) { _ in
-                // Put button handler here
-            }
             let shareAction = UIAction(title: "Share", image: UIImage(systemName: "square.and.arrow.up"), identifier: nil) { _ in
                 guard let url = URL(string: "https://lostpointer.site/album/\(track.album?.id ?? 0)") else {
                     return
@@ -98,7 +95,7 @@ final class AlbumController: UIViewController, UITableViewDataSource, UITableVie
                 )
                 self.present(shareSheetVC, animated: true)
             }
-            return UIMenu(title: menuTitle, children: [likeAction, openArtistAction, playlistAction, shareAction])
+            return UIMenu(title: menuTitle, children: [likeAction, openArtistAction, shareAction])
         }
         return configuration
     }

@@ -5,8 +5,10 @@ final class HomeController: UIViewController, UITableViewDataSource, UITableView
     let tableView = UITableView()
     let player: AudioPlayer
     var tracks: [TrackModel] = []
+    var playlists: [PlaylistModel] = []
     var albumsCell: HomeAlbumsCell?
     var artistsCell: ArtistsCell?
+    var playlistsTitleCell: TitleCell?
 
     let refreshControl = UIRefreshControl()
 
@@ -21,6 +23,8 @@ final class HomeController: UIViewController, UITableViewDataSource, UITableView
         self.tableView.register(HomeAlbumsCell.self, forCellReuseIdentifier: "HomeAlbumsCell")
         self.tableView.register(TrackCell.self, forCellReuseIdentifier: "TrackCell")
         self.tableView.register(ArtistsCell.self, forCellReuseIdentifier: "ArtistsCell")
+        self.tableView.register(TitleCell.self, forCellReuseIdentifier: "TitleCell")
+        self.tableView.register(PlaylistCell.self, forCellReuseIdentifier: "PlaylistCell")
     }
 
     required init?(coder: NSCoder) {
@@ -28,7 +32,7 @@ final class HomeController: UIViewController, UITableViewDataSource, UITableView
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        1 + self.tracks.count + 1
+        1 + self.tracks.count + 1 + 1 + self.playlists.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -36,6 +40,14 @@ final class HomeController: UIViewController, UITableViewDataSource, UITableView
             return self.albumsCell ?? UITableViewCell()
         } else if indexPath.row == self.tracks.count + 1 {
             return self.artistsCell ?? UITableViewCell()
+        } else if indexPath.row == self.tracks.count + 1 + 1 {
+            let cell = self.playlistsTitleCell
+            cell?.titleLabel.text = "Playlists"
+            return cell ?? UITableViewCell()
+        } else if indexPath.row > self.tracks.count + 1 + 1 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "PlaylistCell", for: indexPath) as? PlaylistCell
+            cell?.playlist = playlists[indexPath.row - 1 - 1 - 1 - self.tracks.count]
+            return cell ?? UITableViewCell()
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "TrackCell", for: indexPath) as? TrackCell
             cell?.btn.tag = indexPath.row
@@ -63,7 +75,7 @@ final class HomeController: UIViewController, UITableViewDataSource, UITableView
     }
 
     func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
-        if indexPath.row == 0 || indexPath.row == self.tracks.count + 1 {
+        if indexPath.row == 0 || indexPath.row > self.tracks.count {
             return nil
         }
 
@@ -96,9 +108,6 @@ final class HomeController: UIViewController, UITableViewDataSource, UITableView
             let openArtistAction = UIAction(title: "Open artist page", image: UIImage(systemName: "person.circle"), identifier: nil) { _ in
                 self.navigationController?.pushViewController(ArtistController(player: self.player, id: track.artist?.id ?? 0), animated: true)
             }
-            let playlistAction = UIAction(title: "Add to the playlist...", image: nil, identifier: nil) { _ in
-                // Put button handler here
-            }
             let shareAction = UIAction(title: "Share", image: UIImage(systemName: "square.and.arrow.up"), identifier: nil) { _ in
                 guard let url = URL(string: "https://lostpointer.site/album/\(track.album?.id ?? 0)") else {
                     return
@@ -108,7 +117,7 @@ final class HomeController: UIViewController, UITableViewDataSource, UITableView
                 )
                 self.present(shareSheetVC, animated: true)
             }
-            return UIMenu(title: menuTitle, children: [likeAction, openAlbumAction, openArtistAction, playlistAction, shareAction])
+            return UIMenu(title: menuTitle, children: [likeAction, openAlbumAction, openArtistAction, shareAction])
         }
         return configuration
     }
@@ -128,34 +137,58 @@ final class HomeController: UIViewController, UITableViewDataSource, UITableView
     }
 
     func load() {
+        let dispatchGroup = DispatchGroup()
+
+        dispatchGroup.enter()
         TrackModel.getHomeTracks {[weak self] loadedTracks in
             self?.tracks = loadedTracks
-
-            guard let tableView = self?.tableView else { return }
-            self?.view.addSubview(tableView)
-
-            self?.view.backgroundColor = UIColor(named: "backgroundColor")
-
-            guard let safeArea = self?.view.safeAreaLayoutGuide else { return }
-
-            NSLayoutConstraint.activate([
-                tableView.topAnchor.constraint(equalTo: safeArea.topAnchor),
-                tableView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor),
-                tableView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor),
-                tableView.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor)
-            ])
-
-            self?.albumsCell = tableView.dequeueReusableCell(withIdentifier: "HomeAlbumsCell") as? HomeAlbumsCell
-            self?.artistsCell = tableView.dequeueReusableCell(withIdentifier: "ArtistsCell") as? ArtistsCell
-            self?.albumsCell?.load(player: self?.player, navigator: self?.navigationController)
-            self?.artistsCell?.load(player: self?.player, navigator: self?.navigationController)
-
-            self?.refreshControl.endRefreshing()
-
+            DispatchQueue.main.async {
+                dispatchGroup.leave()
+            }
         } onError: {[weak self] err in
             debugPrint(err)
             self?.showAlert(title: "Error", message: err.localizedDescription)
             self?.refreshControl.endRefreshing()
+            DispatchQueue.main.async {
+                dispatchGroup.leave()
+            }
+        }
+
+        dispatchGroup.enter()
+        PlaylistModel.getHomePublicPlaylists {[weak self] publicPlaylists in
+            self?.playlists = publicPlaylists
+            DispatchQueue.main.async {
+                dispatchGroup.leave()
+            }
+        } onError: {[weak self] err in
+            debugPrint(err)
+            self?.showAlert(title: "Error", message: err.localizedDescription)
+            self?.refreshControl.endRefreshing()
+            DispatchQueue.main.async {
+                dispatchGroup.leave()
+            }
+        }
+
+        dispatchGroup.notify(queue: .main) {
+            self.view.addSubview(self.tableView)
+
+            self.view.backgroundColor = UIColor(named: "backgroundColor")
+
+            NSLayoutConstraint.activate([
+                self.tableView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
+                self.tableView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor),
+                self.tableView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor),
+                self.tableView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor)
+            ])
+
+            self.albumsCell = self.tableView.dequeueReusableCell(withIdentifier: "HomeAlbumsCell") as? HomeAlbumsCell
+            self.artistsCell = self.tableView.dequeueReusableCell(withIdentifier: "ArtistsCell") as? ArtistsCell
+            self.playlistsTitleCell = self.tableView.dequeueReusableCell(withIdentifier: "TitleCell") as? TitleCell
+            self.albumsCell?.load(player: self.player, navigator: self.navigationController)
+            self.artistsCell?.load(player: self.player, navigator: self.navigationController)
+
+            self.refreshControl.endRefreshing()
+
         }
     }
 }
