@@ -7,7 +7,6 @@ final class AudioPlayer: NSObject {
     var player: AVPlayer?
     var playerItem: AVPlayerItem?
     var playingCell: TrackCell?
-    let mpic = MPNowPlayingInfoCenter.default()
     var nowPlayingInfo: [String: AnyObject]?
     let audioSession: AVAudioSession
     let commandCenter: MPRemoteCommandCenter
@@ -77,13 +76,6 @@ final class AudioPlayer: NSObject {
             setupCommandCenter()
         }
 
-        // Пока не работает...
-        mpic.nowPlayingInfo = [MPMediaItemPropertyTitle: "track",
-                               MPMediaItemPropertyArtist: "artist",
-                               MPNowPlayingInfoPropertyPlaybackRate: 1,
-                               MPNowPlayingInfoPropertyElapsedPlaybackTime: 10,
-                               MPMediaItemPropertyPlaybackDuration: 30
-        ]
         play(url: url)
         cell.setPlaying(playing: true)
     }
@@ -165,17 +157,19 @@ final class AudioPlayer: NSObject {
     }
 
     func updateNowPlayingInfoForCurrentPlaybackItem() {
-        guard let _ = self.player else {
+        if self.player == nil {
             self.configureNowPlayingInfo(nil)
             return
         }
 
         let track = playingCell?.getTrack()
-        var nowPlayingInfo = [MPMediaItemPropertyTitle: track?.title,
-                              MPMediaItemPropertyAlbumTitle: track?.album?.title,
-                              MPMediaItemPropertyArtist: track?.artist?.name,
-                              MPMediaItemPropertyPlaybackDuration: track?.duration,
-                              MPNowPlayingInfoPropertyPlaybackRate: NSNumber(value: 1.0 as Float)] as [String: Any]
+        var nowPlayingInfo = [
+            MPMediaItemPropertyTitle: track?.title,
+            MPMediaItemPropertyAlbumTitle: track?.album?.title,
+            MPMediaItemPropertyArtist: track?.artist?.name,
+            MPMediaItemPropertyPlaybackDuration: track?.duration,
+            MPNowPlayingInfoPropertyPlaybackRate: NSNumber(value: 1.0 as Float)
+        ] as [String: Any]
 
         if let artwork = track?.album?.artwork {
             if let image = UIImage(named: artwork) {
