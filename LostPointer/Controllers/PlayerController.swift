@@ -115,9 +115,11 @@ final class PlayerController: UIViewController, TabBarCustomPresentable {
     override func viewDidLoad() {
         super.viewDidLoad()
         let track = player.playingCell?.track
+
         if let art = track?.album?.artwork {
             artwork.downloaded(from: "\(Constants.albumArtworkPrefix)\(art)_512px.webp")
         }
+
         if let artworkColor = track?.album?.artworkColor {
             let color = UIColor(artworkColor)
             self.view.applyGradient(isVertical: true, colorArray: [color, .black])
@@ -143,10 +145,12 @@ final class PlayerController: UIViewController, TabBarCustomPresentable {
             width: view.bounds.width * 0.8,
             height: view.bounds.width * 0.8
         )
-        trackTitle.frame = CGRect(x: view.bounds.minX,
-                                  y: view.bounds.height / 2 - 10,
-                                  width: view.bounds.width,
-                                  height: 30)
+        trackTitle.frame = CGRect(
+            x: view.bounds.minX,
+            y: view.bounds.height / 2 - 10,
+            width: view.bounds.width,
+            height: 30
+        )
         artist.frame = CGRect(
             x: view.bounds.minX,
             y: view.bounds.height / 2 + 20,
@@ -202,9 +206,10 @@ final class PlayerController: UIViewController, TabBarCustomPresentable {
             timeObserverToken = player.addPeriodicTimeObserver(
                 forInterval: time,
                 queue: .main
-            ) {
-                [weak self] time in
-                self?.elapsedTime.text = Helpers.convertSecondsToHrMinuteSec(seconds: Int(CMTimeGetSeconds(time)))
+            ) { [weak self] time in
+                let sec = Int(CMTimeGetSeconds(time))
+                self?.elapsedTime.text = Helpers.convertSecondsToHrMinuteSec(seconds: sec)
+                self?.seekbar.setValue(Float(sec), animated: true)
             }
 
         }
