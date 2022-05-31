@@ -129,7 +129,44 @@ final class HomeController: UIViewController, UITableViewDataSource, UITableView
     }
 
     @objc func refresh(_ sender: AnyObject) {
-        self.load()
+        let dispatchGroup = DispatchGroup()
+
+        dispatchGroup.enter()
+        TrackModel.getHomeTracks {[weak self] loadedTracks in
+            self?.tracks = loadedTracks
+            DispatchQueue.main.async {
+                dispatchGroup.leave()
+            }
+        } onError: {[weak self] err in
+            debugPrint(err)
+            self?.showAlert(title: "Error", message: err.localizedDescription)
+            self?.refreshControl.endRefreshing()
+            DispatchQueue.main.async {
+                dispatchGroup.leave()
+            }
+        }
+
+        dispatchGroup.enter()
+        PlaylistModel.getHomePublicPlaylists {[weak self] publicPlaylists in
+            self?.playlists = publicPlaylists
+            DispatchQueue.main.async {
+                dispatchGroup.leave()
+            }
+        } onError: {[weak self] err in
+            debugPrint(err)
+            self?.showAlert(title: "Error", message: err.localizedDescription)
+            self?.refreshControl.endRefreshing()
+            DispatchQueue.main.async {
+                dispatchGroup.leave()
+            }
+        }
+
+        dispatchGroup.notify(queue: .main) {
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+                self.refreshControl.endRefreshing()
+            }
+        }
     }
 
     override func viewDidLoad() {
@@ -139,10 +176,6 @@ final class HomeController: UIViewController, UITableViewDataSource, UITableView
         refreshControl.addTarget(self, action: #selector(self.refresh(_:)), for: .valueChanged)
         tableView.addSubview(refreshControl)
 
-        self.load()
-    }
-
-    func load() {
         let dispatchGroup = DispatchGroup()
 
         dispatchGroup.enter()

@@ -103,7 +103,14 @@ final class FavoritesController: UIViewController, UITableViewDataSource, UITabl
     }
 
     @objc func refresh(_ sender: AnyObject) {
-        self.load()
+        TrackModel.getFavoritesTrack {[weak self] loadedTracks in
+            self?.tracks = loadedTracks
+            self?.tableView.reloadData()
+            self?.refreshControl.endRefreshing()
+        } onError: {[weak self] err in
+            debugPrint(err)
+            self?.showAlert(title: "Error", message: err.localizedDescription)
+        }
     }
 
     override func viewDidLoad() {
@@ -113,10 +120,6 @@ final class FavoritesController: UIViewController, UITableViewDataSource, UITabl
         refreshControl.addTarget(self, action: #selector(self.refresh(_:)), for: .valueChanged)
         tableView.addSubview(refreshControl)
 
-        self.load()
-    }
-
-    func load() {
         TrackModel.getFavoritesTrack {[weak self] loadedTracks in
             self?.tracks = loadedTracks
 
