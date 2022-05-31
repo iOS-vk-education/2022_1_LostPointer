@@ -5,8 +5,9 @@ import MediaPlayer
 final class AudioPlayer: NSObject {
 
     var player: AVPlayer?
-    var playerItem: AVPlayerItem?
     var playingCell: TrackCell?
+    var context: [TrackCell]?
+    var currentTrack: Int?
     var nowPlayingInfo: [String: AnyObject]?
     let audioSession: AVAudioSession
     let commandCenter: MPRemoteCommandCenter
@@ -55,8 +56,9 @@ final class AudioPlayer: NSObject {
         }
     }
 
-    func setContext(context: [TrackCell]) {
-
+    func setContext(context: [TrackCell], currentTrack: Int) {
+        self.context = context
+        self.currentTrack = currentTrack
     }
 
     func playTrack(cell: TrackCell) {
