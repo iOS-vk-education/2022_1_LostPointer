@@ -37,18 +37,23 @@ final class HomeController: UIViewController, UITableViewDataSource, UITableView
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        // первая ячейка - альбомы
         if indexPath.row == 0 {
             return self.albumsCell ?? UITableViewCell()
+        // ячейка после треков - артисты
         } else if indexPath.row == self.tracks.count + 1 {
             return self.artistsCell ?? UITableViewCell()
+        // ячейка после после артистов - label
         } else if indexPath.row == self.tracks.count + 1 + 1 {
             let cell = self.playlistsTitleCell
             cell?.titleLabel.text = "Playlists"
             return cell ?? UITableViewCell()
+        // ячейка после после label - плейлисты
         } else if indexPath.row > self.tracks.count + 1 + 1 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "PlaylistCell", for: indexPath) as? PlaylistCell
             cell?.playlist = playlists[indexPath.row - 1 - 1 - 1 - self.tracks.count]
             return cell ?? UITableViewCell()
+        // ячейка трека
         } else {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "TrackCell", for: indexPath) as? TrackCell else {
                 return UITableViewCell()
@@ -61,10 +66,13 @@ final class HomeController: UIViewController, UITableViewDataSource, UITableView
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        // первая ячейка - альбомы
         if indexPath.row == 0 {
             return 480
+        // ячейка после треков - артисты
         } else if indexPath.row == self.tracks.count + 1 {
             return 290
+        // все остальные ячейки
         } else {
             return 80
         }
@@ -81,6 +89,7 @@ final class HomeController: UIViewController, UITableViewDataSource, UITableView
     }
 
     func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        // если не ячейка с треком, выходим
         if indexPath.row == 0 || indexPath.row > self.tracks.count {
             return nil
         }
