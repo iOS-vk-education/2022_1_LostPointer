@@ -60,6 +60,7 @@ final class AudioPlayer: NSObject {
     func setContext(context: [TrackCell], currentTrack: Int) {
         self.context = context
         self.currentTrack = currentTrack
+        debugPrint("Set current", currentTrack)
     }
 
     func playTrack(cell: TrackCell) {
@@ -110,11 +111,27 @@ final class AudioPlayer: NSObject {
     }
 
     func next() {
-        debugPrint("Next track")
+        guard let cells = context else { return }
+        guard var current = currentTrack else { return }
+        current += 1
+        if current > cells.count {
+            player?.stop()
+            return
+        }
+        playTrack(cell: cells[current])
+        currentTrack = current
     }
 
     func prev() {
-        debugPrint("Prev track")
+        guard let cells = context else { return }
+        guard var current = currentTrack else { return }
+        current -= 1
+        if current < 0 {
+            player?.stop()
+            return
+        }
+        playTrack(cell: cells[current])
+        currentTrack = current
     }
 
     private func setupAVAudioSession() {

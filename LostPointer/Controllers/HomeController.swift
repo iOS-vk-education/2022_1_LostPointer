@@ -9,6 +9,7 @@ final class HomeController: UIViewController, UITableViewDataSource, UITableView
     var albumsCell: HomeAlbumsCell?
     var artistsCell: ArtistsCell?
     var playlistsTitleCell: TitleCell?
+    var trackCells: [TrackCell] = []
 
     let refreshControl = UIRefreshControl()
 
@@ -49,10 +50,13 @@ final class HomeController: UIViewController, UITableViewDataSource, UITableView
             cell?.playlist = playlists[indexPath.row - 1 - 1 - 1 - self.tracks.count]
             return cell ?? UITableViewCell()
         } else {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "TrackCell", for: indexPath) as? TrackCell
-            cell?.btn.tag = indexPath.row
-            cell?.track = tracks[indexPath.row - 1]
-            return cell ?? UITableViewCell()
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "TrackCell", for: indexPath) as? TrackCell else {
+                return UITableViewCell()
+            }
+            cell.btn.tag = indexPath.row
+            cell.track = tracks[indexPath.row - 1]
+            trackCells.append(cell)
+            return cell
         }
     }
 
@@ -69,6 +73,7 @@ final class HomeController: UIViewController, UITableViewDataSource, UITableView
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let trackCell = self.tableView.cellForRow(at: indexPath) as? TrackCell {
             player.playTrack(cell: trackCell)
+            player.setContext(context: trackCells, currentTrack: indexPath.row - 1)
         } else if let playlistCell = self.tableView.cellForRow(at: indexPath) as? PlaylistCell {
             print(playlistCell)
             self.navigationController?.pushViewController(PlaylistController(player: self.player, id: playlistCell.playlist?.id ?? 0), animated: true)
