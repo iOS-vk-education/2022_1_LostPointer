@@ -1,16 +1,17 @@
 import UIKit
 
-final class FavoritesController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+final class PlaylistController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
     let tableView = UITableView()
     let player: AudioPlayer
+    let playlistId: Int
+    var playlist: PlaylistModel?
     var tracks: [TrackModel] = []
     var titleCell: TitleCell?
 
-    let refreshControl = UIRefreshControl()
-
-    init (player: AudioPlayer) {
+    init (player: AudioPlayer, id: Int) {
         self.player = player
+        self.playlistId = id
         super.init(nibName: nil, bundle: nil)
 
         self.tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -32,12 +33,12 @@ final class FavoritesController: UIViewController, UITableViewDataSource, UITabl
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.row == 0 {
             let cell = self.titleCell
-            cell?.titleLabel.text = "Favorites"
+            cell?.titleLabel.text = self.playlist?.title
             return cell ?? UITableViewCell()
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "TrackCell", for: indexPath) as? TrackCell
             cell?.btn.tag = indexPath.row
-            cell?.track = tracks[indexPath.row - 1]
+            cell?.track = self.tracks[indexPath.row - 1]
             return cell ?? UITableViewCell()
         }
     }
@@ -102,23 +103,11 @@ final class FavoritesController: UIViewController, UITableViewDataSource, UITabl
         return configuration
     }
 
-    @objc func refresh(_ sender: AnyObject) {
-        self.load()
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
-        refreshControl.addTarget(self, action: #selector(self.refresh(_:)), for: .valueChanged)
-        tableView.addSubview(refreshControl)
-
-        self.load()
-    }
-
-    func load() {
-        TrackModel.getFavoritesTrack {[weak self] loadedTracks in
-            self?.tracks = loadedTracks
+        PlaylistModel.getPlaylist(id: self.playlistId) {[weak self] loadedPlaylist in
+            self?.playlist = loadedPlaylist
+            self?.tracks = self?.playlist?.tracks ?? []
 
             guard let tableView = self?.tableView else { return }
             self?.view.addSubview(tableView)
@@ -134,9 +123,8 @@ final class FavoritesController: UIViewController, UITableViewDataSource, UITabl
                 tableView.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor)
             ])
 
-            self?.titleCell = tableView.dequeueReusableCell(withIdentifier: "TitleCell") as? TitleCell
+            self?.titleCell = self?.tableView.dequeueReusableCell(withIdentifier: "TitleCell") as? TitleCell
 
-            self?.refreshControl.endRefreshing()
         } onError: {[weak self] err in
             debugPrint(err)
             self?.showAlert(title: "Error", message: err.localizedDescription)

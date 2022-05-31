@@ -9,7 +9,7 @@ final class AlbumsCell: UITableViewCell, UICollectionViewDelegate, UICollectionV
     var albums: [AlbumModel] = []
     var loaded: Bool = false
 
-    func load(albums: [AlbumModel], player: AudioPlayer, navigator: UINavigationController?) {
+    func load(albums: [AlbumModel], player: AudioPlayer?, navigator: UINavigationController?) {
         if loaded {
             return
         }

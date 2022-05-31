@@ -90,8 +90,10 @@ final class SigninController: UIViewController {
     @objc func signinTap() {
         UserModel.authenticate(email: loginInput.text ?? "", password: passwordInput.text ?? "") {
             return self.navigationController?.setViewControllers([TabController(player: self.player)], animated: true)
-        } onError: {_ in
+        } onError: { err in
             self.showToast(controller: self, message: "Incorrect credentials!", seconds: 1.0)
+            self.showAlert(title: "Error", message: err.localizedDescription)
+            return nil
         }
     }
 }

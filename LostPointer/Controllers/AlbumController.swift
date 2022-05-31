@@ -13,6 +13,13 @@ final class AlbumController: UIViewController, UITableViewDataSource, UITableVie
         self.player = player
         self.albumId = id
         super.init(nibName: nil, bundle: nil)
+
+        self.tableView.translatesAutoresizingMaskIntoConstraints = false
+        self.tableView.dataSource = self
+        self.tableView.delegate = self
+
+        self.tableView.register(TitleCell.self, forCellReuseIdentifier: "TitleCell")
+        self.tableView.register(TrackCell.self, forCellReuseIdentifier: "TrackCell")
     }
 
     required init?(coder: NSCoder) {
@@ -64,6 +71,7 @@ final class AlbumController: UIViewController, UITableViewDataSource, UITableVie
                     self.tracks[indexPath.row - 1].isInFavorites = true
                 } onError: {err in
                     debugPrint(err)
+                    self.showAlert(title: "Error", message: err.localizedDescription)
                 }
             }
             if track.isInFavorites ?? false {
@@ -72,14 +80,12 @@ final class AlbumController: UIViewController, UITableViewDataSource, UITableVie
                         self.tracks[indexPath.row - 1].isInFavorites = false
                     } onError: {err in
                         debugPrint(err)
+                        self.showAlert(title: "Error", message: err.localizedDescription)
                     }
                 }
             }
             let openArtistAction = UIAction(title: "Open artist page", image: UIImage(systemName: "person.circle"), identifier: nil) { _ in
                 self.navigationController?.pushViewController(ArtistController(player: self.player, id: track.artist?.id ?? 0), animated: true)
-            }
-            let playlistAction = UIAction(title: "Add to the playlist...", image: nil, identifier: nil) { _ in
-                // Put button handler here
             }
             let shareAction = UIAction(title: "Share", image: UIImage(systemName: "square.and.arrow.up"), identifier: nil) { _ in
                 guard let url = URL(string: "https://lostpointer.site/album/\(track.album?.id ?? 0)") else {
@@ -90,7 +96,7 @@ final class AlbumController: UIViewController, UITableViewDataSource, UITableVie
                 )
                 self.present(shareSheetVC, animated: true)
             }
-            return UIMenu(title: menuTitle, children: [likeAction, openArtistAction, playlistAction, shareAction])
+            return UIMenu(title: menuTitle, children: [likeAction, openArtistAction, shareAction])
         }
         return configuration
     }
@@ -117,8 +123,6 @@ final class AlbumController: UIViewController, UITableViewDataSource, UITableVie
 
             self?.view.backgroundColor = UIColor(named: "backgroundColor")
 
-            self?.tableView.translatesAutoresizingMaskIntoConstraints = false
-
             guard let safeArea = self?.view.safeAreaLayoutGuide else { return }
 
             NSLayoutConstraint.activate([
@@ -128,16 +132,11 @@ final class AlbumController: UIViewController, UITableViewDataSource, UITableVie
                 tableView.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor)
             ])
 
-            self?.tableView.dataSource = self
-            self?.tableView.delegate = self
-
-            self?.tableView.register(TitleCell.self, forCellReuseIdentifier: "TitleCell")
-            self?.tableView.register(TrackCell.self, forCellReuseIdentifier: "TrackCell")
-
             self?.titleCell = self?.tableView.dequeueReusableCell(withIdentifier: "TitleCell") as? TitleCell
 
-        } onError: {err in
+        } onError: {[weak self] err in
             debugPrint(err)
+            self?.showAlert(title: "Error", message: err.localizedDescription)
         }
     }
 }
