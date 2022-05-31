@@ -1,5 +1,6 @@
 import UIKit
 import WebKit
+import LPFramework
 
 final class ProfileController: UIViewController {
     var player: AudioPlayer

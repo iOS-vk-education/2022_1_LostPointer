@@ -1,6 +1,7 @@
 import AVFAudio
 import MediaPlayer
 import UIKit
+import LPFramework
 
 protocol TabBarCustomPresentable {}
 final class PlayerController: UIViewController, TabBarCustomPresentable {

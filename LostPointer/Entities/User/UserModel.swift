@@ -1,4 +1,5 @@
 import UIKit
+import LPFramework
 
 struct UserModel: Codable {
     let email: String?

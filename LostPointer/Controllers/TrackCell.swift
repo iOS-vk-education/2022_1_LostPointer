@@ -1,4 +1,5 @@
 import UIKit
+import LPFramework
 
 protocol TrackCellDelegate: AnyObject {
     func cellBtnTapped(tag: Int)

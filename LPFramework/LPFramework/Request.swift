@@ -7,7 +7,7 @@ public enum RequestMethods: String {
     case DELETE
 }
 
-struct MessageModel: Codable {
+public struct MessageModel: Codable {
     var status: Int?
     var message: String?
 

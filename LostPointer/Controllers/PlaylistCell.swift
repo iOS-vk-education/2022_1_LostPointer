@@ -1,4 +1,5 @@
 import UIKit
+import LPFramework
 
 final class PlaylistCell: UITableViewCell {
     var playlist: PlaylistModel? {

@@ -1,6 +1,7 @@
 import UIKit
 import AVFoundation
 import MediaPlayer
+import LPFramework
 
 final class AudioPlayer: NSObject {
 

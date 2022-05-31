@@ -1,4 +1,5 @@
 import UIKit
+import LPFramework
 
 class AlbumCell: UICollectionViewCell {
     static var identifier = "AlbumCell"

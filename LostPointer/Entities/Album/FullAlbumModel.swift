@@ -1,4 +1,5 @@
 import UIKit
+import LPFramework
 
 struct FullAlbumModel: Codable {
     var id, year, tracksDuration: Int?

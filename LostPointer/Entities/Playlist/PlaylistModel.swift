@@ -1,4 +1,5 @@
 import UIKit
+import LPFramework
 
 struct PlaylistsModel: Codable {
     var playlists: [PlaylistModel]
