@@ -175,14 +175,14 @@ final class PlayerController: UIViewController, TabBarCustomPresentable {
             height: 40
         )
         elapsedTime.frame = CGRect(
-            x: seekbar.bounds.minX + 15,
-            y: seekbar.frame.maxY,
+            x: seekbar.bounds.minX + 20,
+            y: seekbar.frame.maxY - 10,
             width: view.bounds.width - 20,
             height: 40
         )
         totalTime.frame = CGRect(
-            x: seekbar.bounds.maxX - 15,
-            y: seekbar.frame.maxY,
+            x: seekbar.bounds.maxX - 25,
+            y: seekbar.frame.maxY - 10,
             width: seekbar.bounds.width - 20,
             height: 40
         )
