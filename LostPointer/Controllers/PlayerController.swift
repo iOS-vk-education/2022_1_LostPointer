@@ -127,6 +127,7 @@ final class PlayerController: UIViewController, TabBarCustomPresentable {
         super.viewDidLoad()
 
         refreshView()
+        updatePlaying()
 
         artwork.frame = CGRect(
             x: view.bounds.midX * 0.2,
@@ -264,7 +265,6 @@ final class PlayerController: UIViewController, TabBarCustomPresentable {
         let volumeView = MPVolumeView()
         if let view = volumeView.subviews.first as? UISlider {
             view.value = volume.value
-
         }
     }
 
@@ -309,7 +309,5 @@ final class PlayerController: UIViewController, TabBarCustomPresentable {
         if let dur = track?.duration {
             seekbar.maximumValue = Float(dur)
         }
-
-        updatePlaying()
     }
 }
