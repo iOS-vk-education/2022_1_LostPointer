@@ -8,13 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		52CCB54F2846C178008DDC76 /* LPFramework.h in Headers */ = {isa = PBXBuildFile; fileRef = 52CCB54E2846C178008DDC76 /* LPFramework.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		52CCB55C2846C1B7008DDC76 /* Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52CCB55B2846C1B7008DDC76 /* Request.swift */; };
+		52CCB5642846C341008DDC76 /* Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52CCB5632846C341008DDC76 /* Request.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		52CCB54B2846C178008DDC76 /* LPFramework.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LPFramework.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		52CCB54E2846C178008DDC76 /* LPFramework.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LPFramework.h; sourceTree = "<group>"; };
-		52CCB55B2846C1B7008DDC76 /* Request.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Request.swift; sourceTree = "<group>"; };
+		52CCB5632846C341008DDC76 /* Request.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Request.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -47,7 +47,7 @@
 		52CCB54D2846C178008DDC76 /* LPFramework */ = {
 			isa = PBXGroup;
 			children = (
-				52CCB55B2846C1B7008DDC76 /* Request.swift */,
+				52CCB5632846C341008DDC76 /* Request.swift */,
 				52CCB54E2846C178008DDC76 /* LPFramework.h */,
 			);
 			path = LPFramework;
@@ -96,6 +96,7 @@
 				TargetAttributes = {
 					52CCB54A2846C178008DDC76 = {
 						CreatedOnToolsVersion = 13.4;
+						LastSwiftMigration = 1340;
 					};
 				};
 			};
@@ -132,7 +133,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				52CCB55C2846C1B7008DDC76 /* Request.swift in Sources */,
+				52CCB5642846C341008DDC76 /* Request.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -261,6 +262,7 @@
 		52CCB5532846C178008DDC76 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
@@ -282,6 +284,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -289,6 +292,7 @@
 		52CCB5542846C178008DDC76 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
