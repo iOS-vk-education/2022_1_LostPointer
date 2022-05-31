@@ -5,6 +5,9 @@ import UIKit
 protocol TabBarCustomPresentable {}
 final class PlayerController: UIViewController, TabBarCustomPresentable {
     var player: AudioPlayer
+    var timeObserverToken: Any?
+    var stateObserverToken: Any?
+
     init(player: AudioPlayer) {
         self.player = player
         super.init(nibName: nil, bundle: nil)
@@ -78,6 +81,11 @@ final class PlayerController: UIViewController, TabBarCustomPresentable {
         let img = UIImageView()
         img.image = UIImage(systemName: "backward.fill")
         img.tintColor = .white
+
+        let tap = UITapGestureRecognizer(target: self, action: #selector(prevClicked))
+        img.addGestureRecognizer(tap)
+        img.isUserInteractionEnabled = true
+
         return img
     }()
 
@@ -97,6 +105,11 @@ final class PlayerController: UIViewController, TabBarCustomPresentable {
         let img = UIImageView()
         img.image = UIImage(systemName: "forward.fill")
         img.tintColor = .white
+
+        let tap = UITapGestureRecognizer(target: self, action: #selector(nextClicked))
+        img.addGestureRecognizer(tap)
+        img.isUserInteractionEnabled = true
+
         return img
     }()
 
@@ -112,9 +125,11 @@ final class PlayerController: UIViewController, TabBarCustomPresentable {
     override func viewDidLoad() {
         super.viewDidLoad()
         let track = player.playingCell?.track
+
         if let art = track?.album?.artwork {
             artwork.downloaded(from: "\(Constants.albumArtworkPrefix)\(art)_512px.webp")
         }
+
         if let artworkColor = track?.album?.artworkColor {
             let color = UIColor(artworkColor)
             self.view.applyGradient(isVertical: true, colorArray: [color, .black])
@@ -140,10 +155,12 @@ final class PlayerController: UIViewController, TabBarCustomPresentable {
             width: view.bounds.width * 0.8,
             height: view.bounds.width * 0.8
         )
-        trackTitle.frame = CGRect(x: view.bounds.minX,
-                                  y: view.bounds.height / 2 - 10,
-                                  width: view.bounds.width,
-                                  height: 30)
+        trackTitle.frame = CGRect(
+            x: view.bounds.minX,
+            y: view.bounds.height / 2 - 10,
+            width: view.bounds.width,
+            height: 30
+        )
         artist.frame = CGRect(
             x: view.bounds.minX,
             y: view.bounds.height / 2 + 20,
@@ -193,8 +210,22 @@ final class PlayerController: UIViewController, TabBarCustomPresentable {
             height: 40
         )
 
+        let timeScale = CMTimeScale(NSEC_PER_SEC)
+        let time = CMTime(seconds: 0.5, preferredTimescale: timeScale)
+        if let player = player.player {
+            timeObserverToken = player.addPeriodicTimeObserver(
+                forInterval: time,
+                queue: .main
+            ) { [weak self] time in
+                let sec = Int(CMTimeGetSeconds(time))
+                self?.elapsedTime.text = Helpers.convertSecondsToHrMinuteSec(seconds: sec)
+                self?.seekbar.setValue(Float(sec), animated: false)
+            }
+
+        }
+
         [artwork, trackTitle, artist, seekbar, elapsedTime,
-         totalTime, prev, pause, nextTrack, volume].forEach {subview in
+         totalTime, prev, pause, nextTrack, volume].forEach { subview in
             view.addSubview(subview)
          }
     }
@@ -202,15 +233,18 @@ final class PlayerController: UIViewController, TabBarCustomPresentable {
     @objc
     func play() {
         if player.isPlaying {
+            debugPrint("Is playing, pausing")
             player.player?.pause()
         } else {
+            debugPrint("Is not playing, playing")
             player.player?.play()
         }
         updatePlaying()
     }
 
-    private func updatePlaying() {
-        if player.isPlaying {
+    private func updatePlaying(playing: Bool = false) {
+        let playingStatus = playing || player.isPlaying
+        if playingStatus {
             zoom(out: false)
             pause.image = UIImage(systemName: "pause.fill")
         } else {
@@ -237,13 +271,13 @@ final class PlayerController: UIViewController, TabBarCustomPresentable {
         if player.isPlaying {
             zoom(out: false)
         }
-        player.player?.currentTime = TimeInterval(seekbar.value)
+        player.player?.seek(to: CMTimeMake(value: Int64(seekbar.value), timescale: 1))
     }
 
     @objc
     func volumeChanged() {
-        // На симуляторе не работает... Проверить не на чем
         debugPrint("Setting volume to \(volume.value * 100)%")
+        // На реальном айфоне не работает
         let volumeView = MPVolumeView()
         if let view = volumeView.subviews.first as? UISlider {
             view.value = volume.value
@@ -251,13 +285,15 @@ final class PlayerController: UIViewController, TabBarCustomPresentable {
         }
     }
 
-    private func deallocObservers(player: AVPlayer) {
-        player.removeObserver(self, forKeyPath: "status")
-    }
-
     @objc
     func timeUpdated() {
         guard let player = player.player else { return }
-        elapsedTime.text = Helpers.convertSecondsToHrMinuteSec(seconds: Int(player.currentTime))
+        elapsedTime.text = Helpers.convertSecondsToHrMinuteSec(seconds: Int(CMTimeGetSeconds(player.currentTime())))
     }
+
+    @objc
+    func nextClicked() { player.next() }
+
+    @objc
+    func prevClicked() { player.prev() }
 }

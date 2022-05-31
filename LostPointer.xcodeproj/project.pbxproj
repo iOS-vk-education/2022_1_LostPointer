@@ -145,9 +145,9 @@
 			children = (
 				ED9CF6FF2845792A0062064F /* Playlist */,
 				5BB5898E27E90046008A78F2 /* Album */,
-				5BB5898D27E90040008A78F2 /* User */,
 				5BB5898C27E90037008A78F2 /* Artist */,
 				5BB5898B27E9002C008A78F2 /* Track */,
+				5BB5898D27E90040008A78F2 /* User */,
 			);
 			path = Entities;
 			sourceTree = "<group>";
@@ -155,19 +155,22 @@
 		5B1ADC0927E63B510081EFDB /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				5B1ADC0E27E63BD30081EFDB /* MainController.swift */,
-				520C8EDC2807504100A2BFA5 /* TabController.swift */,
-				520C8EDE280752A000A2BFA5 /* HomeController.swift */,
-				520C8EE0280752AA00A2BFA5 /* ProfileController.swift */,
-				520C8EE22807564500A2BFA5 /* FavoritesController.swift */,
-				52A80885280C431E00D0DF26 /* SigninController.swift */,
-				52D091D3280C766100461DF9 /* SearchController.swift */,
-				ED8EF222280C9233009F9673 /* TrackCell.swift */,
-				ED8EF224280C9254009F9673 /* HomeAlbumsCell.swift */,
-				ED8EF226280C9289009F9673 /* HomeAlbumCollectionViewCell.swift */,
-				ED8EF228280C9488009F9673 /* ArtistsCell.swift */,
+				EDB847362842A851005D2E82 /* AlbumCell.swift */,
+				EDB847382842B041005D2E82 /* AlbumController.swift */,
+				EDB847342842A846005D2E82 /* AlbumsCell.swift */,
 				ED8EF22A280C94F8009F9673 /* ArtistCell.swift */,
+				EDB8473228426F7D005D2E82 /* ArtistController.swift */,
+				ED8EF228280C9488009F9673 /* ArtistsCell.swift */,
+				520C8EE22807564500A2BFA5 /* FavoritesController.swift */,
+				ED8EF226280C9289009F9673 /* HomeAlbumCollectionViewCell.swift */,
+				ED8EF224280C9254009F9673 /* HomeAlbumsCell.swift */,
+				520C8EDE280752A000A2BFA5 /* HomeController.swift */,
+				5B1ADC0E27E63BD30081EFDB /* MainController.swift */,
 				52821F45283AC2BC0091C4C4 /* PlayerController.swift */,
+				520C8EE0280752AA00A2BFA5 /* ProfileController.swift */,
+				52D091D3280C766100461DF9 /* SearchController.swift */,
+				52A80885280C431E00D0DF26 /* SigninController.swift */,
+				520C8EDC2807504100A2BFA5 /* TabController.swift */,
 				EDB8473028425A72005D2E82 /* TitleCell.swift */,
 				EDB8473228426F7D005D2E82 /* ArtistController.swift */,
 				EDB847342842A846005D2E82 /* AlbumsCell.swift */,
@@ -175,6 +178,7 @@
 				EDB847382842B041005D2E82 /* AlbumController.swift */,
 				ED9CF702284588010062064F /* PlaylistCell.swift */,
 				ED9CF70428458DB20062064F /* PlaylistController.swift */,
+				ED8EF222280C9233009F9673 /* TrackCell.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -182,11 +186,11 @@
 		5B1ADC0B27E63B700081EFDB /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				5B2E371327F9F91600530356 /* Request.swift */,
-				ED0EEDAC280C569A002A3D26 /* Extensions.swift */,
 				52D23D43280DC6C500E1D4C4 /* Constants.swift */,
-				5268444B282EA0B8000A3EBD /* Player.swift */,
+				ED0EEDAC280C569A002A3D26 /* Extensions.swift */,
 				52A014BC2842E30D0067C4E6 /* Helpers.swift */,
+				5268444B282EA0B8000A3EBD /* Player.swift */,
+				5B2E371327F9F91600530356 /* Request.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -415,7 +419,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -470,7 +474,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;

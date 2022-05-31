@@ -43,11 +43,11 @@ final class TabController: UITabBarController, UITabBarControllerDelegate {
                                           selectedImage: UIImage(systemName: "person.crop.circle.fill"))
 
         let player = PlayerController(player: self.player)
-        player.tabBarItem = UITabBarItem(title: "Profile",
-                                         image: UIImage(systemName: "person.crop.circle"),
+        player.tabBarItem = UITabBarItem(title: "Now Playing",
+                                         image: UIImage(systemName: "music.note"),
                                          tag: .max)
 
-        self.viewControllers = [home, favorites, search, profile, player]
+        self.viewControllers = [home, favorites, player, search, profile ]
     }
 
     private func tabBarController(_ tabBarController: UITabBarController,

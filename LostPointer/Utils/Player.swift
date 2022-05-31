@@ -2,11 +2,11 @@ import UIKit
 import AVFoundation
 import MediaPlayer
 
-final class AudioPlayer: NSObject, AVAudioPlayerDelegate {
+final class AudioPlayer: NSObject {
 
-    var player: AVAudioPlayer?
+    var player: AVPlayer?
+    var playerItem: AVPlayerItem?
     var playingCell: TrackCell?
-    let mpic = MPNowPlayingInfoCenter.default()
     var nowPlayingInfo: [String: AnyObject]?
     let audioSession: AVAudioSession
     let commandCenter: MPRemoteCommandCenter
@@ -42,7 +42,6 @@ final class AudioPlayer: NSObject, AVAudioPlayerDelegate {
 
     private func setupCommandCenter() {
         MPNowPlayingInfoCenter.default().nowPlayingInfo = [MPMediaItemPropertyTitle: "LostPointer"]
-
         let commandCenter = MPRemoteCommandCenter.shared()
         commandCenter.playCommand.isEnabled = true
         commandCenter.pauseCommand.isEnabled = true
@@ -55,6 +54,11 @@ final class AudioPlayer: NSObject, AVAudioPlayerDelegate {
             return .success
         }
     }
+
+    func setContext(context: [TrackCell]) {
+
+    }
+
     func playTrack(cell: TrackCell) {
         if let track = cell.getTrack() {
             if let playing = playingCell?.track {
@@ -77,33 +81,14 @@ final class AudioPlayer: NSObject, AVAudioPlayerDelegate {
             setupCommandCenter()
         }
 
-        // Пока не работает...
-        mpic.nowPlayingInfo = [MPMediaItemPropertyTitle: "track",
-                               MPMediaItemPropertyArtist: "artist",
-                               MPNowPlayingInfoPropertyPlaybackRate: 1,
-                               MPNowPlayingInfoPropertyElapsedPlaybackTime: 10,
-                               MPMediaItemPropertyPlaybackDuration: 30
-        ]
-
+        play(url: url)
         cell.setPlaying(playing: true)
-        downloadFileFromURL(url: url)
     }
 
-    func downloadFileFromURL(url: URL) {
-        var downloadTask: URLSessionDownloadTask
-        downloadTask = URLSession.shared.downloadTask(with: url) { [weak self] (url, _, _) in
-            if let url = url {
-                self?.play(url: url)
-            } else {
-                return
-            }
-        }
-        downloadTask.resume()
-    }
     func toggle() {
         if let cell = playingCell {
             guard let player = player else { return }
-            if player.isPlaying {
+            if player.timeControlStatus == .playing {
                 player.pause()
                 cell.setPlaying(playing: false)
             } else {
@@ -113,19 +98,12 @@ final class AudioPlayer: NSObject, AVAudioPlayerDelegate {
         }
     }
     func play(url: URL) {
-        do {
-            player = try AVAudioPlayer(contentsOf: url)
-            player?.prepareToPlay()
-            player?.volume = 1
-            player?.play()
-            self.updateNowPlayingInfoForCurrentPlaybackItem()
-            self.updateCommandCenter()
-            debugPrint("playing")
-        } catch let error as NSError {
-            debugPrint(error.localizedDescription)
-        } catch {
-            debugPrint("AVAudioPlayer init failed")
-        }
+        player = AVPlayer(url: url)
+        player?.volume = 1
+        player?.play()
+        updateNowPlayingInfoForCurrentPlaybackItem()
+        self.updateCommandCenter()
+        debugPrint("playing")
     }
 
     func next() {
@@ -184,24 +162,24 @@ final class AudioPlayer: NSObject, AVAudioPlayerDelegate {
     }
 
     func updateNowPlayingInfoForCurrentPlaybackItem() {
-        guard let _ = self.player else {
+        if self.player == nil {
             self.configureNowPlayingInfo(nil)
             return
         }
 
         let track = playingCell?.getTrack()
-        var nowPlayingInfo = [MPMediaItemPropertyTitle: track?.title,
-                              MPMediaItemPropertyAlbumTitle: track?.album?.title,
-                              MPMediaItemPropertyArtist: track?.artist?.name,
-                              MPMediaItemPropertyPlaybackDuration: track?.duration,
-                              MPNowPlayingInfoPropertyPlaybackRate: NSNumber(value: 1.0 as Float)] as [String: Any]
+        var nowPlayingInfo = [
+            MPMediaItemPropertyTitle: track?.title,
+            MPMediaItemPropertyAlbumTitle: track?.album?.title,
+            MPMediaItemPropertyArtist: track?.artist?.name,
+            MPMediaItemPropertyPlaybackDuration: track?.duration,
+            MPNowPlayingInfoPropertyPlaybackRate: NSNumber(value: 1.0 as Float)
+        ] as [String: Any]
 
         if let artwork = track?.album?.artwork {
-            if let image = UIImage(named: artwork) {
-                nowPlayingInfo[MPMediaItemPropertyArtwork] = MPMediaItemArtwork(image: image)
-            } else {
-                debugPrint("artwork error")
-            }
+            nowPlayingInfo[MPMediaItemPropertyArtwork] = MPMediaItemArtwork(
+                image: Downloader.downloadImageWithURL(url:
+                                                        "\(Constants.albumArtworkPrefix)\(artwork)_512px.webp"))
         }
 
         print("Now playing updated with", nowPlayingInfo)
@@ -213,7 +191,7 @@ final class AudioPlayer: NSObject, AVAudioPlayerDelegate {
     func updateNowPlayingInfoElapsedTime() {
         guard var nowPlayingInfo = self.nowPlayingInfo, let audioPlayer = self.player else { return }
 
-        nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = NSNumber(value: audioPlayer.currentTime as Double)
+        nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = CMTimeGetSeconds(audioPlayer.currentTime()) as AnyObject
 
         self.configureNowPlayingInfo(nowPlayingInfo)
     }
@@ -226,6 +204,7 @@ final class AudioPlayer: NSObject, AVAudioPlayerDelegate {
 
     var isPlaying: Bool {
         guard let player = player else { return false }
-        return player.isPlaying
+        debugPrint("Player is playing \(player.timeControlStatus == .playing)")
+        return player.timeControlStatus == .playing
     }
 }
