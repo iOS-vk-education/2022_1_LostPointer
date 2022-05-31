@@ -69,8 +69,9 @@ final class HomeController: UIViewController, UITableViewDataSource, UITableView
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let trackCell = self.tableView.cellForRow(at: indexPath) as? TrackCell {
             player.playTrack(cell: trackCell)
-        } else {
-            self.navigationController?.pushViewController(ArtistController(player: self.player, id: 369), animated: true)
+        } else if let playlistCell = self.tableView.cellForRow(at: indexPath) as? PlaylistCell {
+            print(playlistCell)
+            self.navigationController?.pushViewController(PlaylistController(player: self.player, id: playlistCell.playlist?.id ?? 0), animated: true)
         }
     }
 
