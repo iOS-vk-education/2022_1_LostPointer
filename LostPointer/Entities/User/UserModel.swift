@@ -89,7 +89,7 @@ struct UserModel: Codable {
     }
 
     public static func search(text: String, onSucess: @escaping (SearchResult) -> Void, onError: @escaping (Error) -> Void) {
-        Request.fetch(url: "/music/search?text=\(text)", method: RequestMethods.GET) {data in
+        Request.fetch(url: "/music/search?text=\(text.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) ?? "")", method: RequestMethods.GET) {data in
             guard let tracks = try? JSONDecoder().decode(SearchResult.self, from: data) else {
                 debugPrint("Error unmarshalling message data (dislike)")
                 return

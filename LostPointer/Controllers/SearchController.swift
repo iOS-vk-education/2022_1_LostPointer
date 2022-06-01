@@ -162,10 +162,6 @@ final class SearchController: UIViewController, UITableViewDataSource, UITableVi
                 text: "",
                 placeholder: "Search...",
                 didChange: { text in
-                    if text.count < 4 {
-                        return
-                    }
-
                     debugPrint(text)
                     UserModel.search(text: text) {[weak self] searchResult in
                         self?.tracks = searchResult.tracks ?? []

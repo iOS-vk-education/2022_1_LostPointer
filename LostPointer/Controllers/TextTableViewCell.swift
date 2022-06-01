@@ -36,7 +36,7 @@ final class TextInputTableViewCell: UITableViewCell {
     lazy private var editableTextField: UITextField = {
         let textField = UITextField(frame: .zero)
         textField.translatesAutoresizingMaskIntoConstraints = false
-        textField.addTarget(self, action: #selector(TextInputTableViewCell.textDidChange), for: .editingChanged)
+        textField.addTarget(self, action: #selector(TextInputTableViewCell.textDidChange), for: .editingDidEndOnExit)
         return textField
     }()
 
