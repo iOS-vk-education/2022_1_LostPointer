@@ -80,7 +80,7 @@ final class SearchController: UIViewController, UITableViewDataSource, UITableVi
 
     func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         // если не ячейка с треком, выходим
-        if indexPath.row == 0 || indexPath.row > 1 + self.tracks.count {
+        if indexPath.row == 0 || indexPath.row > self.tracks.count {
             return nil
         }
 
