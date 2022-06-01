@@ -125,29 +125,8 @@ final class PlayerController: UIViewController, TabBarCustomPresentable {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        let track = player.playingCell?.track
 
-        if let art = track?.album?.artwork {
-            artwork.downloaded(from: "\(Constants.albumArtworkPrefix)\(art)_512px.webp")
-        }
-
-        if let artworkColor = track?.album?.artworkColor {
-            let color = UIColor(artworkColor)
-            self.view.applyGradient(isVertical: true, colorArray: [color, .black])
-            seekbar.minimumTrackTintColor = color
-            volume.minimumTrackTintColor = color
-        }
-
-        if let time = track?.duration {
-            totalTime.text = Helpers.convertSecondsToHrMinuteSec(seconds: time)
-        }
-
-        trackTitle.text = track?.title
-        artist.text = track?.artist?.name
-        if let dur = track?.duration {
-            seekbar.maximumValue = Float(dur)
-        }
-
+        refreshView()
         updatePlaying()
 
         artwork.frame = CGRect(
@@ -175,14 +154,14 @@ final class PlayerController: UIViewController, TabBarCustomPresentable {
             height: 40
         )
         elapsedTime.frame = CGRect(
-            x: seekbar.bounds.minX + 15,
-            y: seekbar.frame.maxY,
+            x: seekbar.bounds.minX + 20,
+            y: seekbar.frame.maxY - 10,
             width: view.bounds.width - 20,
             height: 40
         )
         totalTime.frame = CGRect(
-            x: seekbar.bounds.maxX - 15,
-            y: seekbar.frame.maxY,
+            x: seekbar.bounds.maxX - 25,
+            y: seekbar.frame.maxY - 10,
             width: seekbar.bounds.width - 20,
             height: 40
         )
@@ -240,7 +219,11 @@ final class PlayerController: UIViewController, TabBarCustomPresentable {
             debugPrint("Is not playing, playing")
             player.player?.play()
         }
-        updatePlaying()
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) { [weak self] in
+            self?.updatePlaying()
+            self?.view.setNeedsDisplay()
+        }
     }
 
     private func updatePlaying(playing: Bool = false) {
@@ -282,7 +265,6 @@ final class PlayerController: UIViewController, TabBarCustomPresentable {
         let volumeView = MPVolumeView()
         if let view = volumeView.subviews.first as? UISlider {
             view.value = volume.value
-
         }
     }
 
@@ -293,8 +275,39 @@ final class PlayerController: UIViewController, TabBarCustomPresentable {
     }
 
     @objc
-    func nextClicked() { player.next() }
+    func nextClicked() {
+        player.next()
+        refreshView()
+    }
 
     @objc
-    func prevClicked() { player.prev() }
+    func prevClicked() {
+        player.prev()
+        refreshView()
+    }
+
+    func refreshView() {
+        let track = player.playingCell?.track
+
+        if let art = track?.album?.artwork {
+            artwork.downloaded(from: "\(Constants.albumArtworkPrefix)\(art)_512px.webp")
+        }
+
+        if let artworkColor = track?.album?.artworkColor {
+            let color = UIColor(artworkColor)
+            self.view.applyGradient(isVertical: true, colorArray: [color, .black])
+            seekbar.minimumTrackTintColor = color
+            volume.minimumTrackTintColor = color
+        }
+
+        if let time = track?.duration {
+            totalTime.text = Helpers.convertSecondsToHrMinuteSec(seconds: time)
+        }
+
+        trackTitle.text = track?.title
+        artist.text = track?.artist?.name
+        if let dur = track?.duration {
+            seekbar.maximumValue = Float(dur)
+        }
+    }
 }

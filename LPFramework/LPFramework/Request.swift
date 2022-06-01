@@ -84,7 +84,7 @@ public final class Request {
                 return
             }
 
-            guard let url = URL(string: Constants.baseUrl) else {return}
+            guard let url = URL(string: Constants.baseUrl) else { return }
 
             HTTPCookieStorage.shared.cookies(
                 for: (response.url ?? url))
