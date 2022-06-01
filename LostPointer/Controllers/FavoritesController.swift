@@ -12,6 +12,13 @@ final class FavoritesController: UIViewController, UITableViewDataSource, UITabl
     init (player: AudioPlayer) {
         self.player = player
         super.init(nibName: nil, bundle: nil)
+
+        self.tableView.translatesAutoresizingMaskIntoConstraints = false
+        self.tableView.dataSource = self
+        self.tableView.delegate = self
+
+        self.tableView.register(TitleCell.self, forCellReuseIdentifier: "TitleCell")
+        self.tableView.register(TrackCell.self, forCellReuseIdentifier: "TrackCell")
     }
 
     required init?(coder: NSCoder) {
@@ -62,6 +69,7 @@ final class FavoritesController: UIViewController, UITableViewDataSource, UITabl
                     self.tracks[indexPath.row - 1].isInFavorites = true
                 } onError: {err in
                     debugPrint(err)
+                    self.showAlert(title: "Error", message: err.localizedDescription)
                 }
             }
             if track.isInFavorites ?? false {
@@ -70,6 +78,7 @@ final class FavoritesController: UIViewController, UITableViewDataSource, UITabl
                         self.tracks[indexPath.row - 1].isInFavorites = false
                     } onError: {err in
                         debugPrint(err)
+                        self.showAlert(title: "Error", message: err.localizedDescription)
                     }
                 }
             }
@@ -78,9 +87,6 @@ final class FavoritesController: UIViewController, UITableViewDataSource, UITabl
             }
             let openArtistAction = UIAction(title: "Open artist page", image: UIImage(systemName: "person.circle"), identifier: nil) { _ in
                 self.navigationController?.pushViewController(ArtistController(player: self.player, id: track.artist?.id ?? 0), animated: true)
-            }
-            let playlistAction = UIAction(title: "Add to the playlist...", image: nil, identifier: nil) { _ in
-                // Put button handler here
             }
             let shareAction = UIAction(title: "Share", image: UIImage(systemName: "square.and.arrow.up"), identifier: nil) { _ in
                 guard let url = URL(string: "https://lostpointer.site/album/\(track.album?.id ?? 0)") else {
@@ -91,13 +97,20 @@ final class FavoritesController: UIViewController, UITableViewDataSource, UITabl
                 )
                 self.present(shareSheetVC, animated: true)
             }
-            return UIMenu(title: menuTitle, children: [likeAction, openAlbumAction, openArtistAction, playlistAction, shareAction])
+            return UIMenu(title: menuTitle, children: [likeAction, openAlbumAction, openArtistAction, shareAction])
         }
         return configuration
     }
 
     @objc func refresh(_ sender: AnyObject) {
-        self.load()
+        TrackModel.getFavoritesTrack {[weak self] loadedTracks in
+            self?.tracks = loadedTracks
+            self?.tableView.reloadData()
+            self?.refreshControl.endRefreshing()
+        } onError: {[weak self] err in
+            debugPrint(err)
+            self?.showAlert(title: "Error", message: err.localizedDescription)
+        }
     }
 
     override func viewDidLoad() {
@@ -107,38 +120,29 @@ final class FavoritesController: UIViewController, UITableViewDataSource, UITabl
         refreshControl.addTarget(self, action: #selector(self.refresh(_:)), for: .valueChanged)
         tableView.addSubview(refreshControl)
 
-        self.load()
-    }
+        TrackModel.getFavoritesTrack {[weak self] loadedTracks in
+            self?.tracks = loadedTracks
 
-    func load() {
-        TrackModel.getFavoritesTrack {loadedTracks in
-            self.tracks = loadedTracks
+            guard let tableView = self?.tableView else { return }
+            self?.view.addSubview(tableView)
 
-            self.view.addSubview(self.tableView)
+            self?.view.backgroundColor = UIColor(named: "backgroundColor")
 
-            self.view.backgroundColor = UIColor(named: "backgroundColor")
-
-            self.tableView.translatesAutoresizingMaskIntoConstraints = false
+            guard let safeArea = self?.view.safeAreaLayoutGuide else { return }
 
             NSLayoutConstraint.activate([
-                self.tableView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
-                self.tableView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor),
-                self.tableView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor),
-                self.tableView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor)
+                tableView.topAnchor.constraint(equalTo: safeArea.topAnchor),
+                tableView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor),
+                tableView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor),
+                tableView.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor)
             ])
 
-            self.tableView.dataSource = self
-            self.tableView.delegate = self
+            self?.titleCell = tableView.dequeueReusableCell(withIdentifier: "TitleCell") as? TitleCell
 
-            self.tableView.register(TitleCell.self, forCellReuseIdentifier: "TitleCell")
-            self.tableView.register(TrackCell.self, forCellReuseIdentifier: "TrackCell")
-
-            self.titleCell = self.tableView.dequeueReusableCell(withIdentifier: "TitleCell") as? TitleCell
-
-            self.refreshControl.endRefreshing()
-        } onError: {err in
+            self?.refreshControl.endRefreshing()
+        } onError: {[weak self] err in
             debugPrint(err)
-            self.refreshControl.endRefreshing()
+            self?.showAlert(title: "Error", message: err.localizedDescription)
         }
     }
 }

@@ -1,25 +1,23 @@
 import UIKit
 
-class ArtistController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+final class PlaylistController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
     let tableView = UITableView()
     let player: AudioPlayer
-    let artistId: Int
-    var artist: ArtistModel?
+    let playlistId: Int
+    var playlist: PlaylistModel?
     var tracks: [TrackModel] = []
     var titleCell: TitleCell?
-    var albumsCell: AlbumsCell?
 
     init (player: AudioPlayer, id: Int) {
         self.player = player
-        self.artistId = id
+        self.playlistId = id
         super.init(nibName: nil, bundle: nil)
 
         self.tableView.translatesAutoresizingMaskIntoConstraints = false
         self.tableView.dataSource = self
         self.tableView.delegate = self
 
-        self.tableView.register(AlbumsCell.self, forCellReuseIdentifier: "AlbumsCell")
         self.tableView.register(TitleCell.self, forCellReuseIdentifier: "TitleCell")
         self.tableView.register(TrackCell.self, forCellReuseIdentifier: "TrackCell")
     }
@@ -29,35 +27,24 @@ class ArtistController: UIViewController, UITableViewDataSource, UITableViewDele
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        1 + self.tracks.count + 1
+        1 + self.tracks.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.row == 0 {
             let cell = self.titleCell
-            cell?.titleLabel.text = self.artist?.name
+            cell?.titleLabel.text = self.playlist?.title
             return cell ?? UITableViewCell()
-        } else if indexPath.row == self.tracks.count + 1 {
-            return self.albumsCell ?? UITableViewCell()
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "TrackCell", for: indexPath) as? TrackCell
             cell?.btn.tag = indexPath.row
             cell?.track = self.tracks[indexPath.row - 1]
-            cell?.track?.artist = ArtistModel(id: self.artist?.id, name: self.artist?.name, avatar: self.artist?.avatar, tracks: [], albums: [])
             return cell ?? UITableViewCell()
         }
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.row == 0 {
-            return 80
-        } else if indexPath.row == self.tracks.count + 1 {
-            let pairs = Int((self.artist?.albums?.count ?? 0) / 2) + (self.artist?.albums?.count ?? 0) % 2
-            let height = 160 * pairs
-            return CGFloat(height)
-        } else {
-            return 80
-        }
+        return 80
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -99,8 +86,11 @@ class ArtistController: UIViewController, UITableViewDataSource, UITableViewDele
             let openAlbumAction = UIAction(title: "Open album page", image: UIImage(systemName: "opticaldisc"), identifier: nil) { _ in
                 self.navigationController?.pushViewController(AlbumController(player: self.player, id: track.album?.id ?? 0), animated: true)
             }
+            let openArtistAction = UIAction(title: "Open artist page", image: UIImage(systemName: "person.circle"), identifier: nil) { _ in
+                self.navigationController?.pushViewController(ArtistController(player: self.player, id: track.artist?.id ?? 0), animated: true)
+            }
             let shareAction = UIAction(title: "Share", image: UIImage(systemName: "square.and.arrow.up"), identifier: nil) { _ in
-                guard let url = URL(string: "https://lostpointer.site/artist/\(track.artist?.id ?? 0)") else {
+                guard let url = URL(string: "https://lostpointer.site/album/\(track.album?.id ?? 0)") else {
                     return
                 }
                 let shareSheetVC = UIActivityViewController(
@@ -108,20 +98,16 @@ class ArtistController: UIViewController, UITableViewDataSource, UITableViewDele
                 )
                 self.present(shareSheetVC, animated: true)
             }
-            return UIMenu(title: menuTitle, children: [likeAction, openAlbumAction, shareAction])
+            return UIMenu(title: menuTitle, children: [likeAction, openAlbumAction, openArtistAction, shareAction])
         }
         return configuration
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        ArtistModel.getArtist(id: self.artistId) {[weak self] loadedArtist in
-            self?.artist = loadedArtist
-
-            for var track in self?.artist?.tracks ?? [] {
-                track.artist = ArtistModel(id: self?.artist?.id, name: self?.artist?.name, avatar: self?.artist?.avatar, tracks: [], albums: [])
-                self?.tracks.append(track)
-            }
+        PlaylistModel.getPlaylist(id: self.playlistId) {[weak self] loadedPlaylist in
+            self?.playlist = loadedPlaylist
+            self?.tracks = self?.playlist?.tracks ?? []
 
             guard let tableView = self?.tableView else { return }
             self?.view.addSubview(tableView)
@@ -137,9 +123,7 @@ class ArtistController: UIViewController, UITableViewDataSource, UITableViewDele
                 tableView.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor)
             ])
 
-            self?.albumsCell = tableView.dequeueReusableCell(withIdentifier: "AlbumsCell") as? AlbumsCell
-            self?.titleCell = tableView.dequeueReusableCell(withIdentifier: "TitleCell") as? TitleCell
-            self?.albumsCell?.load(albums: self?.artist?.albums ?? [], player: self?.player, navigator: self?.navigationController)
+            self?.titleCell = self?.tableView.dequeueReusableCell(withIdentifier: "TitleCell") as? TitleCell
 
         } onError: {[weak self] err in
             debugPrint(err)

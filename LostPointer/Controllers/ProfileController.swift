@@ -1,9 +1,14 @@
 import UIKit
+import WebKit
+import LPFramework
 
 final class ProfileController: UIViewController {
     var player: AudioPlayer
+    var webView: WKWebView
+
     init(player: AudioPlayer) {
         self.player = player
+        self.webView = WKWebView()
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -130,15 +135,10 @@ final class ProfileController: UIViewController {
 
         scrollView.backgroundColor = UIColor(named: "backgroundColor")
         scrollView.superview?.isUserInteractionEnabled = true
-        [avatar,
-         nicknameLabel, nicknameInput,
-         emailLabel, emailInput,
-         oldPasswordLabel, oldPasswordInput,
-         newPasswordLabel, newPasswordInput,
-         confirmPasswordLabel, confirmPasswordInput,
-         saveButton, logoutButton].forEach {[weak self] view in
-            self?.scrollView.addSubview(view)
-         }
+        [
+            saveButton, logoutButton].forEach {[weak self] view in
+                self?.scrollView.addSubview(view)
+            }
 
         activityIndicator.translatesAutoresizingMaskIntoConstraints = false
         scrollView.addSubview(activityIndicator)
@@ -166,82 +166,13 @@ final class ProfileController: UIViewController {
             self?.activityIndicator.stopAnimating()
         } onError: {[weak self] err in
             self?.activityIndicator.startAnimating()
+            self?.showAlert(title: "Error", message: err.localizedDescription)
             debugPrint(err)
         }
     }
 
-    // swiftlint:disable function_body_length
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-
-        avatar.frame = CGRect(
-            x: scrollView.bounds.midX - 90,
-            y: scrollView.bounds.minY + view.bounds.midY / 5,
-            width: 180,
-            height: 180
-        )
-
-        nicknameLabel.frame = CGRect(
-            x: scrollView.bounds.minX + 10,
-            y: avatar.frame.maxY + 30,
-            width: scrollView.bounds.width - 40,
-            height: 15
-        )
-        // subview, layoutSubviews
-        nicknameInput.frame = CGRect(
-            x: scrollView.bounds.minX + 10,
-            y: nicknameLabel.frame.maxY + 10,
-            width: scrollView.bounds.width - 40,
-            height: 30
-        )
-        emailLabel.frame = CGRect(
-            x: scrollView.bounds.minX + 10,
-            y: nicknameInput.frame.maxY + 10,
-            width: scrollView.bounds.width - 40,
-            height: 15
-        )
-        emailInput.frame = CGRect(
-            x: scrollView.bounds.minX + 10,
-            y: emailLabel.frame.maxY + 10,
-            width: view.bounds.width - 40,
-            height: 30
-        )
-        oldPasswordLabel.frame = CGRect(
-            x: scrollView.bounds.minX + 10,
-            y: emailInput.frame.maxY + 10,
-            width: scrollView.bounds.width - 40,
-            height: 15
-        )
-        oldPasswordInput.frame = CGRect(
-            x: view.bounds.minX + 10,
-            y: oldPasswordLabel.frame.maxY + 10,
-            width: view.bounds.width - 40,
-            height: 30
-        )
-        newPasswordLabel.frame = CGRect(
-            x: scrollView.bounds.minX + 10,
-            y: oldPasswordInput.frame.maxY + 10,
-            width: scrollView.bounds.width - 40,
-            height: 15
-        )
-        newPasswordInput.frame = CGRect(
-            x: scrollView.bounds.minX + 10,
-            y: newPasswordLabel.frame.maxY + 10,
-            width: scrollView.bounds.width - 40,
-            height: 30
-        )
-        confirmPasswordLabel.frame = CGRect(
-            x: scrollView.bounds.minX + 10,
-            y: newPasswordInput.frame.maxY + 10,
-            width: scrollView.bounds.width - 40,
-            height: 15
-        )
-        confirmPasswordInput.frame = CGRect(
-            x: scrollView.bounds.minX + 10,
-            y: confirmPasswordLabel.frame.maxY + 10,
-            width: scrollView.bounds.width - 40,
-            height: 30
-        )
         saveButton.frame = CGRect(
             x: scrollView.bounds.minX + 10,
             y: confirmPasswordInput.frame.maxY + 10,
@@ -262,18 +193,22 @@ final class ProfileController: UIViewController {
     }
 
     @objc func saveProfile() {
-        if newPasswordInput.text != confirmPasswordInput.text {
-            showAlert(title: "Error", message: "Passwords do not match")
-        }
-        let user = UserModel(email: emailInput.text, password: oldPasswordInput.text,
-                             nickname: nicknameInput.text,
-                             oldPassword: oldPasswordInput.text)
+        debugPrint("Open ВКИД)")
+        guard let cookie = Request.getCookie().first else { return }
+        webView.configuration.websiteDataStore.httpCookieStore.setCookie(cookie)
+        webView.load(URLRequest.init(url: URL(string: "\(Constants.baseUrl)/profile")!))
+        view = webView
+    }
 
-        user.updateProfileData {
-            debugPrint("Success")
-        } onError: {[weak self] err in
-            self?.showAlert(title: "Error", message: err)
+    public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Swift.Void) {
+        if navigationAction.navigationType == .other {
+            if let redirectedUrl = navigationAction.request.url {
+                debugPrint(redirectedUrl)
+            }
+            decisionHandler(.cancel)
+            return
         }
+        decisionHandler(.allow)
     }
 
     @objc func logout() {
@@ -285,8 +220,9 @@ final class ProfileController: UIViewController {
             UserModel.logout {
                 guard let player = self?.player else { return nil }
                 return self?.navigationController?.setViewControllers([SigninController(player: player)], animated: true)
-            } onError: {err in
+            } onError: {[weak self] err in
                 debugPrint(err)
+                return self?.showAlert(title: "Error", message: err.localizedDescription)
             }
         }))
         present(alert, animated: true, completion: nil)

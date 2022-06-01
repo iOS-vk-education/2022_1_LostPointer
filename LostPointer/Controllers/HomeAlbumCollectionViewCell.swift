@@ -1,4 +1,5 @@
 import UIKit
+import LPFramework
 
 final class HomeAlbumCollectionViewCell: UICollectionViewCell {
     static var identifier = "HomeAlbumCollectionViewCell"

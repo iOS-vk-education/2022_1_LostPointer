@@ -7,7 +7,7 @@ public enum RequestMethods: String {
     case DELETE
 }
 
-struct MessageModel: Codable {
+public struct MessageModel: Codable {
     var status: Int?
     var message: String?
 
@@ -21,6 +21,11 @@ struct CommonResponse: Decodable {
 }
 
 public final class Request {
+    public static func getCookie() -> [HTTPCookie] {
+        guard let url = URL(string: Constants.baseUrl) else { return [] }
+        guard let cookies = HTTPCookieStorage.shared.cookies(for: url) else { return [] }
+        return cookies
+    }
     public static func fetch(url: String, method: RequestMethods, data: Data? = nil,
                              onSuccess: ((Data) -> Void)?, onError: ((Error) -> Void)?) {
         guard let url = URL(string: Constants.baseRequestUrl + url) else {

@@ -1,4 +1,5 @@
 import UIKit
+import LPFramework
 
 protocol TrackCellDelegate: AnyObject {
     func cellBtnTapped(tag: Int)
@@ -20,8 +21,10 @@ final class TrackCell: UITableViewCell {
                 artistNameLabel.text = artistName
             }
             if let album = trackItem.album {
-                albumImageView.downloaded(from: Constants.albumArtworkPrefix +
-                                            (album.artwork ?? "") + Constants.albumArtworkSmallSuffix)
+                albumImageView.downloaded(
+                    from: Constants.albumArtworkPrefix +
+                        (album.artwork ?? "") + Constants.albumArtworkSmallSuffix
+                )
             }
             controlsImageView.image = UIImage(systemName: "\(playing ? "pause" : "play").fill")
         }
@@ -76,18 +79,23 @@ final class TrackCell: UITableViewCell {
         self.contentView.addSubview(controlsImageView)
 
         NSLayoutConstraint.activate([
-            albumImageView.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor),
-            albumImageView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 10),
+            albumImageView.centerYAnchor.constraint(
+                equalTo: self.contentView.centerYAnchor),
+            albumImageView.leadingAnchor.constraint(
+                equalTo: self.contentView.leadingAnchor, constant: 10),
             albumImageView.widthAnchor.constraint(equalToConstant: 70),
             albumImageView.heightAnchor.constraint(equalToConstant: 70),
 
             containerView.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor),
-            containerView.leadingAnchor.constraint(equalTo: self.albumImageView.trailingAnchor, constant: 10),
-            containerView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -10),
+            containerView.leadingAnchor.constraint(
+                equalTo: self.albumImageView.trailingAnchor, constant: 10),
+            containerView.trailingAnchor.constraint(
+                equalTo: self.contentView.trailingAnchor, constant: -10),
             containerView.heightAnchor.constraint(equalToConstant: 40),
 
             titleLabel.topAnchor.constraint(equalTo: self.containerView.topAnchor),
-            titleLabel.widthAnchor.constraint(equalTo: self.containerView.widthAnchor, constant: -30),
+            titleLabel.widthAnchor.constraint(
+                equalTo: self.containerView.widthAnchor, constant: -30),
             titleLabel.leadingAnchor.constraint(equalTo: self.containerView.leadingAnchor),
             titleLabel.trailingAnchor.constraint(equalTo: self.containerView.trailingAnchor),
 
@@ -97,7 +105,8 @@ final class TrackCell: UITableViewCell {
 
             controlsImageView.widthAnchor.constraint(equalToConstant: 26),
             controlsImageView.heightAnchor.constraint(equalToConstant: 26),
-            controlsImageView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -20),
+            controlsImageView.trailingAnchor.constraint(
+                equalTo: self.contentView.trailingAnchor, constant: -20),
             controlsImageView.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor)
         ])
     }

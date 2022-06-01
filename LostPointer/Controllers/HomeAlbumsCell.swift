@@ -10,11 +10,7 @@ class HomeAlbumsCell: UITableViewCell, UICollectionViewDelegate, UICollectionVie
     var albums: [AlbumModel] = []
     var loaded: Bool = false
 
-    func load(player: AudioPlayer, navigator: UINavigationController?) {
-        if loaded {
-            return
-        }
-
+    func load(player: AudioPlayer?, navigator: UINavigationController?) {
         self.player = player
         self.navigator = navigator
 
@@ -43,7 +39,7 @@ class HomeAlbumsCell: UITableViewCell, UICollectionViewDelegate, UICollectionVie
         }
     }
 
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int { 5 }
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int { self.albums.count }
 
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {

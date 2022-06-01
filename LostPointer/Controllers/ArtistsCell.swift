@@ -9,7 +9,7 @@ final class ArtistsCell: UITableViewCell, UICollectionViewDelegate, UICollection
     var artists: [ArtistModel] = []
     var loaded: Bool = false
 
-    func load(player: AudioPlayer, navigator: UINavigationController?) {
+    func load(player: AudioPlayer?, navigator: UINavigationController?) {
         if loaded {
             return
         }
@@ -51,7 +51,7 @@ final class ArtistsCell: UITableViewCell, UICollectionViewDelegate, UICollection
     }
 
     func collectionView(_ collectionView: UICollectionView,
-                        numberOfItemsInSection section: Int) -> Int { 4 }
+                        numberOfItemsInSection section: Int) -> Int { self.artists.count }
 
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
