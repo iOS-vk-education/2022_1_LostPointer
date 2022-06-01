@@ -50,7 +50,6 @@ final class AlbumController: UIViewController, UITableViewDataSource, UITableVie
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let trackCell = self.tableView.cellForRow(at: indexPath) as? TrackCell {
             player.playTrack(cell: trackCell)
-            //            player.setContext(context: self.table, currentTrack: indexPath)
         } else {
             return
         }

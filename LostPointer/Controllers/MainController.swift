@@ -12,7 +12,6 @@ final class MainController: UIViewController {
         self.player = player
         self.webView = WKWebView()
         super.init(nibName: nil, bundle: nil)
-        //        debugPrint(HTTPCookieStorage.shared.getCookiesFor(URL(string: "https://lostpointer.site/")!), completionHandler: nil))
     }
 
     required init?(coder: NSCoder) {
