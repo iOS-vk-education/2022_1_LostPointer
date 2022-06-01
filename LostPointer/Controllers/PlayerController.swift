@@ -123,6 +123,10 @@ final class PlayerController: UIViewController, TabBarCustomPresentable {
         return slider
     }()
 
+    override func viewDidLayoutSubviews() {
+        refreshView()
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -190,6 +194,15 @@ final class PlayerController: UIViewController, TabBarCustomPresentable {
             height: 40
         )
 
+        updateElapsedTime()
+
+        [artwork, trackTitle, artist, seekbar, elapsedTime,
+         totalTime, prev, pause, nextTrack, volume].forEach { subview in
+            view.addSubview(subview)
+         }
+    }
+
+    func updateElapsedTime() {
         let timeScale = CMTimeScale(NSEC_PER_SEC)
         let time = CMTime(seconds: 0.5, preferredTimescale: timeScale)
         if let player = player.player {
@@ -203,11 +216,6 @@ final class PlayerController: UIViewController, TabBarCustomPresentable {
             }
 
         }
-
-        [artwork, trackTitle, artist, seekbar, elapsedTime,
-         totalTime, prev, pause, nextTrack, volume].forEach { subview in
-            view.addSubview(subview)
-         }
     }
 
     @objc
@@ -269,21 +277,17 @@ final class PlayerController: UIViewController, TabBarCustomPresentable {
     }
 
     @objc
-    func timeUpdated() {
-        guard let player = player.player else { return }
-        elapsedTime.text = Helpers.convertSecondsToHrMinuteSec(seconds: Int(CMTimeGetSeconds(player.currentTime())))
-    }
-
-    @objc
     func nextClicked() {
         player.next()
         refreshView()
+        updateElapsedTime()
     }
 
     @objc
     func prevClicked() {
         player.prev()
         refreshView()
+        updateElapsedTime()
     }
 
     func refreshView() {
