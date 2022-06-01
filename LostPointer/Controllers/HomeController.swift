@@ -40,24 +40,24 @@ final class HomeController: UIViewController, UITableViewDataSource, UITableView
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        // первая ячейка - альбомы
         if indexPath.row == 0 {
+            // первая ячейка - альбомы
             return self.albumsCell ?? UITableViewCell()
-            // ячейка после треков - артисты
         } else if indexPath.row == self.tracks.count + 1 {
+            // ячейка после треков - артисты
             return self.artistsCell ?? UITableViewCell()
-            // ячейка после после артистов - label
         } else if indexPath.row == self.tracks.count + 1 + 1 {
+            // ячейка после после артистов - label
             let cell = self.playlistsTitleCell
             cell?.titleLabel.text = "Playlists"
             return cell ?? UITableViewCell()
-            // ячейка после после label - плейлисты
         } else if indexPath.row > self.tracks.count + 1 + 1 {
+            // ячейка после после label - плейлисты
             let cell = tableView.dequeueReusableCell(withIdentifier: "PlaylistCell", for: indexPath) as? PlaylistCell
             cell?.playlist = playlists[indexPath.row - 1 - 1 - 1 - self.tracks.count]
             return cell ?? UITableViewCell()
-            // ячейка трека
         } else {
+            // ячейка трека
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "TrackCell", for: indexPath) as? TrackCell else {
                 return UITableViewCell()
             }

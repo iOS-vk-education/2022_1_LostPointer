@@ -32,7 +32,7 @@ final class TabController: UITabBarController, UITabBarControllerDelegate {
                                             image: UIImage(systemName: "heart"),
                                             selectedImage: UIImage(systemName: "heart.fill"))
 
-        let search = SearchController()
+        let search = SearchController(player: self.player)
         search.tabBarItem = UITabBarItem(title: "Search",
                                          image: UIImage(systemName: "magnifyingglass.circle"),
                                          selectedImage: UIImage(systemName: "magnifyingglass.circle.fill"))
