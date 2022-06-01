@@ -1,11 +1,15 @@
 import UIKit
+import WebKit
+import LPFramework
 
-final class SigninController: UIViewController {
+final class SigninController: UIViewController, WKNavigationDelegate {
 
     var player: AudioPlayer
+    var webView: WKWebView
 
     init(player: AudioPlayer) {
         self.player = player
+        self.webView = WKWebView()
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -29,15 +33,23 @@ final class SigninController: UIViewController {
 
     private lazy var loginInput: UITextField = {
         let input = UITextField()
-        input.placeholder = "Login"
+        input.attributedPlaceholder = NSAttributedString(
+            string: "Login",
+            attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray]
+        )
         input.backgroundColor = .white
+        input.textColor = .black
         return input
     }()
 
     private lazy var passwordInput: UITextField = {
         let input = UITextField()
-        input.placeholder = "Password"
+        input.attributedPlaceholder = NSAttributedString(
+            string: "Password",
+            attributes: [NSAttributedString.Key.foregroundColor: UIColor.gray]
+        )
         input.backgroundColor = .white
+        input.textColor = .black
         input.isSecureTextEntry = true
         return input
     }()
@@ -46,9 +58,19 @@ final class SigninController: UIViewController {
         let button = UIButton(type: UIButton.ButtonType.roundedRect)
         button.setTitle("Sign In", for: .normal)
         button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = UIColor(named: "AccentColor")
+        button.backgroundColor = .systemBlue
         button.layer.cornerRadius = 10
         button.addTarget(self, action: #selector(signinTap), for: .touchUpInside)
+        return button
+    }()
+
+    private lazy var signupButton: UIButton = {
+        let button = UIButton(type: UIButton.ButtonType.roundedRect)
+        button.setTitle("Sign Up", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.backgroundColor = UIColor(named: "AccentColor")
+        button.layer.cornerRadius = 10
+        button.addTarget(self, action: #selector(signupTap), for: .touchUpInside)
         return button
     }()
 
@@ -56,7 +78,9 @@ final class SigninController: UIViewController {
         view.addSubview(loginInput)
         view.addSubview(passwordInput)
         view.addSubview(signinButton)
-        view.setBackgroundImage(img: UIImage(named: "SigninImage")!)
+        view.addSubview(signupButton)
+
+        webView.addObserver(self, forKeyPath: "URL", options: .new, context: nil)
     }
 
     override func viewDidLayoutSubviews() {
@@ -68,7 +92,7 @@ final class SigninController: UIViewController {
 
         loginInput.frame = CGRect(
             x: view.bounds.minX + 20,
-            y: view.bounds.minY + view.bounds.midY / 2,
+            y: view.bounds.midY - view.bounds.midY / 4,
             width: view.bounds.width - 40,
             height: 30
         )
@@ -85,6 +109,13 @@ final class SigninController: UIViewController {
             width: view.bounds.width - 40,
             height: 30
         )
+
+        signupButton.frame = CGRect(
+            x: view.bounds.minX + 20,
+            y: signinButton.frame.maxY + 10,
+            width: view.bounds.width - 40,
+            height: 30
+        )
     }
 
     @objc func signinTap() {
@@ -94,6 +125,32 @@ final class SigninController: UIViewController {
             self.showToast(controller: self, message: "Incorrect credentials!", seconds: 1.0)
             self.showAlert(title: "Error", message: err.localizedDescription)
             return nil
+        }
+    }
+
+    @objc func signupTap() {
+        //        webView.configuration.websiteDataStore.httpCookieStore.setCookie(cookie)
+        webView.load(URLRequest.init(url: URL(string: "\(Constants.baseUrl)/signup")!))
+        view = webView
+    }
+
+    func stopLoading() {
+        webView.removeFromSuperview()
+    }
+
+    // Observe value
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
+        if let key = change?[NSKeyValueChangeKey.newKey] {
+
+            if let path = (key as? URL)?.path {
+                if path == "/" {
+                    webView.configuration.websiteDataStore.httpCookieStore.getAllCookies { [weak self] cookies in
+                        HTTPCookieStorage.shared.setCookies(cookies, for: URL(string: "https://lostpointer.site/"), mainDocumentURL: URL(string: "https://lostpointer.site/"))
+                    }
+                    navigationController?.isNavigationBarHidden = true
+                    self.navigationController?.pushViewController(MainController(player: player), animated: false)
+                }
+            }
         }
     }
 }
