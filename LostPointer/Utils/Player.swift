@@ -227,4 +227,8 @@ final class AudioPlayer: NSObject {
         debugPrint("Player is playing \(player.timeControlStatus == .playing)")
         return player.timeControlStatus == .playing
     }
+
+    var isEmpty: Bool {
+        return playingCell == nil
+    }
 }

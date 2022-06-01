@@ -65,7 +65,7 @@ final class TabController: UITabBarController, UITabBarControllerDelegate {
 
     override func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
         debugPrint(item.tag)
-        if item.tag == .max && player.isPlaying {
+        if item.tag == .max && !player.isEmpty {
             let player = PlayerController(player: player)
             present(player, animated: true, completion: nil)
         }
