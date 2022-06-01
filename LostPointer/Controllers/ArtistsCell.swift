@@ -51,7 +51,7 @@ final class ArtistsCell: UITableViewCell, UICollectionViewDelegate, UICollection
     }
 
     func collectionView(_ collectionView: UICollectionView,
-                        numberOfItemsInSection section: Int) -> Int { 4 }
+                        numberOfItemsInSection section: Int) -> Int { self.artists.count }
 
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {

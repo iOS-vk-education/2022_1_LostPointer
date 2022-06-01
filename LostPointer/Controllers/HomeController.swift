@@ -6,6 +6,9 @@ final class HomeController: UIViewController, UITableViewDataSource, UITableView
     let player: AudioPlayer
     var tracks: [TrackModel] = []
     var playlists: [PlaylistModel] = []
+    var albums: [AlbumModel] = []
+    var artists: [ArtistModel] = []
+
     var albumsCell: HomeAlbumsCell?
     var artistsCell: ArtistsCell?
     var playlistsTitleCell: TitleCell?
@@ -40,20 +43,20 @@ final class HomeController: UIViewController, UITableViewDataSource, UITableView
         // первая ячейка - альбомы
         if indexPath.row == 0 {
             return self.albumsCell ?? UITableViewCell()
-        // ячейка после треков - артисты
+            // ячейка после треков - артисты
         } else if indexPath.row == self.tracks.count + 1 {
             return self.artistsCell ?? UITableViewCell()
-        // ячейка после после артистов - label
+            // ячейка после после артистов - label
         } else if indexPath.row == self.tracks.count + 1 + 1 {
             let cell = self.playlistsTitleCell
             cell?.titleLabel.text = "Playlists"
             return cell ?? UITableViewCell()
-        // ячейка после после label - плейлисты
+            // ячейка после после label - плейлисты
         } else if indexPath.row > self.tracks.count + 1 + 1 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "PlaylistCell", for: indexPath) as? PlaylistCell
             cell?.playlist = playlists[indexPath.row - 1 - 1 - 1 - self.tracks.count]
             return cell ?? UITableViewCell()
-        // ячейка трека
+            // ячейка трека
         } else {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "TrackCell", for: indexPath) as? TrackCell else {
                 return UITableViewCell()
@@ -69,10 +72,10 @@ final class HomeController: UIViewController, UITableViewDataSource, UITableView
         // первая ячейка - альбомы
         if indexPath.row == 0 {
             return 480
-        // ячейка после треков - артисты
+            // ячейка после треков - артисты
         } else if indexPath.row == self.tracks.count + 1 {
             return 290
-        // все остальные ячейки
+            // все остальные ячейки
         } else {
             return 80
         }
@@ -141,8 +144,38 @@ final class HomeController: UIViewController, UITableViewDataSource, UITableView
         let dispatchGroup = DispatchGroup()
 
         dispatchGroup.enter()
+        AlbumModel.getHomeAlbums {[weak self] loadedAlbums in
+            self?.albums = loadedAlbums
+            DispatchQueue.main.async {
+                dispatchGroup.leave()
+            }
+        } onError: {[weak self] err in
+            debugPrint(err)
+            self?.showAlert(title: "Error", message: err.localizedDescription)
+            self?.refreshControl.endRefreshing()
+            DispatchQueue.main.async {
+                dispatchGroup.leave()
+            }
+        }
+
+        dispatchGroup.enter()
         TrackModel.getHomeTracks {[weak self] loadedTracks in
             self?.tracks = loadedTracks
+            DispatchQueue.main.async {
+                dispatchGroup.leave()
+            }
+        } onError: {[weak self] err in
+            debugPrint(err)
+            self?.showAlert(title: "Error", message: err.localizedDescription)
+            self?.refreshControl.endRefreshing()
+            DispatchQueue.main.async {
+                dispatchGroup.leave()
+            }
+        }
+
+        dispatchGroup.enter()
+        ArtistModel.getHomeArtists { [weak self] loadedArtists in
+            self?.artists = loadedArtists
             DispatchQueue.main.async {
                 dispatchGroup.leave()
             }
@@ -172,7 +205,11 @@ final class HomeController: UIViewController, UITableViewDataSource, UITableView
 
         dispatchGroup.notify(queue: .main) {
             DispatchQueue.main.async {
+                self.albumsCell?.albums = self.albums
+                self.albumsCell?.albumsCollectionView?.reloadData()
                 self.tableView.reloadData()
+                self.artistsCell?.artists = self.artists
+                self.artistsCell?.artistsCollectionView?.reloadData()
                 self.refreshControl.endRefreshing()
             }
         }
@@ -196,7 +233,6 @@ final class HomeController: UIViewController, UITableViewDataSource, UITableView
         } onError: {[weak self] err in
             debugPrint(err)
             self?.showAlert(title: "Error", message: err.localizedDescription)
-            self?.refreshControl.endRefreshing()
             DispatchQueue.main.async {
                 dispatchGroup.leave()
             }
@@ -211,7 +247,6 @@ final class HomeController: UIViewController, UITableViewDataSource, UITableView
         } onError: {[weak self] err in
             debugPrint(err)
             self?.showAlert(title: "Error", message: err.localizedDescription)
-            self?.refreshControl.endRefreshing()
             DispatchQueue.main.async {
                 dispatchGroup.leave()
             }
@@ -234,9 +269,6 @@ final class HomeController: UIViewController, UITableViewDataSource, UITableView
             self.playlistsTitleCell = self.tableView.dequeueReusableCell(withIdentifier: "TitleCell") as? TitleCell
             self.albumsCell?.load(player: self.player, navigator: self.navigationController)
             self.artistsCell?.load(player: self.player, navigator: self.navigationController)
-
-            self.refreshControl.endRefreshing()
-
         }
     }
 }
