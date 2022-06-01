@@ -267,8 +267,8 @@ final class HomeController: UIViewController, UITableViewDataSource, UITableView
             self.albumsCell = self.tableView.dequeueReusableCell(withIdentifier: "HomeAlbumsCell") as? HomeAlbumsCell
             self.artistsCell = self.tableView.dequeueReusableCell(withIdentifier: "ArtistsCell") as? ArtistsCell
             self.playlistsTitleCell = self.tableView.dequeueReusableCell(withIdentifier: "TitleCell") as? TitleCell
-            self.albumsCell?.load(player: self.player, navigator: self.navigationController)
-            self.artistsCell?.load(player: self.player, navigator: self.navigationController)
+            self.albumsCell?.load(player: self.player, navigator: self.navigationController, forSearch: false)
+            self.artistsCell?.load(player: self.player, navigator: self.navigationController, forSearch: false)
         }
     }
 }

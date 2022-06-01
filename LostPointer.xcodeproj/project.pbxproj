@@ -30,6 +30,8 @@
 		5B1ADC1527E63D2D0081EFDB /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B1ADC1427E63D2D0081EFDB /* UserModel.swift */; };
 		5B1ADC1727E63E040081EFDB /* AlbumModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B1ADC1627E63E040081EFDB /* AlbumModel.swift */; };
 		ED0EEDAD280C569A002A3D26 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED0EEDAC280C569A002A3D26 /* Extensions.swift */; };
+		ED4FB66928478C8D0021591C /* TextTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED4FB66828478C8D0021591C /* TextTableViewCell.swift */; };
+		ED4FB66C28478DEB0021591C /* SearchForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED4FB66B28478DEB0021591C /* SearchForm.swift */; };
 		ED8EF223280C9233009F9673 /* TrackCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED8EF222280C9233009F9673 /* TrackCell.swift */; };
 		ED8EF225280C9254009F9673 /* HomeAlbumsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED8EF224280C9254009F9673 /* HomeAlbumsCell.swift */; };
 		ED8EF227280C928A009F9673 /* HomeAlbumCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED8EF226280C9289009F9673 /* HomeAlbumCollectionViewCell.swift */; };
@@ -95,6 +97,8 @@
 		5B1ADC1427E63D2D0081EFDB /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
 		5B1ADC1627E63E040081EFDB /* AlbumModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumModel.swift; sourceTree = "<group>"; };
 		ED0EEDAC280C569A002A3D26 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		ED4FB66828478C8D0021591C /* TextTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextTableViewCell.swift; sourceTree = "<group>"; };
+		ED4FB66B28478DEB0021591C /* SearchForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchForm.swift; sourceTree = "<group>"; };
 		ED8EF222280C9233009F9673 /* TrackCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackCell.swift; sourceTree = "<group>"; };
 		ED8EF224280C9254009F9673 /* HomeAlbumsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeAlbumsCell.swift; sourceTree = "<group>"; };
 		ED8EF226280C9289009F9673 /* HomeAlbumCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeAlbumCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -216,6 +220,7 @@
 				ED9CF702284588010062064F /* PlaylistCell.swift */,
 				ED9CF70428458DB20062064F /* PlaylistController.swift */,
 				ED8EF222280C9233009F9673 /* TrackCell.swift */,
+				ED4FB66828478C8D0021591C /* TextTableViewCell.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -226,6 +231,7 @@
 				ED0EEDAC280C569A002A3D26 /* Extensions.swift */,
 				52A014BC2842E30D0067C4E6 /* Helpers.swift */,
 				5268444B282EA0B8000A3EBD /* Player.swift */,
+				ED4FB66B28478DEB0021591C /* SearchForm.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -393,6 +399,7 @@
 				EDB847352842A846005D2E82 /* AlbumsCell.swift in Sources */,
 				ED9CF70528458DB20062064F /* PlaylistController.swift in Sources */,
 				52821F46283AC2BC0091C4C4 /* PlayerController.swift in Sources */,
+				ED4FB66928478C8D0021591C /* TextTableViewCell.swift in Sources */,
 				5B1ADC1527E63D2D0081EFDB /* UserModel.swift in Sources */,
 				5B1ADBF327E63AD10081EFDB /* AppDelegate.swift in Sources */,
 				ED8EF225280C9254009F9673 /* HomeAlbumsCell.swift in Sources */,
@@ -402,6 +409,7 @@
 				520C8EDD2807504100A2BFA5 /* TabController.swift in Sources */,
 				520C8EE1280752AA00A2BFA5 /* ProfileController.swift in Sources */,
 				52A80886280C431E00D0DF26 /* SigninController.swift in Sources */,
+				ED4FB66C28478DEB0021591C /* SearchForm.swift in Sources */,
 				5B1ADC1727E63E040081EFDB /* AlbumModel.swift in Sources */,
 				EDB847392842B041005D2E82 /* AlbumController.swift in Sources */,
 				EDB8473128425A72005D2E82 /* TitleCell.swift in Sources */,

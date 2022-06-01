@@ -7,11 +7,10 @@ final class SearchController: UIViewController, UITableViewDataSource, UITableVi
     var albums: [AlbumModel] = []
     var artists: [ArtistModel] = []
 
+    var searchInputCell: TextInputTableViewCell?
     var albumsCell: HomeAlbumsCell?
     var artistsCell: ArtistsCell?
     var trackCells: [TrackCell] = []
-
-    let refreshControl = UIRefreshControl()
 
     init (player: AudioPlayer) {
         self.player = player
@@ -21,6 +20,7 @@ final class SearchController: UIViewController, UITableViewDataSource, UITableVi
         self.tableView.dataSource = self
         self.tableView.delegate = self
 
+        self.tableView.register(TextInputTableViewCell.self, forCellReuseIdentifier: "TextInputTableViewCell")
         self.tableView.register(HomeAlbumsCell.self, forCellReuseIdentifier: "HomeAlbumsCell")
         self.tableView.register(TrackCell.self, forCellReuseIdentifier: "TrackCell")
         self.tableView.register(ArtistsCell.self, forCellReuseIdentifier: "ArtistsCell")
@@ -33,16 +33,19 @@ final class SearchController: UIViewController, UITableViewDataSource, UITableVi
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        1 + self.tracks.count + 1
+        1 + self.tracks.count + 1 + 1
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.row == 0 {
-            // первая ячейка - альбомы
-            return self.albumsCell ?? UITableViewCell()
+            // первая ячейка - searchInput
+            return self.searchInputCell ?? UITableViewCell()
         } else if indexPath.row == self.tracks.count + 1 {
             // ячейка после треков - артисты
             return self.artistsCell ?? UITableViewCell()
+        } else if indexPath.row == self.tracks.count + 1 + 1 {
+            // вторая ячейка - альбомы
+            return self.albumsCell ?? UITableViewCell()
         } else {
             // ячейка трека
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "TrackCell", for: indexPath) as? TrackCell else {
@@ -56,14 +59,14 @@ final class SearchController: UIViewController, UITableViewDataSource, UITableVi
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        // первая ячейка - альбомы
-        if indexPath.row == 0 {
+        if indexPath.row == 1 + self.tracks.count + 1 + 1 {
+            // первая ячейка - альбомы
             return 480
+        } else if indexPath.row == 1 + self.tracks.count + 1 {
             // ячейка после треков - артисты
-        } else if indexPath.row == self.tracks.count + 1 {
             return 290
-            // все остальные ячейки
         } else {
+            // все остальные ячейки
             return 80
         }
     }
@@ -77,7 +80,7 @@ final class SearchController: UIViewController, UITableViewDataSource, UITableVi
 
     func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         // если не ячейка с треком, выходим
-        if indexPath.row == 0 || indexPath.row > self.tracks.count {
+        if indexPath.row == 0 || indexPath.row > 1 + self.tracks.count {
             return nil
         }
 
@@ -124,78 +127,14 @@ final class SearchController: UIViewController, UITableViewDataSource, UITableVi
         return configuration
     }
 
-    @objc func refresh(_ sender: AnyObject) {
-        let dispatchGroup = DispatchGroup()
-
-        dispatchGroup.enter()
-        AlbumModel.getHomeAlbums {[weak self] loadedAlbums in
-            self?.albums = loadedAlbums
-            DispatchQueue.main.async {
-                dispatchGroup.leave()
-            }
-        } onError: {[weak self] err in
-            debugPrint(err)
-            self?.showAlert(title: "Error", message: err.localizedDescription)
-            self?.refreshControl.endRefreshing()
-            DispatchQueue.main.async {
-                dispatchGroup.leave()
-            }
-        }
-
-        dispatchGroup.enter()
-        TrackModel.getHomeTracks {[weak self] loadedTracks in
-            self?.tracks = loadedTracks
-            DispatchQueue.main.async {
-                dispatchGroup.leave()
-            }
-        } onError: {[weak self] err in
-            debugPrint(err)
-            self?.showAlert(title: "Error", message: err.localizedDescription)
-            self?.refreshControl.endRefreshing()
-            DispatchQueue.main.async {
-                dispatchGroup.leave()
-            }
-        }
-
-        dispatchGroup.enter()
-        ArtistModel.getHomeArtists { [weak self] loadedArtists in
-            self?.artists = loadedArtists
-            DispatchQueue.main.async {
-                dispatchGroup.leave()
-            }
-        } onError: {[weak self] err in
-            debugPrint(err)
-            self?.showAlert(title: "Error", message: err.localizedDescription)
-            self?.refreshControl.endRefreshing()
-            DispatchQueue.main.async {
-                dispatchGroup.leave()
-            }
-        }
-
-        dispatchGroup.notify(queue: .main) {
-            DispatchQueue.main.async {
-                self.albumsCell?.albums = self.albums
-                self.albumsCell?.albumsCollectionView?.reloadData()
-                self.tableView.reloadData()
-                self.artistsCell?.artists = self.artists
-                self.artistsCell?.artistsCollectionView?.reloadData()
-                self.refreshControl.endRefreshing()
-            }
-        }
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
-        refreshControl.addTarget(self, action: #selector(self.refresh(_:)), for: .valueChanged)
-        tableView.addSubview(refreshControl)
-
         let dispatchGroup = DispatchGroup()
 
         dispatchGroup.enter()
-        TrackModel.getHomeTracks {[weak self] loadedTracks in
-            self?.tracks = loadedTracks
+        TrackModel.getHomeTracks {[weak self] _ in
+            self?.tracks = []
             DispatchQueue.main.async {
                 dispatchGroup.leave()
             }
@@ -219,10 +158,38 @@ final class SearchController: UIViewController, UITableViewDataSource, UITableVi
                 self.tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
             ])
 
+            let searchModel = TextInputFormItem(
+                text: "",
+                placeholder: "Search...",
+                didChange: { text in
+                    if text.count < 4 {
+                        return
+                    }
+
+                    debugPrint(text)
+                    UserModel.search(text: text) {[weak self] searchResult in
+                        self?.tracks = searchResult.tracks ?? []
+                        self?.albums = searchResult.albums ?? []
+                        self?.artists = searchResult.artists ?? []
+
+                        self?.albumsCell?.albums = self?.albums ?? []
+                        self?.albumsCell?.albumsCollectionView?.reloadData()
+                        self?.tableView.reloadData()
+                        self?.artistsCell?.artists = self?.artists ?? []
+                        self?.artistsCell?.artistsCollectionView?.reloadData()
+                    } onError: {[weak self] err in
+                        debugPrint(err)
+                        self?.showAlert(title: "Error", message: err.localizedDescription)
+                    }
+                }
+            )
+
+            self.searchInputCell = self.tableView.dequeueReusableCell(withIdentifier: "TextInputTableViewCell") as? TextInputTableViewCell
             self.albumsCell = self.tableView.dequeueReusableCell(withIdentifier: "HomeAlbumsCell") as? HomeAlbumsCell
             self.artistsCell = self.tableView.dequeueReusableCell(withIdentifier: "ArtistsCell") as? ArtistsCell
-            self.albumsCell?.load(player: self.player, navigator: self.navigationController)
-            self.artistsCell?.load(player: self.player, navigator: self.navigationController)
+            self.searchInputCell?.configure(for: searchModel)
+            self.albumsCell?.load(player: self.player, navigator: self.navigationController, forSearch: true)
+            self.artistsCell?.load(player: self.player, navigator: self.navigationController, forSearch: true)
         }
     }
 }
