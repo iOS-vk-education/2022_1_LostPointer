@@ -98,7 +98,7 @@ final class ProfileController: UIViewController {
 
     private lazy var profileButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Save", for: .normal)
+        button.setTitle("Edit Profile", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = UIColor.systemBlue
         button.layer.cornerRadius = 10
@@ -189,22 +189,10 @@ final class ProfileController: UIViewController {
     }
 
     @objc func saveProfile() {
-        debugPrint("Open ВКИД)")
         guard let cookie = Request.getCookie().first else { return }
         webView.configuration.websiteDataStore.httpCookieStore.setCookie(cookie)
         webView.load(URLRequest.init(url: URL(string: "\(Constants.baseUrl)/profile")!))
         view = webView
-    }
-
-    public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Swift.Void) {
-        if navigationAction.navigationType == .other {
-            if let redirectedUrl = navigationAction.request.url {
-                debugPrint(redirectedUrl)
-            }
-            decisionHandler(.cancel)
-            return
-        }
-        decisionHandler(.allow)
     }
 
     @objc func logout() {
