@@ -16,7 +16,7 @@ final class PlaylistCell: UITableViewCell {
         let img = UIImageView()
         img.contentMode = .scaleAspectFill
         img.translatesAutoresizingMaskIntoConstraints = false
-        img.layer.cornerRadius = 35
+        img.layer.cornerRadius = 10
         img.clipsToBounds = true
         return img
     }()
