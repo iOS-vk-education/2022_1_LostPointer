@@ -79,6 +79,8 @@ final class SigninController: UIViewController, WKNavigationDelegate {
         view.addSubview(passwordInput)
         view.addSubview(signinButton)
         view.addSubview(signupButton)
+
+        webView.addObserver(self, forKeyPath: "URL", options: .new, context: nil)
     }
 
     override func viewDidLayoutSubviews() {
@@ -134,19 +136,21 @@ final class SigninController: UIViewController, WKNavigationDelegate {
 
     func stopLoading() {
         webView.removeFromSuperview()
-        //          self.moveToVC()
     }
 
-    public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Swift.Void) {
-        if navigationAction.navigationType == .other {
-            if let redirectedUrl = navigationAction.request.url {
-                debugPrint("redirect", redirectedUrl)
-                // do what you need with url
-                // self.delegate?.openURL(url: redirectedUrl)
+    // Observe value
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
+        if let key = change?[NSKeyValueChangeKey.newKey] {
+
+            if let path = (key as? URL)?.path {
+                if path == "/" {
+                    webView.configuration.websiteDataStore.httpCookieStore.getAllCookies { [weak self] cookies in
+                        HTTPCookieStorage.shared.setCookies(cookies, for: URL(string: "https://lostpointer.site/"), mainDocumentURL: URL(string: "https://lostpointer.site/"))
+                    }
+                    navigationController?.isNavigationBarHidden = true
+                    self.navigationController?.pushViewController(MainController(player: player), animated: false)
+                }
             }
-            decisionHandler(.cancel)
-            return
         }
-        decisionHandler(.allow)
     }
 }

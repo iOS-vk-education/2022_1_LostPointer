@@ -12,14 +12,6 @@ final class MainController: UIViewController {
         self.player = player
         self.webView = WKWebView()
         super.init(nibName: nil, bundle: nil)
-
-        webView.configuration.websiteDataStore.httpCookieStore.getAllCookies { [weak self] cookies in
-            HTTPCookieStorage.shared.setCookies(cookies, for: URL(string: "https://lostpointer.site/"), mainDocumentURL: URL(string: "https://lostpointer.site/"))
-            for cookie in cookies {
-                debugPrint("cookie", cookie)
-                self?.wvCookies.append(cookie as HTTPCookie)
-            }
-        }
         //        debugPrint(HTTPCookieStorage.shared.getCookiesFor(URL(string: "https://lostpointer.site/")!), completionHandler: nil))
     }
 
