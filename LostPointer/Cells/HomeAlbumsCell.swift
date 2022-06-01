@@ -10,12 +10,17 @@ class HomeAlbumsCell: UITableViewCell, UICollectionViewDelegate, UICollectionVie
     var albums: [AlbumModel] = []
     var loaded: Bool = false
 
-    func load(player: AudioPlayer?, navigator: UINavigationController?) {
+    func load(player: AudioPlayer?, navigator: UINavigationController?, forSearch: Bool) {
         self.player = player
         self.navigator = navigator
 
         AlbumModel.getHomeAlbums {loadedAlbums in
-            self.albums = loadedAlbums
+            // 24+, опасно для жизни, повторять только профессионалам
+            if forSearch {
+                self.albums = []
+            } else {
+                self.albums = loadedAlbums
+            }
 
             self.backgroundColor = UIColor(named: "backgroundColor")
 

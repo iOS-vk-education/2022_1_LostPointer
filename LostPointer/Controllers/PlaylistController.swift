@@ -90,7 +90,7 @@ final class PlaylistController: UIViewController, UITableViewDataSource, UITable
                 self.navigationController?.pushViewController(ArtistController(player: self.player, id: track.artist?.id ?? 0), animated: true)
             }
             let shareAction = UIAction(title: "Share", image: UIImage(systemName: "square.and.arrow.up"), identifier: nil) { _ in
-                guard let url = URL(string: "https://lostpointer.site/album/\(track.album?.id ?? 0)") else {
+                guard let url = URL(string: "https://lostpointer.site/playlist/\(self.playlist?.id ?? 0)") else {
                     return
                 }
                 let shareSheetVC = UIActivityViewController(

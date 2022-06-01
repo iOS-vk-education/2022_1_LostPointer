@@ -1,6 +1,12 @@
 import UIKit
 import LPFramework
 
+struct SearchResult: Codable {
+    let tracks: [TrackModel]?
+    let albums: [AlbumModel]?
+    let artists: [ArtistModel]?
+}
+
 struct UserModel: Codable {
     let email: String?
     let password: String?
@@ -80,5 +86,17 @@ struct UserModel: Codable {
         }, onError: {(err: String) -> Void in
             onError(err)
         })
+    }
+
+    public static func search(text: String, onSucess: @escaping (SearchResult) -> Void, onError: @escaping (Error) -> Void) {
+        Request.fetch(url: "/music/search?text=\(text.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) ?? "")", method: RequestMethods.GET) {data in
+            guard let tracks = try? JSONDecoder().decode(SearchResult.self, from: data) else {
+                debugPrint("Error unmarshalling message data (dislike)")
+                return
+            }
+            onSucess(tracks)
+        } onError: {err in
+            onError(err)
+        }
     }
 }

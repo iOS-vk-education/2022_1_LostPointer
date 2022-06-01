@@ -9,7 +9,7 @@ final class ArtistsCell: UITableViewCell, UICollectionViewDelegate, UICollection
     var artists: [ArtistModel] = []
     var loaded: Bool = false
 
-    func load(player: AudioPlayer?, navigator: UINavigationController?) {
+    func load(player: AudioPlayer?, navigator: UINavigationController?, forSearch: Bool) {
         if loaded {
             return
         }
@@ -18,7 +18,12 @@ final class ArtistsCell: UITableViewCell, UICollectionViewDelegate, UICollection
         self.navigator = navigator
 
         ArtistModel.getHomeArtists { [weak self] loadedArtists in
-            self?.artists = loadedArtists
+            // 24+, опасно для жизни, повторять только профессионалам
+            if forSearch {
+                self?.artists = []
+            } else {
+                self?.artists = loadedArtists
+            }
 
             self?.backgroundColor = UIColor(named: "backgroundColor")
 
