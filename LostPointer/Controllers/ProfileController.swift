@@ -96,13 +96,14 @@ final class ProfileController: UIViewController {
         return input
     }()
 
-    private lazy var saveButton: UIButton = {
+    private lazy var profileButton: UIButton = {
         let button = UIButton()
         button.setTitle("Save", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = UIColor.systemBlue
         button.layer.cornerRadius = 10
         button.addTarget(self, action: #selector(saveProfile), for: .touchUpInside)
+        button.imageEdgeInsets.left = -50
         return button
     }()
 
@@ -135,10 +136,9 @@ final class ProfileController: UIViewController {
 
         scrollView.backgroundColor = UIColor(named: "backgroundColor")
         scrollView.superview?.isUserInteractionEnabled = true
-        [
-            saveButton, logoutButton].forEach {[weak self] view in
-                self?.scrollView.addSubview(view)
-            }
+        [profileButton, logoutButton].forEach {[weak self] view in
+            self?.scrollView.addSubview(view)
+        }
 
         activityIndicator.translatesAutoresizingMaskIntoConstraints = false
         scrollView.addSubview(activityIndicator)
@@ -159,11 +159,7 @@ final class ProfileController: UIViewController {
                 return
             }
 
-            self?.avatar.downloaded(from: Constants.baseUrl + profile.bigAvatar!)
-            self?.nicknameInput.text = profile.nickname
-            self?.emailInput.text = profile.email
-
-            self?.activityIndicator.stopAnimating()
+            //            self?.profileButton..downloaded(from: Constants.baseUrl + profile.bigAvatar!)
         } onError: {[weak self] err in
             self?.activityIndicator.startAnimating()
             self?.showAlert(title: "Error", message: err.localizedDescription)
@@ -173,7 +169,7 @@ final class ProfileController: UIViewController {
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        saveButton.frame = CGRect(
+        profileButton.frame = CGRect(
             x: scrollView.bounds.minX + 10,
             y: confirmPasswordInput.frame.maxY + 10,
             width: scrollView.bounds.width - 20,
@@ -181,7 +177,7 @@ final class ProfileController: UIViewController {
         )
         logoutButton.frame = CGRect(
             x: scrollView.bounds.minX + 10,
-            y: saveButton.frame.maxY + 10,
+            y: profileButton.frame.maxY + 10,
             width: scrollView.bounds.width - 20,
             height: 40
         )
